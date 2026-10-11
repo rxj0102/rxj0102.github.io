@@ -1,0 +1,1492 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<title>Raj Quant Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single column, left aligned. Each project is a text column beside a live demo panel. Dark only, hairline structure, mono for data. */
+:root{
+  color-scheme:dark;
+  --bg:#0a0d10;
+  --surface:#0f1419;
+  --surface-2:#141a21;
+  --line:#1e2730;
+  --line-2:#2b3743;
+  --fg:#dae1e7;
+  --muted:#8895a2;
+  --dim:#5f6c78;
+  --accent:#6db3f2;
+  --accent-2:#e3b062;
+  --pass:#5cb88a;
+  --pass-bg:#10261d;
+  --pass-line:#24533f;
+  --fail:#e07a66;
+  --fail-bg:#2a1612;
+  --fail-line:#5c2c23;
+  --g1:#6db3f2;
+  --g2:#e3b062;
+  --g3:#7fcaa6;
+  --g4:#b79cf0;
+  --sans:'Geist',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{background:var(--bg);color:var(--fg);font:15px/1.65 var(--sans);padding-inline:clamp(16px,4vw,40px);padding-block:0;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-underline-offset:3px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+code,.mono{font-family:var(--mono)}
+.wrap{max-width:1080px;margin-inline:auto}
+
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;justify-content:space-between;align-items:baseline;gap:8px 18px;flex-wrap:wrap;padding-block:14px;background:var(--bg);border-bottom:1px solid var(--line);font:13px var(--mono)}
+.brand{color:var(--fg);text-decoration:none;font-weight:500}
+.brand span{color:var(--dim)}
+.top nav{display:flex;gap:6px 18px;flex-wrap:wrap}
+.top nav a{color:var(--muted);text-decoration:none}
+.top nav a:hover{color:var(--fg)}
+
+.hero{padding-block:72px 40px}
+.eyebrow{font:500 11.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 16px}
+h1{font:500 clamp(2rem,5.2vw,3.5rem)/1.08 var(--sans);letter-spacing:-.025em;margin:0 0 20px;max-width:22ch;text-wrap:balance}
+h2{font:500 clamp(1.5rem,3vw,2rem)/1.2 var(--sans);letter-spacing:-.015em;margin:0 0 12px;text-wrap:balance}
+h3{font:500 1.15rem/1.3 var(--sans);letter-spacing:-.01em;margin:0 0 10px}
+p{margin:0 0 12px}
+.lede{color:var(--muted);max-width:64ch;font-size:16px}
+.hero-links{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0 36px}
+.btn{display:inline-block;font:500 13px var(--mono);padding:9px 14px;border:1px solid var(--accent);border-radius:4px;color:var(--bg);background:var(--accent);text-decoration:none}
+.btn.ghost{background:transparent;color:var(--fg);border-color:var(--line-2)}
+.btn.ghost:hover{border-color:var(--muted)}
+.strip{margin:0;border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:14px 14px 10px}
+.strip figcaption{font:12px var(--mono);color:var(--dim);margin-top:6px}
+
+.sec{padding-block:56px;border-top:1px solid var(--line)}
+.sec>.lede{margin-bottom:8px}
+
+.proj{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:20px 36px;padding-block:40px;border-top:1px solid var(--line);align-items:start}
+.proj:first-of-type{border-top:0}
+.proj-text{min-width:0}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0;padding:0;list-style:none}
+.tags li{font:11.5px var(--mono);color:var(--muted);border:1px solid var(--line-2);border-radius:3px;padding:2px 7px}
+.try{font-size:14px;color:var(--muted);border-left:2px solid var(--line-2);padding-left:12px;margin-top:16px}
+.repo{font:12.5px var(--mono)}
+@media (max-width:860px){.proj{grid-template-columns:minmax(0,1fr)}}
+
+.demo{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px;min-width:0}
+.ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px 22px;margin-bottom:14px}
+.ctl label{display:flex;flex-direction:column;gap:5px;font:12px var(--mono);color:var(--muted)}
+.ctl label span{display:flex;justify-content:space-between;gap:8px}
+.ctl output{color:var(--fg)}
+.ctl label.chk{flex-direction:row;align-items:center;gap:8px}
+input[type=range]{width:100%;accent-color:var(--accent);margin:0}
+select{font:12.5px var(--mono);background:var(--surface-2);color:var(--fg);border:1px solid var(--line-2);border-radius:4px;padding:6px 8px}
+.bs{font:12.5px var(--mono);background:var(--surface-2);color:var(--fg);border:1px solid var(--line-2);border-radius:4px;padding:6px 10px;cursor:pointer;align-self:end}
+.bs:hover{border-color:var(--muted)}
+.stats{display:flex;flex-wrap:wrap;gap:4px 22px;font:12px var(--mono);color:var(--muted);margin-top:12px}
+.stats b{color:var(--fg);font-weight:500}
+.fine{font:11.5px/1.5 var(--mono);color:var(--dim);margin:12px 0 0}
+svg.chart{width:100%;height:auto;display:block;overflow:visible}
+.legend{display:flex;flex-wrap:wrap;gap:4px 16px;font:11.5px var(--mono);color:var(--muted);margin-bottom:8px}
+.legend i{display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+.alert{font:12px var(--mono);margin-top:10px;padding:7px 10px;border-radius:4px;border:1px solid var(--line-2);color:var(--muted)}
+.alert.bad{color:var(--fail);border-color:var(--fail-line);background:var(--fail-bg)}
+.alert.good{color:var(--pass);border-color:var(--pass-line);background:var(--pass-bg)}
+
+/* svg classes */
+.tk{font:10.5px var(--mono);fill:var(--muted)}
+.tk.dim{fill:var(--dim)}
+.tk.fg{fill:var(--fg)}
+.grid{stroke:var(--line);stroke-width:1}
+.axis{stroke:var(--line-2);stroke-width:1}
+.spike{fill:none;stroke:var(--dim);stroke-width:1}
+.ln{fill:none;stroke-width:1.6;stroke-linejoin:round}
+.ln.thin{stroke-width:1.2}
+.ln.dash{stroke-dasharray:4 4}
+.s-acc{stroke:var(--accent)}.s-acc2{stroke:var(--accent-2)}.s-g3{stroke:var(--g3)}.s-fail{stroke:var(--fail)}.s-pass{stroke:var(--pass)}.s-muted{stroke:var(--muted)}.s-dim{stroke:var(--dim)}
+.f-acc{fill:var(--accent)}.f-acc2{fill:var(--accent-2)}.f-g3{fill:var(--g3)}.f-fail{fill:var(--fail)}.f-pass{fill:var(--pass)}.f-muted{fill:var(--muted)}.f-dim{fill:var(--dim)}
+.f-g1{fill:var(--g1)}.f-g2{fill:var(--g2)}.f-g4{fill:var(--g4)}
+.area-acc{fill:var(--accent);fill-opacity:.14;stroke:none}
+.area-pass{fill:var(--pass);fill-opacity:.16;stroke:none}
+
+.pill{display:inline-block;font:500 10.5px var(--mono);padding:1px 6px;border-radius:3px;border:1px solid;vertical-align:middle;margin-left:6px;letter-spacing:.02em}
+.pill.ok{color:var(--pass);border-color:var(--pass-line);background:var(--pass-bg)}
+.pill.bad{color:var(--fail);border-color:var(--fail-line);background:var(--fail-bg)}
+.scroll{overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;font:12.5px var(--mono)}
+.tbl th{font-weight:500;color:var(--muted);text-align:left;padding:8px 10px 8px 0;border-bottom:1px solid var(--line-2);white-space:nowrap}
+.tbl td{padding:9px 10px 9px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl td.n{white-space:nowrap}
+
+.also{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden;margin-top:20px}
+.also article{background:var(--bg);padding:18px;min-width:0}
+.also h3{font-size:1rem}
+.also p{font-size:14px;color:var(--muted);margin:0}
+
+.kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 18px;font:12.5px var(--mono);margin:16px 0 0}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0}
+.spec{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px 36px;margin-top:24px}
+.spec>div{min-width:0}
+.spec h3{font:500 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+
+.sub{padding-top:40px;margin-top:40px;border-top:1px solid var(--line)}
+.sub>.sub-head{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:20px 36px;align-items:start}
+@media (max-width:860px){.sub>.sub-head{grid-template-columns:minmax(0,1fr)}}
+
+.alpha{padding-block:24px;border-top:1px solid var(--line)}
+.alpha:first-of-type{border-top:0}
+.alpha code.expr{display:block;overflow-x:auto;white-space:pre;font:13px/1.5 var(--mono);color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:10px 12px;margin:0 0 12px}
+.pipe{display:flex;flex-wrap:wrap;gap:8px 0;list-style:none;margin:0 0 14px;padding:0;counter-reset:none}
+.pipe li{display:flex;flex-direction:column;gap:3px;padding:7px 10px;background:var(--surface-2);border:1px solid var(--line-2);border-radius:4px;margin-right:22px;position:relative;min-width:0}
+.pipe li:not(:last-child)::after{content:'>';position:absolute;right:-17px;top:50%;transform:translateY(-50%);font:12px var(--mono);color:var(--dim)}
+.pipe .k{font:10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.pipe code{font:12.5px var(--mono);color:var(--fg);overflow-wrap:anywhere}
+.alpha p{color:var(--muted);max-width:68ch;font-size:14.5px}
+
+.seg{display:flex;flex-wrap:wrap;gap:0;margin-bottom:12px}
+.seg button{font:12px var(--mono);background:var(--surface-2);color:var(--muted);border:1px solid var(--line-2);padding:6px 10px;cursor:pointer;margin-right:-1px}
+.seg button:first-child{border-radius:4px 0 0 4px}
+.seg button:last-child{border-radius:0 4px 4px 0;margin-right:0}
+.seg button[aria-pressed=true]{background:var(--accent);color:var(--bg);border-color:var(--accent);position:relative;z-index:1}
+.chips{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:12px}
+.chip{border:1px solid var(--line-2);border-radius:4px;padding:8px 10px;font:12px var(--mono);color:var(--muted);min-width:0}
+.chip b{display:block;color:var(--fg);font-weight:500;font-size:13px}
+@media (max-width:520px){.chips{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.big{font:500 2.2rem/1 var(--mono);letter-spacing:-.02em}
+.checks{display:flex;flex-wrap:wrap;gap:6px 18px;font:12.5px var(--mono);color:var(--muted);margin-top:10px}
+.lessons{margin:16px 0 0;padding:0;list-style:none;display:grid;gap:10px}
+.lessons li{padding-left:16px;position:relative;color:var(--muted);font-size:14.5px;max-width:70ch}
+.lessons li::before{content:'';position:absolute;left:0;top:.72em;width:7px;height:1px;background:var(--accent)}
+.lessons b{color:var(--fg);font-weight:500}
+footer{padding-block:40px 56px;border-top:1px solid var(--line);font:12px/1.6 var(--mono);color:var(--dim)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0 18px}
+.tabs button{font:12.5px var(--mono);background:var(--surface);color:var(--muted);border:1px solid var(--line-2);border-radius:4px;padding:7px 11px;cursor:pointer}
+.tabs button span{color:var(--dim);margin-left:4px}
+.tabs button:hover{border-color:var(--muted);color:var(--fg)}
+.tabs button[aria-selected=true]{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.tabs button[aria-selected=true] span{color:var(--bg)}
+.browser{display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr);gap:24px;align-items:start}
+.plist{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:6px;overflow:hidden auto;position:sticky;top:64px;max-height:calc(100vh - 90px)}
+.plist li+li{border-top:1px solid var(--line)}
+.plist button{display:block;width:100%;text-align:left;font:13px/1.35 var(--sans);color:var(--muted);background:var(--bg);border:0;padding:10px 12px;cursor:pointer}
+.plist button:hover{color:var(--fg);background:var(--surface)}
+.plist button[aria-current=true]{color:var(--fg);background:var(--surface-2);box-shadow:inset 2px 0 0 var(--accent)}
+.pdetail{min-width:0}
+.pd-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;margin-bottom:8px}
+.pd-head h3{margin:0}
+.pd-blurb{color:var(--muted);max-width:68ch}
+.ctl textarea{font:12px/1.5 var(--mono);background:var(--surface-2);color:var(--fg);border:1px solid var(--line-2);border-radius:4px;padding:8px;width:100%;resize:vertical}
+.ctl label.wide{grid-column:1/-1}
+.g0{fill:var(--surface-2)}.g1{fill:var(--accent);fill-opacity:.75}.g2{fill:var(--fail)}.g3{fill:var(--pass);fill-opacity:.8}
+@media (max-width:760px){.browser{grid-template-columns:minmax(0,1fr)}.plist{position:static;max-height:220px}}
+
+:root{--pink:#d98ab5}
+.f-pink{fill:var(--pink)}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media (max-width:760px){.two{grid-template-columns:minmax(0,1fr)}}
+.scroll.tall{max-height:380px;overflow:auto;border:1px solid var(--line);border-radius:6px;padding:0 12px}
+.thb{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-align:left}
+.tbl th .thb{font-weight:500;color:var(--muted)}
+.tbl td .thb{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+.tbl tr.sel td{background:var(--surface-2)}
+.tbl td.ex{font:12px var(--mono);color:var(--muted);max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;vertical-align:baseline}
+.thb:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#a-detail code.expr{display:block;overflow:auto;max-height:260px;white-space:pre;font:13px/1.5 var(--mono);color:var(--fg);background:var(--surface-2);border:1px solid var(--line);border-radius:4px;padding:10px 12px;margin:0 0 12px}
+</style>
+
+<div class="wrap">
+<header class="top">
+  <a class="brand" href="#top">raj<span>/quant</span></a>
+  <nav aria-label="Sections">
+    <a href="#projects">projects</a>
+    <a href="#brain">brain alphas</a>
+    <a href="#about">about</a>
+    <a href="#contact">contact</a>
+  </nav>
+</header>
+
+<main id="top">
+<section class="hero">
+  <p class="eyebrow">MS Quantitative Finance and Risk Management / Temple University / May 2027</p>
+  <h1>Volatility, risk, and alpha research you can run in the browser.</h1>
+  <p class="lede">I'm Raj, a graduate student at Temple's Fox School of Business. Each demo below re-implements the core of a model from my GitHub repos and runs on synthetic data, so you can move the parameters and watch the result change. The second half walks through the alphas I have built on WorldQuant BRAIN.</p>
+  <div class="hero-links">
+    <a class="btn" href="#projects">Run the models</a>
+    <a class="btn ghost" href="#brain">Read the alphas</a>
+    <a class="btn ghost" href="https://github.com/rxj0102" target="_blank" rel="noopener">github.com/rxj0102</a>
+  </div>
+  <figure class="strip">
+    <svg id="hero-svg" class="chart" role="img" aria-label="Simulated GARCH conditional volatility with a shock on day 150"></svg>
+    <figcaption>GARCH(1,1) conditional volatility, 500 synthetic days, one -6% shock on day 150.</figcaption>
+  </figure>
+</section>
+
+<section id="projects" class="sec">
+  <p class="eyebrow">/projects</p>
+  <h2>Every repo, simulated</h2>
+  <p class="lede">All 56 of my GitHub repos, grouped by category. Pick a tab, pick a project, and move the controls. Each demo re-implements the core idea of the repo on synthetic data generated in your browser. They show how the methods behave and are not results from the repos.</p>
+  <div class="tabs" id="cat-tabs" role="tablist" aria-label="Project categories"></div>
+  <div class="browser">
+    <ul class="plist" id="plist" aria-label="Projects in this category"></ul>
+    <div class="pdetail" id="pdetail"></div>
+  </div>
+</section>
+
+<section id="brain" class="sec">
+  <p class="eyebrow">/worldquant-brain</p>
+  <h2>WorldQuant BRAIN alphas</h2>
+  <p class="lede">BRAIN scores an alpha written in Fast Expression, a formula that assigns a weight to every stock each day. I iterate on expressions against the real platform checks. Below: the rules, the alphas I have submitted, the latest results on families still in progress, and two interactive pieces that explain why the checks bite.</p>
+
+  <div class="spec">
+    <div>
+      <h3>Fixed settings</h3>
+      <dl class="kv">
+        <dt>instrument</dt><dd>Equity, USA</dd>
+        <dt>delay</dt><dd>1</dd>
+        <dt>neutralization</dt><dd>Subindustry</dd>
+        <dt>decay</dt><dd>4</dd>
+        <dt>truncation</dt><dd>0.08</dd>
+        <dt>pasteurization</dt><dd>On</dd>
+        <dt>universe</dt><dd>TOP500 or TOP3000, per alpha</dd>
+      </dl>
+    </div>
+    <div>
+      <h3>Every alpha must clear</h3>
+      <dl class="kv">
+        <dt>Sharpe</dt><dd>at least 1.25</dd>
+        <dt>Fitness</dt><dd>at least 1.0</dd>
+        <dt>turnover</dt><dd>between 1% and 70%</dd>
+        <dt>sub-universe Sharpe</dt><dd>above a signal-dependent cutoff</dd>
+        <dt>weights</dt><dd>well distributed across instruments</dd>
+        <dt>self-correlation</dt><dd>below 0.70 against my submitted alphas</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="sub">
+    <h3>Submitted alphas, read step by step</h3>
+    <p class="lede" style="margin-bottom:8px">Each expression is a pipeline. Read the chips left to right.</p>
+    <div id="submitted"></div>
+  </div>
+
+  <div class="sub">
+    <h3>Alpha library</h3>
+    <p class="lede" style="margin-bottom:12px">Every alpha I have logged, grouped by the kind of data it uses. Pick a family, sort the table, and select a row to read the full expression and see what it is built from. Figures are the values the platform reported. Families are assigned from the data fields an expression uses, and Blend means fundamental fields combined with price or volume.</p>
+    <div class="chips" id="a-chips"></div>
+    <div class="tabs" id="a-tabs" role="group" aria-label="Alpha families"></div>
+    <div class="demo" id="a-charts"></div>
+    <div class="demo" id="a-detail" style="margin-top:16px"></div>
+    <div class="scroll tall" style="margin-top:16px"><table class="tbl" id="a-tbl"></table></div>
+  </div>
+
+  <div class="sub">
+    <div class="sub-head">
+      <div>
+        <h3>Results on families in progress</h3>
+        <p style="color:var(--muted)">Latest numbers I logged for each family. Pending variants are not shown. Two of the three have strong Sharpe and still fail, and the table shows why.</p>
+        <p style="color:var(--muted)">Fitness grows with the square root of returns per unit of turnover. Moving from 0.55 to 1.0 at the same Sharpe needs about 3.3 times the return per unit of turnover. That gap is the work.</p>
+      </div>
+      <div class="demo">
+        <svg id="s-svg" class="chart" role="img" aria-label="Sharpe and Fitness against the pass thresholds"></svg>
+      </div>
+    </div>
+    <div class="scroll" style="margin-top:24px"><table class="tbl" id="s-tbl"></table></div>
+    <p class="fine">Sub-universe cutoffs depend on the signal, so that column shows the value without a verdict. Fitness gap is 1 divided by fitness squared: the factor on return per unit of turnover needed to reach 1.0 with Sharpe unchanged.</p>
+  </div>
+
+  <div class="sub">
+    <div class="sub-head">
+      <div>
+        <h3>Why fitness is hard to move</h3>
+        <p style="color:var(--muted)">Fitness equals Sharpe times the square root of absolute returns divided by turnover, with turnover floored at 12.5%. The shaded region is every returns and turnover pair that clears 1.0 at the chosen Sharpe, inside the 1% to 70% turnover window.</p>
+        <p style="color:var(--muted)">Two levers only: earn more per trade, or trade less. Below 12.5% turnover the floor stops further reward.</p>
+        <p class="try">Defaults reproduce Sharpe 1.33 and Fitness 0.55 from the volume-price family. Returns and turnover here are illustrative.</p>
+      </div>
+      <div class="demo">
+        <div class="ctl">
+          <label><span>Sharpe <output id="f-s-o"></output></span><input id="f-s" type="range" min="0.5" max="3" step="0.01" value="1.33"></label>
+          <label><span>annual returns <output id="f-r-o"></output></span><input id="f-r" type="range" min="1" max="30" step="0.1" value="5.1"></label>
+          <label><span>turnover <output id="f-t-o"></output></span><input id="f-t" type="range" min="1" max="100" step="1" value="30"></label>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap"><span class="big" id="f-big"></span><span class="mono" style="font-size:12px;color:var(--muted)">fitness</span></div>
+        <div class="checks" id="f-checks"></div>
+        <svg id="f-svg" class="chart" style="margin-top:12px" role="img" aria-label="Region of returns and turnover where fitness is at least one"></svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub">
+    <div class="sub-head">
+      <div>
+        <h3>Why peer-group transforms work</h3>
+        <p style="color:var(--muted)">A raw signal often carries a subindustry bet. Here the four groups have different average signal levels, as real fundamentals do. Switch the operator and watch the net exposure of each group.</p>
+        <p style="color:var(--muted)">group_rank and group_zscore compare each stock with its own subindustry peers, so the book keeps stock selection and drops the sector bet. This matches what I found: peer-group comparisons generally beat market-wide normalization.</p>
+      </div>
+      <div class="demo">
+        <div class="seg" id="p-seg" role="group" aria-label="Operator">
+          <button type="button" data-v="raw" aria-pressed="true">raw</button>
+          <button type="button" data-v="rank" aria-pressed="false">rank</button>
+          <button type="button" data-v="zscore" aria-pressed="false">zscore</button>
+          <button type="button" data-v="group_rank" aria-pressed="false">group_rank</button>
+          <button type="button" data-v="group_zscore" aria-pressed="false">group_zscore</button>
+        </div>
+        <div class="legend"><span><i style="background:var(--g1)"></i>Subindustry A</span><span><i style="background:var(--g2)"></i>B</span><span><i style="background:var(--g3)"></i>C</span><span><i style="background:var(--g4)"></i>D</span></div>
+        <svg id="p-svg" class="chart" role="img" aria-label="Portfolio weights for 48 synthetic stocks"></svg>
+        <div class="chips" id="p-chips"></div>
+        <p class="fine">48 synthetic stocks, 12 per subindustry. Weights are demeaned across the universe and scaled to gross exposure of 100%. Chips show each group net weight.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub">
+    <h3>What I have learned so far</h3>
+    <ul class="lessons">
+      <li><b>Outer wrappers hurt.</b> Wrapping a signal in ts_rank or ts_mean as the outermost layer tends to kill Sharpe.</li>
+      <li><b>Decay has a ceiling.</b> For volume-correlation signals, decay beyond 5 or 6 pushed Sharpe under the threshold.</li>
+      <li><b>Peers beat the market.</b> group_zscore and group_rank by subindustry generally outperform market-wide normalization.</li>
+      <li><b>Volatile signals work better as filters.</b> The buzz signal reached Sharpe 1.54 as a conditional filter, then needed turnover control.</li>
+      <li><b>Stacked transforms degrade.</b> Heavy group_rank layers and stacked smoothing hurt signals that work closer to raw form.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="about" class="sec">
+  <p class="eyebrow">/about</p>
+  <h2>Background and tools</h2>
+  <div class="spec">
+    <div>
+      <h3>Education</h3>
+      <dl class="kv">
+        <dt>2027</dt><dd>MS Quantitative Finance and Risk Management, Fox School of Business, Temple University</dd>
+        <dt>prior</dt><dd>B.Tech Computer Science, NIT Warangal</dd>
+      </dl>
+    </div>
+    <div>
+      <h3>Looking for</h3>
+      <dl class="kv">
+        <dt>roles</dt><dd>Quant research, risk quant, behavioral quant</dd>
+        <dt>start</dt><dd>After graduation, May 2027</dd>
+      </dl>
+    </div>
+    <div>
+      <h3>Tools</h3>
+      <dl class="kv">
+        <dt>languages</dt><dd>Python, R, SQL, C++, MATLAB</dd>
+        <dt>stack</dt><dd>pandas, scikit-learn, XGBoost, arch, cvxpy, Streamlit, Jupyter</dd>
+        <dt>data</dt><dd>WRDS, Bloomberg Terminal, WorldQuant BRAIN</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="sec">
+  <p class="eyebrow">/contact</p>
+  <h2>Get in touch</h2>
+  <p class="lede">Code for everything above is on GitHub.</p>
+  <div class="hero-links" style="margin-bottom:0">
+    <a class="btn" href="https://github.com/rxj0102" target="_blank" rel="noopener">github.com/rxj0102</a>
+  </div>
+</section>
+</main>
+
+<footer>Demos run on synthetic data generated in your browser and illustrate methods. They are not performance claims. BRAIN figures are the latest values I recorded from the platform.</footer>
+</div>
+
+<script>
+(function(){
+'use strict';
+/* ---------- editable data ---------- */
+var SUBMITTED=[
+  {expr:'rank(-ts_rank(fn_liab_fair_val_l1_a, 68))',
+   steps:[['field','fn_liab_fair_val_l1_a'],['time series','ts_rank(x, 68)'],['sign','negate'],['cross-section','rank']],
+   text:'Takes each stock\'s fair-value liability field and asks where today\'s reading sits inside its own last 68 days. A stock near the top of its own range gets a lower score because of the negative sign. A final cross-sectional rank turns those scores into relative weights across the universe. The comparison is with each company\'s own history until the last step.'},
+  {expr:'-group_rank(ts_rank(close - ts_mean(close, 300), 5), subindustry)',
+   steps:[['field','close'],['time series','close - ts_mean(close, 300)'],['time series','ts_rank(x, 5)'],['peer group','group_rank by subindustry'],['sign','negate']],
+   text:'Measures how far price sits above its 300-day average, then checks whether that gap has just widened over the last 5 days. Stocks are ranked against peers in the same subindustry and the sign is flipped. Names whose gap has widened the most versus their peers are shorted, a peer-relative mean reversion bet.'},
+  {expr:'ts_rank(operating_income / close, 252)',
+   steps:[['ratio','operating_income / close'],['time series','ts_rank(x, 252)']],
+   text:'Operating income divided by price is an earnings-yield style measure. ts_rank over 252 days, about one trading year, places today\'s yield inside its own one-year range. A reading near the top of the range means the stock looks cheap against its own recent history, so it gets a long weight.'}
+];
+var ALPHAS=[
+  {short:'Volume-price',name:'Volume-price correlation',
+   expr:'-rank(ts_corr(close, volume, 20)) - 2 * rank(sign(ts_corr(returns, volume, 5)))',
+   sharpe:1.33,sub:0.64,fitness:0.55,turnover:'in range',
+   read:'Two parts: a 20-day price and volume correlation, ranked and negated, and the sign of a 5-day return and volume correlation, ranked and weighted double. Both lean against stocks whose price and volume have been moving together. Best variant clears every check except Fitness.'},
+  {short:'Buzz filter',name:'Social media buzz as a conditional filter',
+   expr:'scl12_buzz used as a conditional filter on the signal',
+   sharpe:1.54,sub:1.07,fitness:0.52,turnover:93,
+   read:'Using a volatile signal as a filter rather than the signal itself lifted Sharpe, but turnover of 93% breaks the 70% cap and drags Fitness down. A ts_decay_linear wrapper is the next lever.'},
+  {short:'Cash to debt',name:'Cash to short-term debt',
+   expr:'group_zscore(rank(cash_st / debt_st), subindustry)',
+   sharpe:0.34,sub:null,fitness:null,turnover:null,
+   read:'Balance sheet strength ratio, tried market-wide and then by sector, industry and subindustry. Sharpe is the best across variants and is far from the threshold, so this family needs a different idea.'}
+];
+var TH={sharpe:1.25,fitness:1.0,tmin:1,tmax:70};
+
+/* ---------- helpers ---------- */
+var $=function(s){return document.querySelector(s)};
+var redraws=[];
+var fmt=function(v,d){return Number(v).toFixed(d==null?2:d)};
+var pc=function(v,d){return (v*100).toFixed(d==null?1:d)+'%'};
+var clamp=function(v,a,b){return Math.min(b,Math.max(a,v))};
+function wid(svg){var w=svg.getBoundingClientRect().width;return w>60?Math.round(w):560}
+function mount(svg,w,h,html){svg.setAttribute('viewBox','0 0 '+w+' '+h);svg.innerHTML=html}
+function sc(d0,d1,r0,r1){var k=(r1-r0)/((d1-d0)||1);return function(v){return r0+(v-d0)*k}}
+function n1(v){return v.toFixed(1)}
+function tx(x,y,s,a,c){return '<text class="'+(c||'tk')+'" x="'+n1(x)+'" y="'+n1(y)+'"'+(a?' text-anchor="'+a+'"':'')+'>'+s+'</text>'}
+function ln(x1,y1,x2,y2,c){return '<line class="'+c+'" x1="'+n1(x1)+'" y1="'+n1(y1)+'" x2="'+n1(x2)+'" y2="'+n1(y2)+'"/>'}
+function pth(pts,c,close){return '<path class="'+c+'" d="M'+pts.map(function(p){return n1(p[0])+','+n1(p[1])}).join('L')+(close?'Z':'')+'"/>'}
+function rect(x,y,w,h,c){return '<rect class="'+c+'" x="'+n1(x)+'" y="'+n1(y)+'" width="'+n1(Math.max(0,w))+'" height="'+n1(Math.max(0,h))+'"/>'}
+function niceTicks(a,b,n){n=n||5;var raw=(b-a)/n,mag=Math.pow(10,Math.floor(Math.log10(raw))),res=raw/mag;var step=(res<1.5?1:res<3?2:res<7?5:10)*mag;var out=[];for(var v=Math.ceil(a/step)*step;v<=b+1e-9;v+=step)out.push(+v.toFixed(10));return out}
+function bind(ids,fn){ids.forEach(function(id){$(id).addEventListener('input',fn)})}
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function gaussFn(r){return function(){var u=r()||1e-12,v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}}
+function normals(seed,n){var g=gaussFn(mulberry32(seed)),o=new Array(n);for(var i=0;i<n;i++)o[i]=g();return o}
+function erf(x){var s=x<0?-1:1;x=Math.abs(x);var x2=x*x;if(x>4){var e=Math.exp(-x2)/(x*Math.sqrt(Math.PI))*(1-1/(2*x2)+3/(4*x2*x2));return s*(1-e)}var sum=x,term=x,n=0;while(Math.abs(term)>1e-17*Math.abs(sum)&&n<300){n++;term*=-x2/n;sum+=term/(2*n+1)}return s*2/Math.sqrt(Math.PI)*sum}
+function ncdf(x){return 0.5*(1+erf(x/Math.SQRT2))}
+function mean(a){var s=0;for(var i=0;i<a.length;i++)s+=a[i];return s/a.length}
+function sdev(a){var m=mean(a),s=0;for(var i=0;i<a.length;i++)s+=(a[i]-m)*(a[i]-m);return Math.sqrt(s/(a.length-1))}
+function moments(a){var n=a.length,m=mean(a),m2=0,m3=0,m4=0;for(var i=0;i<n;i++){var d=a[i]-m;m2+=d*d;m3+=d*d*d;m4+=d*d*d*d}m2/=n;m3/=n;m4/=n;return{mean:m,sd:Math.sqrt(m2*n/(n-1)),skew:m3/Math.pow(m2,1.5),kurt:m4/(m2*m2)-3}}
+
+/* ---------- project browser ---------- */
+/* ---------- shared helpers ---------- */
+const range=(a,b,n)=>Array.from({length:n},(_,i)=>a+(b-a)*i/Math.max(1,n-1));
+const cumsum=a=>{let s=0;return a.map(v=>s+=v)};
+const sortN=a=>a.slice().sort((p,q)=>p-q);
+const qnt=(s,q)=>s[Math.min(s.length-1,Math.max(0,Math.floor(q*(s.length-1))))];
+const dot=(a,b)=>a.reduce((s,v,i)=>s+v*b[i],0);
+function olsSlope(x,y){const mx=mean(x),my=mean(y);let n=0,d=0;for(let i=0;i<x.length;i++){n+=(x[i]-mx)*(y[i]-my);d+=(x[i]-mx)*(x[i]-mx)}return n/d}
+function inv(A){const n=A.length,M=A.map((r,i)=>r.concat(Array.from({length:n},(_,j)=>i===j?1:0)));for(let c=0;c<n;c++){let p=c;for(let r=c+1;r<n;r++)if(Math.abs(M[r][c])>Math.abs(M[p][c]))p=r;const tmp=M[c];M[c]=M[p];M[p]=tmp;const d=M[c][c];for(let j=0;j<2*n;j++)M[c][j]/=d;for(let r=0;r<n;r++)if(r!==c){const f=M[r][c];for(let j=0;j<2*n;j++)M[r][j]-=f*M[c][j]}}return M.map(r=>r.slice(n))}
+function mv(A,v){return A.map(r=>r.reduce((s,a,i)=>s+a*v[i],0))}
+function ols(X,y){const k=X[0].length,A=Array.from({length:k},()=>new Array(k).fill(0)),b=new Array(k).fill(0);X.forEach((r,t)=>{for(let i=0;i<k;i++){b[i]+=r[i]*y[t];for(let j=0;j<k;j++)A[i][j]+=r[i]*r[j]}});return mv(inv(A),b)}
+function normInv(p){
+  const a=[-3.969683028665376e+01,2.209460984245205e+02,-2.759285104469687e+02,1.383577518672690e+02,-3.066479806614716e+01,2.506628277459239e+00],
+    b=[-5.447609879822406e+01,1.615858368580409e+02,-1.556989798598866e+02,6.680131188771972e+01,-1.328068155288572e+01],
+    c=[-7.784894002430293e-03,-3.223964580411365e-01,-2.400758277161838e+00,-2.549732539343734e+00,4.374664141464968e+00,2.938163982698783e+00],
+    d=[7.784695709041462e-03,3.224671290700398e-01,2.445134137142996e+00,3.754408661907416e+00],pl=0.02425;let q,r;
+  if(p<pl){q=Math.sqrt(-2*Math.log(p));return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1)}
+  if(p>1-pl){q=Math.sqrt(-2*Math.log(1-p));return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1)}
+  q=p-0.5;r=q*q;return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q/(((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1)}
+function bs(S,K,s,T,r,call){const sq=s*Math.sqrt(T),d1=(Math.log(S/K)+(r+0.5*s*s)*T)/sq,d2=d1-sq,df=Math.exp(-r*T);return call?S*ncdf(d1)-K*df*ncdf(d2):K*df*ncdf(-d2)-S*ncdf(-d1)}
+function ivBS(price,S,K,T,r,call){let lo=0.005,hi=3;for(let i=0;i<45;i++){const m=(lo+hi)/2;if(bs(S,K,m,T,r,call)>price)hi=m;else lo=m}return (lo+hi)/2}
+function bsCall(F,K,s,T,r){const sq=s*Math.sqrt(T),d1=(Math.log(F/K)+0.5*s*s*T)/sq,d2=d1-sq;return Math.exp(-r*T)*(F*ncdf(d1)-K*ncdf(d2))}
+function garch(al,be,lr,shock,z){const s2=lr*lr/252,om=(1-al-be)*s2;let v=s2;const r=[],sg=[];for(let t=0;t<z.length;t++){const s=Math.sqrt(v);let x=s*z[t];if(shock&&t===150)x=-0.06;r.push(x);sg.push(s*Math.sqrt(252)*100);v=om+al*x*x+be*v}return{r:r,sg:sg}}
+function kupiec(n,x,p){function ll(q){return (n-x)*Math.log(1-q)+(x?x*Math.log(q):0)}const lr=-2*(ll(p)-ll(x/n));return 1-erf(Math.sqrt(Math.max(lr,0)/2))}
+function tDraw(z,off,df,sc){let c=0;for(let j=1;j<=df;j++){const q=z[off+j];c+=q*q}return sc*z[off]/Math.sqrt(c/df)}
+function mkCtx(seed){const cache={};return{seed:seed,z(n,s){const k=n+'_'+s;return cache[k]||(cache[k]=normals(seed*997+s*131+7,n))},rng(s){return mulberry32(seed*1013+s*17+3)}}}
+const KINDS={};
+const R=(k,label,min,max,step,val,f)=>({k:k,label:label,min:min,max:max,step:step,val:val,f:f||(v=>String(+Number(v).toFixed(3)))});
+const CK=(k,label,val)=>({k:k,label:label,type:'check',val:val});
+const SEL=(k,label,opts,val)=>({k:k,label:label,type:'select',opts:opts,val:val});
+const TXT=(k,label,val)=>({k:k,label:label,type:'text',val:val});
+const PF=d=>v=>Number(v).toFixed(d)+'%';
+const NF=d=>v=>Number(v).toFixed(d);
+const XF=d=>v=>Number(v).toFixed(d)+'x';
+const pctf=d=>v=>(v*100).toFixed(d)+'%';
+
+/* ---------- chart renderer ---------- */
+function drawChart(svg,ch){
+  const W=wid(svg),H=ch.h||200,ml=ch.ml||46,mr=10,mt=ch.title?24:10,mb=ch.nox?8:(ch.rot?48:26),t=ch.t;
+  const yf=ch.yf||(v=>String(+Number(v).toFixed(2))),xf=ch.xf||(v=>String(+Number(v).toFixed(2)));
+  let g='',x0,x1,y0,y1,sx,sy;
+  const padY=()=>{if(y1===y0){y1+=1;y0-=1}else{const p=(y1-y0)*0.06;if(ch.ymin==null)y0-=p;if(ch.ymax==null)y1+=p}};
+  const frame=(xt)=>{
+    niceTicks(y0,y1,4).forEach(v=>{g+=ln(ml,sy(v),W-mr,sy(v),'grid')+tx(ml-6,sy(v)+3.5,yf(v),'end')});
+    if(!ch.nox&&xt)xt.forEach(v=>{g+=tx(sx(v),H-mb+14,xf(v),'middle','tk dim')});
+    if(ch.title)g+=tx(ml+4,14,ch.title,'start','tk dim');
+  };
+  const refs=()=>{
+    (ch.hl||[]).forEach(h=>{g+=ln(ml,sy(h.y),W-mr,sy(h.y),'ln thin dash '+(h.cls||'s-muted'));if(h.l)g+=tx(W-mr,sy(h.y)-4,h.l,'end','tk')});
+    (ch.vl||[]).forEach(h=>{g+=ln(sx(h.x),mt,sx(h.x),H-mb,'ln thin dash '+(h.cls||'s-dim'));if(h.l)g+=tx(sx(h.x)+4,mt+10,h.l,'start','tk dim')});
+  };
+  if(t==='line'||t==='scatter'){
+    const xs=[],ys=[];
+    if(t==='line')ch.series.forEach(s=>{s.x.forEach(v=>xs.push(v));s.y.forEach(v=>ys.push(v));if(s.spike)ys.push(0)});
+    else ch.points.forEach(p=>{xs.push(p.x);ys.push(p.y)});
+    (ch.hl||[]).forEach(h=>ys.push(h.y));(ch.vl||[]).forEach(h=>xs.push(h.x));
+    x0=ch.xmin!=null?ch.xmin:Math.min.apply(null,xs);x1=ch.xmax!=null?ch.xmax:Math.max.apply(null,xs);
+    y0=ch.ymin!=null?ch.ymin:Math.min.apply(null,ys);y1=ch.ymax!=null?ch.ymax:Math.max.apply(null,ys);
+    if(x1===x0){x1+=1;x0-=1}
+    if(t==='scatter'){const p=(x1-x0)*0.05;if(ch.xmin==null)x0-=p;if(ch.xmax==null)x1+=p}
+    padY();
+    sx=sc(x0,x1,ml,W-mr);sy=sc(y0,y1,H-mb,mt);
+    frame(ch.xt||niceTicks(x0,x1,5));
+    if(ch.diag){const a=Math.max(x0,y0),b=Math.min(x1,y1);g+=ln(sx(a),sy(a),sx(b),sy(b),'ln thin dash s-dim')}
+    if(t==='line'){
+      ch.series.forEach(s=>{
+        if(s.spike){let d='';s.x.forEach((xv,i)=>{d+='M'+n1(sx(xv))+','+n1(sy(0))+'L'+n1(sx(xv))+','+n1(sy(clamp(s.y[i],y0,y1)))});g+='<path class="spike" d="'+d+'"/>';return}
+        const pts=s.x.map((xv,i)=>[sx(xv),sy(clamp(s.y[i],y0,y1))]);
+        if(s.area)g+=pth(pts.concat([[pts[pts.length-1][0],sy(Math.max(y0,0))],[pts[0][0],sy(Math.max(y0,0))]]),'area-acc',true);
+        g+=pth(pts,'ln '+(s.cls||'s-acc')+(s.dash?' dash':'')+(s.thin?' thin':''));
+      });
+      (ch.dots||[]).forEach(d=>{g+='<circle class="'+(d.cls||'f-fail')+'" cx="'+n1(sx(d.x))+'" cy="'+n1(sy(clamp(d.y,y0,y1)))+'" r="'+(d.r||2.6)+'"/>'});
+    }else{
+      ch.points.forEach(p=>{g+='<circle class="'+(p.cls||'f-acc')+'" cx="'+n1(sx(p.x))+'" cy="'+n1(sy(p.y))+'" r="'+(p.r||3)+'" fill-opacity="'+(p.o||0.85)+'"/>';if(p.t)g+=tx(sx(p.x)+5,sy(p.y)-5,p.t,'start','tk')});
+      if(ch.xlab)g+=tx(W-mr,H-2,ch.xlab,'end','tk dim');
+    }
+    refs();
+  }else if(t==='bars'){
+    const its=ch.items,n=its.length;let lo=0,hi=0;
+    its.forEach(it=>{const vs=it.vs||[it.v],b=it.b||0;vs.forEach(v=>{lo=Math.min(lo,b,b+v);hi=Math.max(hi,b,b+v)})});
+    (ch.hl||[]).forEach(h=>{lo=Math.min(lo,h.y);hi=Math.max(hi,h.y)});
+    y0=ch.ymin!=null?ch.ymin:lo;y1=ch.ymax!=null?ch.ymax:hi;padY();if(ch.ymin==null&&lo>=0)y0=0;
+    sx=sc(0,n,ml,W-mr);sy=sc(y0,y1,H-mb,mt);
+    frame(null);
+    const bw=(W-mr-ml)/n,vf=ch.vf;
+    its.forEach((it,i)=>{
+      const vs=it.vs||[it.v],k=vs.length,w=bw*0.74/k;
+      vs.forEach((v,j)=>{const b=it.b||0,ya=sy(b),yb=sy(b+v),cls=it.vs?ch.series[j]:it.cls;
+        g+=rect(sx(i)+bw*0.13+j*w,Math.min(ya,yb),w*0.92,Math.abs(ya-yb),cls||'f-acc');
+        if(vf)g+=tx(sx(i)+bw*0.13+j*w+w*0.46,(v>=0?Math.min(ya,yb)-4:Math.max(ya,yb)+11),vf(v),'middle','tk')});
+      const lab=n>16&&i%Math.ceil(n/12)?'':it.l;
+      if(lab!==''&&!ch.nox){const cx=sx(i)+bw/2;g+=ch.rot?'<text class="tk dim" transform="translate('+n1(cx)+','+(H-mb+12)+') rotate(-35)" text-anchor="end">'+lab+'</text>':tx(cx,H-mb+14,lab,'middle','tk dim')}
+    });
+    g+=ln(ml,sy(0),W-mr,sy(0),'axis');
+    refs();
+  }else if(t==='hist'){
+    const all=[];ch.sets.forEach(s=>s.data.forEach(v=>all.push(v)));
+    const srt=sortN(all);x0=ch.clip?ch.clip[0]:srt[0];x1=ch.clip?ch.clip[1]:srt[srt.length-1];if(x1===x0)x1+=1;
+    const B=ch.bins||30,bw=(x1-x0)/B,counts=ch.sets.map(s=>{const c=new Array(B).fill(0);s.data.forEach(v=>{if(v<x0||v>x1)return;c[Math.min(B-1,Math.floor((v-x0)/bw))]++});return c.map(k=>k/s.data.length)});
+    y0=0;y1=Math.max.apply(null,counts.map(c=>Math.max.apply(null,c)))*1.08||1;
+    sx=sc(x0,x1,ml,W-mr);sy=sc(y0,y1,H-mb,mt);
+    ch.yf=ch.yf||(v=>(v*100).toFixed(0)+'%');
+    niceTicks(y0,y1,3).forEach(v=>{g+=ln(ml,sy(v),W-mr,sy(v),'grid')+tx(ml-6,sy(v)+3.5,ch.yf(v),'end')});
+    niceTicks(x0,x1,5).forEach(v=>{g+=tx(sx(v),H-mb+14,xf(v),'middle','tk dim')});
+    if(ch.title)g+=tx(ml+4,14,ch.title,'start','tk dim');
+    counts.forEach((c,si)=>c.forEach((v,i)=>{g+='<rect class="'+(ch.sets[si].cls||'f-acc')+'" fill-opacity="'+(ch.sets[si].op||0.8)+'" x="'+n1(sx(x0+i*bw)+0.5)+'" y="'+n1(sy(v))+'" width="'+n1(Math.max(0,sx(x0+(i+1)*bw)-sx(x0+i*bw)-1))+'" height="'+n1(Math.max(0,sy(0)-sy(v)))+'"/>'}));
+    g+=ln(ml,sy(0),W-mr,sy(0),'axis');
+    refs();
+  }else if(t==='grid'){
+    const rows=ch.rows,nr=rows.length,nc=rows[0].length,cell=Math.min(22,(W-ml-mr)/nc,(H-mt-8)/nr);
+    if(ch.title)g+=tx(ml+4,14,ch.title,'start','tk dim');
+    rows.forEach((r,i)=>{g+=tx(ml-6,mt+i*cell+cell*0.7,ch.rl?ch.rl[i]:'','end','tk dim');r.forEach((v,j)=>{g+='<rect class="g'+v+'" x="'+n1(ml+j*cell+1)+'" y="'+n1(mt+i*cell+1)+'" width="'+n1(cell-2)+'" height="'+n1(cell-2)+'" rx="2"/>'})});
+    (ch.cl||[]).forEach((l,j)=>{if(l)g+=tx(ml+j*cell+cell/2,mt+nr*cell+12,l,'middle','tk dim')});
+  }else if(t==='gantt'){
+    const rows=ch.rows,rh=26;x1=ch.xmax;x0=0;sx=sc(0,x1,ml+60,W-mr);sy=null;
+    rows.forEach((r,i)=>{const y=mt+i*rh;g+=tx(ml+54,y+16,r.l,'end','tk fg')+rect(sx(r.s),y+4,sx(r.e)-sx(r.s),16,r.cls||'f-acc')});
+    niceTicks(0,x1,6).forEach(v=>{g+=ln(sx(v),mt-2,sx(v),mt+rows.length*rh,'grid')+tx(sx(v),mt+rows.length*rh+14,v,'middle','tk dim')});
+    (ch.vl||[]).forEach(h=>{g+=ln(sx(h.x),mt-2,sx(h.x),mt+rows.length*rh,'ln thin dash s-dim');if(h.l)g+=tx(sx(h.x)+3,mt+8,h.l,'start','tk dim')});
+    if(ch.title)g+=tx(ml+4,14,ch.title,'start','tk dim');
+  }
+  svg.setAttribute('viewBox','0 0 '+W+' '+(t==='gantt'?mt+ch.rows.length*26+26:t==='grid'?mt+ch.rows.length*Math.min(22,(W-ml-mr)/ch.rows[0].length,(H-mt-8)/ch.rows.length)+24:H));
+  svg.innerHTML=g;
+}
+
+/* ---------- project browser ---------- */
+const cur={cat:null,id:null,seed:1};
+function ctlHTML(c,p){
+  const o=(p.cfg&&p.cfg[c.k])||{},val=o.val!=null?o.val:c.val,label=o.label||c.label;
+  if(c.type==='check')return '<label class="chk"><input type="checkbox" data-k="'+c.k+'"'+(val?' checked':'')+'> '+esc(label)+'</label>';
+  if(c.type==='select')return '<label><span>'+esc(label)+'</span><select data-k="'+c.k+'">'+c.opts.map(x=>'<option value="'+x[0]+'"'+(String(x[0])===String(val)?' selected':'')+'>'+esc(x[1])+'</option>').join('')+'</select></label>';
+  if(c.type==='text')return '<label class="wide"><span>'+esc(label)+'</span><textarea data-k="'+c.k+'" rows="6">'+esc(val)+'</textarea></label>';
+  return '<label><span>'+esc(label)+' <output data-o="'+c.k+'">'+c.f(val)+'</output></span><input type="range" data-k="'+c.k+'" min="'+c.min+'" max="'+c.max+'" step="'+c.step+'" value="'+val+'"></label>';
+}
+function defaults(kind,p){const v={};kind.controls.forEach(c=>{const o=(p&&p.cfg&&p.cfg[c.k])||{};v[c.k]=o.val!=null?o.val:c.val});return v}
+function readVals(kind,p){
+  const v=defaults(kind,p);
+  kind.controls.forEach(c=>{const el=document.querySelector('#d-ctl [data-k="'+c.k+'"]');if(!el)return;
+    if(c.type==='check')v[c.k]=!!el.checked;else if(c.type==='select'||c.type==='text')v[c.k]=el.value;else{v[c.k]=parseFloat(el.value);const out=document.querySelector('#d-ctl [data-o="'+c.k+'"]');if(out)out.textContent=c.f(v[c.k])}});
+  return v;
+}
+function paintSpec(spec){
+  let h='';
+  spec.charts.forEach((ch,i)=>{h+=(ch.legend&&ch.legend.length?'<div class="legend">'+ch.legend.map(x=>'<span><i style="background:var('+x[0]+')"></i>'+x[1]+'</span>').join('')+'</div>':'')+'<svg class="chart" id="ch'+i+'" role="img" aria-label="'+esc(ch.title||'chart')+'"></svg>'});
+  $('#d-charts').innerHTML=h;
+  spec.charts.forEach((ch,i)=>drawChart($('#ch'+i),ch));
+  $('#d-stats').innerHTML=(spec.stats||[]).map(s=>'<span>'+esc(s[0])+' <b>'+esc(s[1])+'</b></span>').join('');
+  let ex='';
+  if(spec.table)ex+='<div class="scroll" style="margin-top:12px"><table class="tbl"><tr>'+spec.table.head.map(x=>'<th>'+x+'</th>').join('')+'</tr>'+spec.table.rows.map(r=>'<tr>'+r.map((c,i)=>'<td'+(i?' class="n"':'')+'>'+c+'</td>').join('')+'</tr>').join('')+'</table></div>';
+  if(spec.alert)ex+='<div class="alert '+(spec.alert.bad?'bad':'good')+'">'+esc(spec.alert.text)+'</div>';
+  $('#d-extra').innerHTML=ex;
+}
+function curProject(){return PROJECTS.find(p=>p.id===cur.id)}
+function updateDemo(){
+  const p=curProject();if(!p)return;const kind=KINDS[p.kind];
+  try{paintSpec(kind.run(readVals(kind,p),mkCtx(cur.seed),p))}catch(err){$('#d-extra').innerHTML='<div class="alert bad">This demo hit an error for these settings. Move a control to try again.</div>'}
+}
+function renderTabs(){
+  $('#cat-tabs').innerHTML=CATS.map(c=>'<button type="button" role="tab" data-cat="'+c.id+'" aria-selected="'+(c.id===cur.cat)+'">'+esc(c.name)+' <span>'+PROJECTS.filter(p=>p.cat===c.id).length+'</span></button>').join('');
+}
+function renderList(){
+  $('#plist').innerHTML=PROJECTS.filter(p=>p.cat===cur.cat).map(p=>'<li><button type="button" data-id="'+esc(p.id)+'" aria-current="'+(p.id===cur.id)+'">'+esc(p.name)+'</button></li>').join('');
+}
+function renderDetail(){
+  const p=curProject(),kind=KINDS[p.kind],url='https://github.com/rxj0102/'+p.id+(BRANCH[p.id]?'/tree/'+BRANCH[p.id]:'');
+  $('#pdetail').innerHTML='<div class="pd-head"><h3>'+esc(p.name)+'</h3><a class="repo" href="'+url+'" target="_blank" rel="noopener">github.com/rxj0102/'+esc(p.id)+'</a></div>'
+   +'<p class="pd-blurb">'+esc(p.blurb)+'</p><ul class="tags">'+p.tags.map(t=>'<li>'+esc(t)+'</li>').join('')+'</ul>'
+   +'<p class="try">'+esc(p.note||kind.note)+'</p>'
+   +'<div class="demo"><div class="ctl" id="d-ctl">'+kind.controls.map(c=>ctlHTML(c,p)).join('')+(kind.rand?'<button class="bs" id="d-new" type="button">New draw</button>':'')+'</div><div id="d-charts"></div><div class="stats" id="d-stats"></div><div id="d-extra"></div><p class="fine">'+esc(kind.fine||'Synthetic data generated in your browser. It illustrates the method and does not report results from the repo.')+'</p></div>';
+  updateDemo();
+}
+function selectCat(id){cur.cat=id;const first=PROJECTS.find(p=>p.cat===id);cur.id=first.id;cur.seed=1;renderTabs();renderList();renderDetail()}
+function selectProject(id){cur.id=id;cur.seed=1;const st=$('#plist').scrollTop;renderList();$('#plist').scrollTop=st;renderDetail()}
+
+/* ---------- demo kinds: volatility and derivatives ---------- */
+const idx=n=>Array.from({length:n},(_,i)=>i);
+const S=(x,y,cls,o)=>Object.assign({x:x,y:y,cls:cls},o||{});
+const F=(v,d)=>Number(v).toFixed(d==null?2:d);
+const P=(v,d)=>(v*100).toFixed(d==null?1:d)+'%';
+const pill=(ok,a,b)=>'<span class="pill '+(ok?'ok':'bad')+'">'+(ok?a:b)+'</span>';
+const chi1p=x=>1-erf(Math.sqrt(Math.max(x,0)/2));
+function tser(ctx,n,df,s){const z=ctx.z(n*32,s),k=Math.sqrt((df-2)/df),o=new Array(n);for(let t=0;t<n;t++){let c=0;for(let j=1;j<=df;j++){const q=z[t*32+j];c+=q*q}o[t]=z[t*32]/Math.sqrt(c/df)*k}return o}
+function chol(A){const n=A.length,L=Array.from({length:n},()=>new Array(n).fill(0));for(let i=0;i<n;i++)for(let j=0;j<=i;j++){let s=A[i][j];for(let k=0;k<j;k++)s-=L[i][k]*L[j][k];if(i===j)L[i][i]=Math.sqrt(Math.max(s,1e-12));else L[i][j]=s/L[j][j]}return L}
+function logRV(ctx,n,noise,s0){const z1=ctx.z(n,s0),z2=ctx.z(n,s0+1),z3=ctx.z(n,s0+2),ze=ctx.z(n,s0+3);let a=0,b=0,c=0;const o=[];for(let t=0;t<n;t++){a=0.55*a+0.5*z1[t];b=0.93*b+0.12*z2[t];c=0.992*c+0.03*z3[t];o.push(-0.2+a+b+c+noise*ze[t])}return o}
+function harRows(y,from,to){const X=[],Y=[];for(let t=from;t<to;t++){X.push([1,y[t],mean(y.slice(t-4,t+1)),mean(y.slice(t-21,t+1))]);Y.push(y[t+1])}return{X:X,Y:Y}}
+function dmStat(l1,l2,lag){const d=l1.map((a,i)=>a-l2[i]),n=d.length,m=mean(d);let v=0;for(let k=0;k<=lag;k++){let c=0;for(let i=k;i<n;i++)c+=(d[i]-m)*(d[i-k]-m);c/=n;v+=k===0?c:2*(1-k/(lag+1))*c}return m/Math.sqrt(Math.max(v,1e-18)/n)}
+
+KINDS.garch={rand:true,
+ note:'Move alpha and beta. Alpha is how hard yesterday shock feeds into today variance, beta is how long it lingers, and their sum is persistence. Turn on the shock and watch how long volatility takes to decay.',
+ controls:[R('al','Alpha (shock weight)',0.01,0.25,0.01,0.09,NF(2)),R('be','Beta (memory)',0.5,0.98,0.01,0.89,NF(2)),R('lr','Long-run vol (annual %)',8,40,1,16,PF(0)),CK('sh','Inject a -6% shock on day 150',true)],
+ run(v,ctx){let al=v.al,be=v.be;const capped=al+be>0.995;if(capped)be=Math.round((0.995-al)*100)/100;
+  const g=garch(al,be,v.lr/100,v.sh,ctx.z(500,1)),x=idx(500),m=moments(g.r),pers=al+be,hl=Math.log(0.5)/Math.log(pers);
+  return{charts:[
+   {t:'line',h:150,title:'Daily returns',series:[S(x,g.r,'s-dim',{spike:true})],yf:v=>(v*100).toFixed(0)+'%',xt:[0,100,200,300,400,500]},
+   {t:'line',h:150,title:'Conditional volatility, annualised',series:[S(x,g.sg,'s-acc',{area:true})],yf:v=>v.toFixed(0)+'%',ymin:0,xt:[0,100,200,300,400,500]}],
+   stats:[['persistence',F(pers,3)],['half-life of a shock',isFinite(hl)&&hl>0?hl.toFixed(0)+' days':'very long'],['excess kurtosis',F(m.kurt,2)]],
+   alert:capped?{bad:false,text:'Alpha plus beta is capped at 0.995 so variance stays stationary.'}:null}}};
+
+KINDS.har={rand:true,
+ note:'HAR-RV regresses tomorrow realised volatility on yesterday, the last week and the last month. Raise the measurement noise and see how much of the forecast advantage over a naive lag survives.',
+ controls:[R('nz','Measurement noise',0.05,0.8,0.05,0.3,NF(2)),SEL('tr','Training share',[[0.5,'50%'],[0.7,'70%'],[0.8,'80%']],0.7)],
+ run(v,ctx){const n=900,y=logRV(ctx,n,v.nz,10),d=harRows(y,21,n-1),cut=Math.floor(d.X.length*(+v.tr)),b=ols(d.X.slice(0,cut),d.Y.slice(0,cut));
+  const Xt=d.X.slice(cut),act=d.Y.slice(cut),har=Xt.map(r=>dot(r,b)),nv=Xt.map(r=>r[1]),wk=Xt.map(r=>r[2]);
+  const rm=f=>Math.sqrt(act.reduce((s,a,i)=>s+(a-f[i])*(a-f[i]),0)/act.length),m0=mean(act),sst=act.reduce((s,a)=>s+(a-m0)*(a-m0),0);
+  const r2=f=>1-act.reduce((s,a,i)=>s+(a-f[i])*(a-f[i]),0)/sst,K=Math.min(120,act.length),xs=idx(K);
+  return{charts:[
+   {t:'line',h:190,title:'Test period: log realised variance',legend:[['--muted','actual'],['--accent','HAR forecast']],series:[S(xs,act.slice(-K),'s-muted',{thin:true}),S(xs,har.slice(-K),'s-acc')],xt:[0,30,60,90,120].filter(q=>q<K)},
+   {t:'bars',h:150,title:'Out-of-sample RMSE (lower is better)',items:[{l:'HAR-RV',v:rm(har),cls:'f-acc'},{l:'5-day mean',v:rm(wk),cls:'f-g3'},{l:'Naive lag',v:rm(nv),cls:'f-dim'}],vf:v=>v.toFixed(3),ymin:0}],
+   stats:[['HAR R2',F(r2(har),3)],['naive R2',F(r2(nv),3)],['b daily',F(b[1],2)],['b weekly',F(b[2],2)],['b monthly',F(b[3],2)]]}}};
+
+KINDS.fcmp={rand:true,
+ note:'Three forecasters are scored with QLIKE loss and compared with a Diebold-Mariano test. The stand-ins here are an EWMA, a HAR regression and a HAR with a nonlinear term. The repo benchmarks deep sequence models against GARCH and boosted trees the same way.',
+ controls:[R('nz','Measurement noise',0.05,0.8,0.05,0.25,NF(2)),R('js','Regime shift size',0,1.2,0.1,0.6,NF(1)),R('hl','EWMA lambda',0.8,0.99,0.01,0.94,NF(2))],
+ run(v,ctx){const n=1100,y=logRV(ctx,n,v.nz,20),rg=ctx.rng(5);let s=0;for(let t=0;t<n;t++){if(rg()<(s?0.04:0.015))s=1-s;y[t]+=v.js*s}
+  let e=Math.exp(y[0]);const ew=[];for(let t=0;t<n;t++){e=v.hl*e+(1-v.hl)*Math.exp(y[t]);ew.push(e)}
+  const X1=[],X2=[],Y=[],ti=[];for(let t=21;t<n-1;t++){const w=mean(y.slice(t-4,t+1)),m=mean(y.slice(t-21,t+1));X1.push([1,y[t],w,m]);X2.push([1,y[t],w,m,Math.max(y[t]-m,0),Math.max(w-m,0)]);Y.push(y[t+1]);ti.push(t)}
+  const cut=Math.floor(Y.length*0.55),b1=ols(X1.slice(0,cut),Y.slice(0,cut)),b2=ols(X2.slice(0,cut),Y.slice(0,cut));
+  const rv=(X,b)=>{const res=X.slice(0,cut).map((r,i)=>Y[i]-dot(r,b)),s2=mean(res.map(q=>q*q));return X.slice(cut).map(r=>Math.exp(dot(r,b)+0.5*s2))};
+  const f1=rv(X1,b1),f2=rv(X2,b2),f0=ti.slice(cut).map(t=>ew[t]),act=Y.slice(cut).map(Math.exp);
+  const ql=(f)=>act.map((a,i)=>a/f[i]-Math.log(a/f[i])-1),l0=ql(f0),l1=ql(f1),l2=ql(f2),dm=dmStat(l0,l1,5),dp=1-erf(Math.abs(dm)/Math.SQRT2);
+  const K=Math.min(150,act.length),xs=idx(K);
+  return{charts:[
+   {t:'bars',h:150,title:'Mean QLIKE loss (lower is better)',items:[{l:'EWMA',v:mean(l0),cls:'f-dim'},{l:'HAR',v:mean(l1),cls:'f-acc'},{l:'HAR nonlinear',v:mean(l2),cls:'f-g3'}],vf:v=>v.toFixed(3),ymin:0},
+   {t:'line',h:190,title:'Test period: log forecasts against log realised variance',legend:[['--muted','actual'],['--dim','EWMA'],['--accent','HAR'],['--g3','HAR nonlinear']],series:[S(xs,act.slice(0,K).map(Math.log),'s-muted',{thin:true}),S(xs,f0.slice(0,K).map(Math.log),'s-dim',{thin:true}),S(xs,f1.slice(0,K).map(Math.log),'s-acc',{thin:true}),S(xs,f2.slice(0,K).map(Math.log),'s-g3',{thin:true})]}],
+   stats:[['DM stat, EWMA vs HAR',F(dm,2)],['p-value',F(dp,3)],['test days',String(act.length)]],
+   alert:{bad:dp>=0.05,text:dm>0?(dp<0.05?'HAR beats the EWMA at the 5% level on this draw.':'HAR is ahead on average but the gap is not significant on this draw.'):'The EWMA is not beaten on this draw.'}}}};
+
+KINDS.heston={
+ note:'Monte Carlo Heston with full truncation. Make rho more negative and the smile tilts toward low strikes, raise vol of vol and both wings lift. The repo prices with Fourier methods and calibrates to market quotes. This demo only shows the shape effects.',
+ controls:[R('rho','Correlation rho',-0.95,0,0.05,-0.7,NF(2)),R('xi','Vol of vol',0.1,1.2,0.05,0.5,NF(2)),R('v0','Initial variance',0.01,0.1,0.005,0.04,NF(3)),R('ka','Mean reversion',0.5,5,0.1,2,NF(1))],
+ run(v,ctx){const N=1200,M=50,T=0.5,dt=T/M,S0=100,r=0.02,th=0.04,z1=ctx.z(N*M,31),z2=ctx.z(N*M,32),sq=Math.sqrt(1-v.rho*v.rho),ST=new Array(N),vp=[];
+  for(let i=0;i<N;i++){let lnS=Math.log(S0),vt=v.v0;const keep=i<10?[Math.sqrt(vt)*100]:null;for(let k=0;k<M;k++){const a=z1[i*M+k],b=v.rho*a+sq*z2[i*M+k],vv=Math.max(vt,0),sv=Math.sqrt(vv*dt);lnS+=(r-0.5*vv)*dt+sv*a;vt+=v.ka*(th-vv)*dt+v.xi*sv*b;if(keep)keep.push(Math.sqrt(Math.max(vt,0))*100)}ST[i]=Math.exp(lnS);if(keep)vp.push(keep)}
+  const fwd=S0*Math.exp(r*T),mu=mean(ST);for(let i=0;i<N;i++)ST[i]*=fwd/mu;
+  const Ks=[80,85,90,95,100,105,110,115,120],iv=Ks.map(K=>{const call=K>=100;let s=0;for(let i=0;i<N;i++)s+=call?Math.max(ST[i]-K,0):Math.max(K-ST[i],0);return ivBS(s/N*Math.exp(-r*T),S0,K,T,r,call)*100});
+  const i90=Ks.indexOf(90),i110=Ks.indexOf(110),fel=2*v.ka*th/(v.xi*v.xi);
+  return{charts:[
+   {t:'line',h:190,title:'Implied volatility by strike, 6 month',series:[S(Ks,iv,'s-acc')],dots:Ks.map((k,i)=>({x:k,y:iv[i],cls:'f-acc'})),yf:v=>v.toFixed(0)+'%',xt:Ks.filter((k,i)=>i%2===0)},
+   {t:'line',h:150,title:'Ten simulated volatility paths',series:vp.map((p,i)=>S(range(0,T,M+1),p,i?'s-dim':'s-acc',{thin:true})),hl:[{y:Math.sqrt(th)*100,l:'long run',cls:'s-g3'}],yf:v=>v.toFixed(0)+'%',xf:v=>F(v,1)+'y'}],
+   stats:[['ATM vol',F(iv[4],1)+'%'],['90/110 skew',F(iv[i90]-iv[i110],1)+' vol pts'],['Feller ratio',F(fel,2)]],
+   alert:{bad:fel<1,text:fel<1?'Feller condition fails. Variance can touch zero, which the full truncation scheme handles by clipping.':'Feller condition holds, so variance stays positive in the continuous model.'}}}};
+
+KINDS.fbm={
+ note:'Rough volatility has a Hurst exponent near 0.1, far below the 0.5 of Brownian motion. Lower H and the volatility path gets visibly jagged. The estimate below recovers H from how increment variance scales with the lag.',
+ controls:[R('H','Hurst exponent H',0.05,0.5,0.01,0.1,NF(2)),R('eta','Vol of vol eta',0.5,3,0.1,1.5,NF(1))],
+ run(v,ctx){const n=100,np=40,z=ctx.z(np*n,41);
+  const mk=H=>{const C=Array.from({length:n},(_,i)=>Array.from({length:n},(_,j)=>{const s=(i+1)/n,t=(j+1)/n;return 0.5*(Math.pow(s,2*H)+Math.pow(t,2*H)-Math.pow(Math.abs(s-t),2*H))})),L=chol(C);return Array.from({length:np},(_,p)=>{const o=new Array(n);for(let i=0;i<n;i++){let s=0;for(let k=0;k<=i;k++)s+=L[i][k]*z[p*n+k];o[i]=s}return o})};
+  const rough=mk(v.H),bm=mk(0.5),xs=range(1/n,1,n);
+  const vol=(W,H)=>W.map((w,i)=>20*Math.exp(v.eta*w-0.5*v.eta*v.eta*Math.pow(xs[i],2*H)));
+  const estH=W=>{const lags=[1,2,4,8],lv=lags.map(l=>{let s=0,c=0;W.forEach(p=>{for(let i=0;i+l<n;i++){const d=p[i+l]-p[i];s+=d*d;c++}});return Math.log(s/c)}),sl=olsSlope(lags.map(Math.log),lv);return sl/2};
+  const ex=i=>S(xs,vol(rough[i],v.H),i?'s-dim':'s-acc',{thin:i>0}),ey=i=>S(xs,vol(bm[i],0.5),i?'s-dim':'s-g3',{thin:i>0});
+  return{charts:[
+   {t:'line',h:150,title:'Volatility paths, H = '+F(v.H,2),series:[0,1,2,3].reverse().map(ex),ymin:0,yf:v=>v.toFixed(0)+'%',xf:v=>F(v,1)},
+   {t:'line',h:150,title:'Volatility paths, H = 0.50 (same shocks)',series:[0,1,2,3].reverse().map(ey),ymin:0,yf:v=>v.toFixed(0)+'%',xf:v=>F(v,1)}],
+   stats:[['input H',F(v.H,2)],['estimated H (40 paths)',F(estH(rough),2)],['estimated H, Brownian',F(estH(bm),2)]]}}};
+
+function crrPrice(S0,K,s,T,r,n,call,am){const dt=T/n,u=Math.exp(s*Math.sqrt(dt)),d=1/u,p=(Math.exp(r*dt)-d)/(u-d),df=Math.exp(-r*dt),V=[];for(let j=0;j<=n;j++){const St=S0*Math.pow(u,2*j-n);V.push(call?Math.max(St-K,0):Math.max(K-St,0))}
+ for(let i=n-1;i>=0;i--)for(let j=0;j<=i;j++){let c=df*(p*V[j+1]+(1-p)*V[j]);if(am){const St=S0*Math.pow(u,2*j-i),ex=call?St-K:K-St;if(ex>c)c=ex}V[j]=c}return V[0]}
+KINDS.crr={
+ note:'Binomial tree against Black-Scholes. The price converges as steps grow, with a sawtooth from where the strike falls on the tree. Switch to an American put to see the early exercise premium.',
+ controls:[R('n','Tree steps',5,200,1,25,NF(0)),R('K','Strike',80,120,1,100,NF(0)),R('vol','Volatility',0.1,0.6,0.01,0.25,pctf(0)),SEL('ty','Option',[['c','Call'],['p','Put']],'p'),CK('am','American exercise',true)],
+ run(v,ctx){const S0=100,T=1,r=0.04,call=v.ty==='c',n=Math.round(v.n),bsP=bs(S0,v.K,v.vol,T,r,call),ns=idx(76).map(i=>i+5),conv=ns.map(k=>crrPrice(S0,v.K,v.vol,T,r,k,call,false));
+  const price=crrPrice(S0,v.K,v.vol,T,r,n,call,v.am),eur=crrPrice(S0,v.K,v.vol,T,r,n,call,false),Ss=range(60,140,21),nn=Math.min(n,60),
+   am=Ss.map(s=>crrPrice(s,v.K,v.vol,T,r,nn,call,true)),eu=Ss.map(s=>bs(s,v.K,v.vol,T,r,call)),iv=Ss.map(s=>call?Math.max(s-v.K,0):Math.max(v.K-s,0));
+  return{charts:[
+   {t:'line',h:170,title:'European price against tree steps',series:[S(ns,conv,'s-acc')],hl:[{y:bsP,l:'Black-Scholes',cls:'s-g3'}],dots:n>=5&&n<=80?[{x:n,y:conv[n-5],cls:'f-acc2',r:3.4}]:[],yf:v=>v.toFixed(2),xf:v=>String(Math.round(v))},
+   {t:'line',h:170,title:'Value against spot, '+nn+' steps',legend:[['--accent','American tree'],['--accent-2','European Black-Scholes'],['--dim','intrinsic']],series:[S(Ss,iv,'s-dim',{dash:true,thin:true}),S(Ss,eu,'s-acc2',{thin:true}),S(Ss,am,'s-acc')],yf:v=>v.toFixed(0),xf:v=>String(Math.round(v))}],
+   stats:[['tree price',F(price,3)],['Black-Scholes',F(bsP,3)],['tree error (European)',F(eur-bsP,3)],['early exercise premium',F(price-eur,3)]]}}};
+
+KINDS.ivs={
+ note:'A parametric smile for four maturities. Skew and curvature scale with one over the square root of time, as they do in real surfaces. The check at the bottom flags calendar arbitrage, where total variance would fall as maturity grows.',
+ controls:[R('atm','1M ATM vol',0.1,0.5,0.01,0.22,pctf(0)),R('sk','Skew at 1M',-0.6,0,0.02,-0.25,NF(2)),R('cv','Curvature at 1M',0,2,0.05,0.6,NF(2)),R('ts','Term slope (vol per year)',-0.3,0.3,0.01,0.05,NF(2))],
+ run(v){const Ts=[1/12,0.25,0.5,1],nm=['1M','3M','6M','1Y'],cl=['s-acc','s-g3','s-acc2','s-fail'],ks=range(-0.25,0.25,41);
+  const iv=(k,T)=>{const f=Math.sqrt((1/12)/T);return Math.max(0.03,v.atm+v.ts*(T-1/12)+v.sk*f*k+v.cv*f*k*k)},rows=Ts.map(T=>ks.map(k=>iv(k,T)*100));
+  let viol=0;for(let j=1;j<Ts.length;j++)ks.forEach(k=>{if(iv(k,Ts[j])*iv(k,Ts[j])*Ts[j]<iv(k,Ts[j-1])*iv(k,Ts[j-1])*Ts[j-1]-1e-12)viol++});
+  const tt=range(1/12,1,12);
+  return{charts:[
+   {t:'line',h:190,title:'Implied vol against log-moneyness',legend:nm.map((n,i)=>[['--accent','--g3','--accent-2','--fail'][i],n]),series:rows.map((r,i)=>S(ks,r,cl[i])),yf:v=>v.toFixed(0)+'%',xf:v=>F(v,2)},
+   {t:'line',h:130,title:'ATM term structure',series:[S(tt,tt.map(T=>iv(0,T)*100),'s-acc')],yf:v=>v.toFixed(0)+'%',xf:v=>F(v,2)+'y'}],
+   stats:[['3M skew, vol(-10%) minus vol(+10%)',F((iv(-0.1,0.25)-iv(0.1,0.25))*100,1)+' pts'],['1Y ATM',F(iv(0,1)*100,1)+'%']],
+   alert:{bad:viol>0,text:viol>0?'Calendar arbitrage: total variance falls with maturity at '+viol+' grid points. Reduce the term slope magnitude.':'No calendar arbitrage on this grid: total variance rises with maturity.'}}}};
+
+KINDS.mcvr={
+ note:'Prices an arithmetic Asian call 30 times with each method and compares the spread of the estimates. Antithetic pairs and a geometric Asian control variate shrink the standard error without adding paths.',
+ controls:[R('N','Paths per batch',200,2000,100,500,NF(0)),R('K','Strike',90,110,1,100,NF(0)),R('vol','Volatility',0.1,0.6,0.01,0.25,pctf(0))],
+ run(v,ctx){const S0=100,r=0.03,T=1,n=24,B=30,dt=T/n,N=Math.round(v.N),g=gaussFn(ctx.rng(40)),df=Math.exp(-r*T),sd=v.vol,drift=(r-0.5*sd*sd)*dt,sdt=sd*Math.sqrt(dt);
+  const m=Math.log(S0)+(r-0.5*sd*sd)*T*(n+1)/(2*n),vv=sd*sd*T*(n+1)*(2*n+1)/(6*n*n),sv=Math.sqrt(vv),d1=(m+vv-Math.log(v.K))/sv,d2=d1-sv,geo=df*(Math.exp(m+vv/2)*ncdf(d1)-v.K*ncdf(d2));
+  const pl=[],an=[],cv=[];
+  for(let b=0;b<B;b++){const X=[],Y=[],AP=[];
+   for(let i=0;i<N;i++){let l1=0,l2=0,a1=0,a2=0,g1=0;for(let k=0;k<n;k++){const z=g();l1+=drift+sdt*z;l2+=drift-sdt*z;const s1=S0*Math.exp(l1),s2=S0*Math.exp(l2);a1+=s1;a2+=s2;g1+=Math.log(s1)}
+    const A1=a1/n,A2=a2/n,G1=Math.exp(g1/n);X.push(df*Math.max(A1-v.K,0));Y.push(df*Math.max(G1-v.K,0));AP.push(0.5*df*(Math.max(A1-v.K,0)+Math.max(A2-v.K,0)))}
+   pl.push(mean(X));an.push(mean(AP.slice(0,Math.floor(N/2))));
+   const mx=mean(X),my=mean(Y);let c=0,q=0;for(let i=0;i<N;i++){c+=(X[i]-mx)*(Y[i]-my);q+=(Y[i]-my)*(Y[i]-my)}const beta=q>0?c/q:0;cv.push(mx-beta*(my-geo))}
+  const ref=mean(cv),se=[sdev(pl),sdev(an),sdev(cv)],pts=[];
+  [pl,an,cv].forEach((a,j)=>a.forEach((e,i)=>pts.push({x:j+1+((i%7)-3)*0.04,y:e,cls:['f-dim','f-acc2','f-acc'][j],r:2.6})));
+  return{charts:[
+   {t:'bars',h:150,title:'Standard error of the price estimate',items:[{l:'Plain',v:se[0],cls:'f-dim'},{l:'Antithetic',v:se[1],cls:'f-acc2'},{l:'Control variate',v:se[2],cls:'f-acc'}],vf:v=>v.toFixed(4),ymin:0},
+   {t:'scatter',h:170,title:'The 30 estimates from each method',points:pts,hl:[{y:ref,l:'reference',cls:'s-g3'}],xt:[1,2,3],xf:v=>['','plain','antithetic','control variate'][v]||'',xmin:0.5,xmax:3.5}],
+   stats:[['reference price',F(ref,3)],['variance cut, antithetic',F(se[0]*se[0]/(se[1]*se[1]),1)+'x'],['variance cut, control variate',F(se[0]*se[0]/(se[2]*se[2]),1)+'x']]}}};
+
+KINDS.rnd={
+ note:'Breeden-Litzenberger: the second derivative of the call price in strike is the risk-neutral density. A downward skew fattens the left tail against a lognormal at the same ATM vol. Push the curvature far enough and the density can go negative, which is an arbitrage.',
+ controls:[R('atm','ATM vol',0.15,0.5,0.01,0.25,pctf(0)),R('sk','Skew',-0.8,0,0.02,-0.3,NF(2)),R('cv','Curvature',0,3,0.1,0.8,NF(1)),R('dd','Days to expiry',14,120,1,30,NF(0))],
+ run(v){const S0=100,r=0.04,T=v.dd/365,F0=S0*Math.exp(r*T),h=0.5,Ks=[];for(let k=50;k<=160;k+=h)Ks.push(k);
+  const iv=K=>{const x=Math.log(K/F0);return Math.max(0.05,v.atm+v.sk*x+v.cv*x*x)},C=Ks.map(K=>bsCall(F0,K,iv(K),T,r));
+  const kk=[],f=[],ln0=[];let neg=0,mass=0,left=0,leftLN=0;
+  for(let i=1;i<Ks.length-1;i++){const K=Ks[i],d=Math.exp(r*T)*(C[i+1]-2*C[i]+C[i-1])/(h*h),s=v.atm*Math.sqrt(T),l=Math.exp(-0.5*Math.pow((Math.log(K/F0)+0.5*s*s)/s,2))/(K*s*Math.sqrt(2*Math.PI));
+   kk.push(K);f.push(d);ln0.push(l);if(d<-1e-6)neg++;mass+=d*h;if(K<80){left+=d*h;leftLN+=l*h}}
+  const ratio=leftLN>1e-9?left/leftLN:NaN;
+  return{charts:[
+   {t:'line',h:190,title:'Risk-neutral density of the terminal price',legend:[['--accent','market-implied'],['--dim','lognormal, ATM vol']],series:[S(kk,ln0,'s-dim',{dash:true,thin:true}),S(kk,f,'s-acc',{area:true})],xmin:60,xmax:140,vl:[{x:100,l:'spot'}],yf:v=>v.toFixed(3),xf:v=>String(Math.round(v))},
+   {t:'line',h:130,title:'Implied volatility by strike',series:[S(Ks,Ks.map(K=>iv(K)*100),'s-acc2')],xmin:60,xmax:140,yf:v=>v.toFixed(0)+'%',xf:v=>String(Math.round(v))}],
+   stats:[['P(drop of 20% or more)',P(left,2)+' vs '+P(leftLN,2)+' lognormal'],['tail ratio',isNaN(ratio)?'n/a':F(ratio,2)+'x'],['density mass',P(mass,1)]],
+   alert:{bad:neg>0||mass>1.01,text:neg>0?'Negative density at '+neg+' strikes: butterfly arbitrage. Lower the curvature.':mass>1.01?'Density integrates above 100%: a call-spread arbitrage. Lower the skew.':'Density is non-negative and integrates to about 100%.'}}}};
+
+function bondYield(md,ka,th,s,r0,tau){if(md==='v'){const B=(1-Math.exp(-ka*tau))/ka,A=Math.exp((th-s*s/(2*ka*ka))*(B-tau)-s*s*B*B/(4*ka));return -Math.log(A*Math.exp(-B*r0))/tau}
+ const h=Math.sqrt(ka*ka+2*s*s),e=Math.exp(h*tau)-1,den=2*h+(ka+h)*e,A=Math.pow(2*h*Math.exp((ka+h)*tau/2)/den,2*ka*th/(s*s)),B=2*e/den;return -Math.log(A*Math.exp(-B*r0))/tau}
+KINDS.vasicek={rand:true,
+ note:'Short rate paths and the model yield curve. Vasicek lets rates go negative. CIR keeps them positive when the Feller condition holds. The vol slider is set in basis points at a 4% rate so the two models are comparable.',
+ controls:[SEL('md','Model',[['v','Vasicek'],['c','CIR']],'v'),R('ka','Mean reversion',0.05,2,0.05,0.5,NF(2)),R('th','Long-run rate',0,0.08,0.005,0.04,pctf(1)),R('bp','Rate vol (bp per year)',20,300,10,100,NF(0)),R('r0','Current short rate',0.005,0.08,0.005,0.02,pctf(1))],
+ run(v,ctx){const vas=v.md==='v',s=vas?v.bp/1e4:v.bp/1e4/0.2,M=120,dt=0.1,np=10,z=ctx.z(np*M,60),series=[];let mn=1;
+  for(let p=0;p<np;p++){let r=v.r0;const y=[r*100];for(let k=0;k<M;k++){const zz=z[p*M+k];if(vas)r+=v.ka*(v.th-r)*dt+s*Math.sqrt(dt)*zz;else{const rp=Math.max(r,0);r+=v.ka*(v.th-rp)*dt+s*Math.sqrt(rp*dt)*zz;r=Math.max(r,0)}mn=Math.min(mn,r);y.push(r*100)}series.push(S(range(0,M*dt,M+1),y,p?'s-dim':'s-acc',{thin:p>0}))}
+  const taus=range(0.25,30,40),yc=taus.map(t=>bondYield(v.md,v.ka,v.th,s,v.r0,t)*100),fel=vas?null:2*v.ka*v.th/(s*s);
+  return{charts:[
+   {t:'line',h:170,title:'Ten short rate paths',series:series,hl:[{y:v.th*100,l:'long run',cls:'s-g3'}],yf:v=>v.toFixed(1)+'%',xf:v=>v+'y'},
+   {t:'line',h:150,title:'Model yield curve',series:[S(taus,yc,'s-acc2')],yf:v=>v.toFixed(1)+'%',xf:v=>v.toFixed(0)+'y'}],
+   stats:[['2y yield',F(bondYield(v.md,v.ka,v.th,s,v.r0,2)*100,2)+'%'],['10y yield',F(bondYield(v.md,v.ka,v.th,s,v.r0,10)*100,2)+'%'],['30y yield',F(yc[yc.length-1],2)+'%']],
+   alert:vas?{bad:mn<0,text:mn<0?'At least one path went negative. Vasicek allows that.':'No path went negative on this draw.'}:{bad:fel<1,text:fel<1?'Feller condition fails (ratio '+F(fel,2)+'). Paths can touch zero.':'Feller condition holds (ratio '+F(fel,2)+').'}}}};
+
+KINDS.spark={rand:true,
+ note:'Gas and power are correlated mean-reverting prices. A gas-fired plant is a strip of daily options on the spark spread. Raise the heat rate and the plant runs less often. Raise power volatility and the option value climbs.',
+ controls:[R('hr','Heat rate (MMBtu/MWh)',6,12,0.25,8,NF(2)),R('pv','Power volatility',0.04,0.2,0.01,0.09,NF(2)),R('rho','Gas-power correlation',0,0.95,0.05,0.6,NF(2))],
+ run(v,ctx){const np=300,M=90,z1=ctx.z(np*M,70),z2=ctx.z(np*M,71),kp=0.12,sq=Math.sqrt(1-v.rho*v.rho),tot=[],samp=[];
+  for(let p=0;p<np;p++){let xg=0,xp=0,sum=0;const sp=[];for(let t=0;t<M;t++){const a=z1[p*M+t],b=v.rho*a+sq*z2[p*M+t];xg+=-kp*xg+0.04*a;xp+=-kp*xp+v.pv*b;const gas=3*Math.exp(xg),pw=32.4*Math.exp(xp),spr=pw-v.hr*gas-2;sum+=Math.max(spr,0)*100*16/1e6;if(p<4)sp.push(spr)}tot.push(sum);if(p<4)samp.push(sp)}
+  const srt=sortN(tot),m=mean(tot),q5=qnt(srt,0.05),tail=srt.slice(0,Math.max(1,Math.floor(np*0.05))),cv=mean(tail);
+  return{charts:[
+   {t:'line',h:150,title:'Spark spread, four sample paths ($/MWh)',series:samp.map((s,i)=>S(idx(M),s,['s-acc','s-g3','s-acc2','s-dim'][i],{thin:true})),hl:[{y:0,cls:'s-fail'}],xf:v=>String(v)},
+   {t:'hist',h:150,title:'Plant value over 90 days, $M (100 MW, 16 h/day)',sets:[{data:tot,cls:'f-acc'}],bins:24,xf:v=>v.toFixed(1),vl:[{x:m,l:'mean',cls:'s-g3'},{x:q5,l:'5th pct',cls:'s-fail'}]}],
+   stats:[['mean value','$'+F(m,2)+'M'],['5th percentile','$'+F(q5,2)+'M'],['CVaR 95 (mean of worst 5%)','$'+F(cv,2)+'M']]}}};
+
+/* ---------- demo kinds: risk, credit, trading, signals ---------- */
+function gcRets(ctx,n,al,df,vol,s){const t=tser(ctx,n,df,s),be=0.98-al,om=(1-al-be)*vol*vol,r=[];let vt=vol*vol;for(let i=0;i<n;i++){const x=Math.sqrt(vt)*t[i];r.push(x);vt=om+al*x*x+be*vt}return r}
+
+KINDS.varm={rand:true,
+ note:'Three one-day VaR models are backtested on the same fat-tailed, volatility-clustered returns. The rolling-window normal model understates tail risk when tails are heavy. Lower the degrees of freedom and watch the exception rates and Kupiec p-values move.',
+ controls:[SEL('cf','Confidence',[[0.95,'95%'],[0.99,'99%']],0.99),R('W','Window (days)',100,500,25,250,NF(0)),R('df','Tail df (lower is fatter)',3,30,1,5,NF(0)),R('al','Volatility clustering (alpha)',0,0.15,0.01,0.08,NF(2))],
+ run(v,ctx){const n=1500,W=Math.round(v.W),cf=+v.cf,a=1-cf,r=gcRets(ctx,n,v.al,Math.round(v.df),0.01,81),zq=-normInv(a);
+  const names=['Rolling normal','Historical simulation','EWMA normal'],ex=[0,0,0],hit=[[],[],[]];let lam=0.94,ev=Math.pow(sdev(r.slice(0,W)),2);
+  for(let t=0;t<n;t++){if(t>=W){const win=r.slice(t-W,t),sd=sdev(win),srt=sortN(win),v0=zq*sd,v1=-qnt(srt,a),v2=zq*Math.sqrt(ev);[v0,v1,v2].forEach((q,j)=>{if(t>=500&&r[t]<-q){ex[j]++;hit[j].push(t)}})}ev=lam*ev+(1-lam)*r[t]*r[t]}
+  const N=n-500,rows=names.map((nm,j)=>{const p=kupiec(N,ex[j],a);return[nm,String(ex[j]),P(ex[j]/N,2),F(p,3),pill(p>=0.05,'pass','reject')]});
+  return{charts:[{t:'bars',h:160,title:'Exception rate against the '+P(a,0)+' target',items:names.map((nm,j)=>({l:nm,v:ex[j]/N,cls:['f-acc','f-g3','f-acc2'][j]})),vf:v=>P(v,2),hl:[{y:a,l:'target',cls:'s-fail'}],ymin:0}],
+   table:{head:['Model','Exceptions','Rate','Kupiec p','Verdict'],rows:rows},
+   stats:[['test days',String(N)],['expected exceptions',F(N*a,1)]]}}};
+
+KINDS.basel={rand:true,
+ note:'A 250-day backtest of a 99% normal VaR against fat-tailed returns, scored with the Basel traffic light. Scale the model vol down to mimic an understated model, or lower the tail df to fatten the real distribution.',
+ controls:[R('sc','Model vol scale',0.6,1.4,0.05,1,NF(2)),R('df','Tail df of true returns',3,30,1,4,NF(0))],
+ run(v,ctx){const n=250,sg=0.012,a=0.01,t=tser(ctx,n,Math.round(v.df),82),r=t.map(q=>q*sg),va=v.sc*sg*(-normInv(a)),ex=[];r.forEach((q,i)=>{if(q<-va)ex.push(i)});
+  const k=ex.length,zone=k<=4?'green':k<=9?'yellow':'red',add=[0,0,0,0,0,0.4,0.5,0.65,0.75,0.85][k]!==undefined&&k<=9?[0,0,0,0,0,0.4,0.5,0.65,0.75,0.85][k]:1,pk=kupiec(n,k,a);
+  const esModel=v.sc*sg*Math.exp(-0.5*normInv(a)*normInv(a))/Math.sqrt(2*Math.PI)/a,esReal=ex.length?mean(ex.map(i=>-r[i])):NaN;
+  return{charts:[{t:'line',h:190,title:'Daily returns against the 99% VaR',legend:[['--muted','return'],['--fail','-VaR']],series:[S(idx(n),r,'s-dim',{spike:true}),S(idx(n),idx(n).map(()=>-va),'s-fail',{thin:true})],dots:ex.map(i=>({x:i,y:r[i],cls:'f-fail',r:3})),yf:v=>(v*100).toFixed(1)+'%',xt:[0,50,100,150,200,250]}],
+   stats:[['exceptions',k+' (expect 2.5)'],['zone',zone],['capital multiplier',F(3+add,2)],['Kupiec p',F(pk,3)],['model ES vs realised',P(esModel,2)+' vs '+(isNaN(esReal)?'n/a':P(esReal,2))]],
+   alert:{bad:zone!=='green',text:zone==='green'?'Green zone: no capital add-on.':zone==='yellow'?'Yellow zone: the supervisor can add '+F(add,2)+' to the multiplier.':'Red zone: the model is presumed flawed and the multiplier goes to 4.'}}}};
+
+KINDS.audit={rand:true,
+ note:'A bank discloses one VaR number that is calibrated in calm markets. Stressed days then breach it far more often than 1%. Slide the conservatism and the stressed share to see when the audit fails.',
+ controls:[R('cs','Disclosed VaR vs calm 99% VaR',0.6,1.6,0.05,1.15,XF(2)),R('sm','Stress vol multiple',1.2,4,0.1,2.2,XF(1)),R('ss','Share of days stressed',0.05,0.4,0.01,0.18,pctf(0))],
+ run(v,ctx){const n=1250,sg=0.01,pin=0.01,pout=pin*(1-v.ss)/v.ss,t=tser(ctx,n,6,83),rg=ctx.rng(84);let s=0;const st=[],r=[];
+  for(let i=0;i<n;i++){if(rg()<(s?pout:pin))s=1-s;st.push(s);r.push(t[i]*sg*(s?v.sm:1))}
+  const VaR=v.cs*sg*2.326,e=r.map(q=>q<-VaR?1:0),cnt=(m)=>{let d=0,x=0;e.forEach((q,i)=>{if(m(st[i])){d++;x+=q}});return[d,x]};
+  const all=[n,e.reduce((a,b)=>a+b,0)],calm=cnt(q=>q===0),str=cnt(q=>q===1);
+  let n00=0,n01=0,n10=0,n11=0;for(let i=1;i<n;i++){if(e[i-1]===0)e[i]?n01++:n00++;else e[i]?n11++:n10++}
+  const xl=(c,p)=>c>0?c*Math.log(p):0,p0=n01/Math.max(1,n00+n01),p1=n11/Math.max(1,n10+n11),pp=(n01+n11)/(n-1),lri=-2*(xl(n00+n10,1-pp)+xl(n01+n11,pp))+2*(xl(n00,1-p0)+xl(n01,p0)+xl(n10,1-p1)+xl(n11,p1)),pind=chi1p(lri);
+  const row=(nm,d)=>{const p=d[0]>0?kupiec(d[0],d[1],0.01):NaN;return[nm,String(d[0]),String(d[1]),F(d[0]*0.01,1),isNaN(p)?'n/a':F(p,3),isNaN(p)?'':pill(p>=0.05,'pass','reject')]};
+  const ex=[];e.forEach((q,i)=>{if(q)ex.push({x:i,y:r[i],cls:st[i]?'f-fail':'f-acc2',r:2.6})});
+  return{charts:[{t:'line',h:190,title:'Daily P&L against the disclosed VaR',legend:[['--accent-2','exception, calm'],['--fail','exception, stressed']],series:[S(idx(n),r,'s-dim',{spike:true})],hl:[{y:-VaR,l:'disclosed VaR',cls:'s-fail'}],dots:ex,yf:v=>(v*100).toFixed(0)+'%',xt:[0,250,500,750,1000,1250]}],
+   table:{head:['Sample','Days','Exceptions','Expected','Kupiec p','Verdict'],rows:[row('All days',all),row('Calm',calm),row('Stressed',str)]},
+   stats:[['independence test p',F(pind,3)]],
+   alert:{bad:str[0]>0&&str[1]/Math.max(1,str[0])>0.03,text:str[0]>0?'Exception rate on stressed days: '+P(str[1]/Math.max(1,str[0]),1)+' against a 1% target.':'No stressed days in this draw.'}}}};
+
+KINDS.regime={rand:true,
+ note:'Beta, Sharpe and volatility all change by regime. Days are split at the median 30-day market volatility. The full-sample beta is an average of two different numbers and describes neither.',
+ controls:[R('bl','True beta, calm',0.4,1.4,0.05,0.8,NF(2)),R('bh','True beta, stressed',0.6,2.2,0.05,1.5,NF(2)),R('sm','Stress vol multiple',1.5,4,0.1,2.5,XF(1))],
+ run(v,ctx){const n=800,zm=ctx.z(n,85),zi=ctx.z(n,86),rg=ctx.rng(87);let s=0;const st=[],m=[],a=[];
+  for(let i=0;i<n;i++){if(rg()<0.02)s=1-s;st.push(s);const mr=0.006*(s?v.sm:1)*zm[i]+0.0004;m.push(mr);a.push((s?v.bh:v.bl)*mr+0.006*zi[i])}
+  const rv=m.map((_,i)=>i<30?NaN:sdev(m.slice(i-29,i+1))),med=qnt(sortN(rv.filter(q=>!isNaN(q))),0.5),lo=[],hi=[];
+  for(let i=30;i<n;i++)(rv[i]>med?hi:lo).push(i);
+  const beta=ix=>olsSlope(ix.map(i=>m[i]),ix.map(i=>a[i])),sh=ix=>{const q=ix.map(i=>a[i]);return mean(q)/sdev(q)*Math.sqrt(252)},all=idx(n).slice(30);
+  const pts=[];lo.forEach(i=>pts.push({x:m[i]*100,y:a[i]*100,cls:'f-acc',r:2.2,o:0.6}));hi.forEach(i=>pts.push({x:m[i]*100,y:a[i]*100,cls:'f-fail',r:2.2,o:0.6}));
+  return{charts:[
+   {t:'scatter',h:200,title:'Asset against market, daily %',legend:[['--accent','low-vol regime'],['--fail','high-vol regime']],points:pts,xf:v=>v.toFixed(0)+'%',yf:v=>v.toFixed(0)+'%',diag:true},
+   {t:'bars',h:140,title:'Estimated beta',items:[{l:'Low-vol',v:beta(lo),cls:'f-acc'},{l:'High-vol',v:beta(hi),cls:'f-fail'},{l:'Full sample',v:beta(all),cls:'f-dim'}],vf:v=>v.toFixed(2),ymin:0}],
+   stats:[['Sharpe, low-vol',F(sh(lo),2)],['Sharpe, high-vol',F(sh(hi),2)],['Sharpe, full',F(sh(all),2)],['vol ratio high/low',F(sdev(hi.map(i=>m[i]))/sdev(lo.map(i=>m[i])),2)]]}}};
+
+KINDS.fed={
+ note:'Paste any text. Hawkish and dovish phrases are counted from a small lexicon and mapped to a score from -100 to +100. The reference statements below are short synthetic texts written for this demo, not real FOMC statements.',
+ controls:[TXT('tx','Statement text','Inflation remains elevated and the labor market is strong. The committee judges that further increases may be appropriate and expects policy to remain restrictive for some time. Risks to inflation are tilted to the upside, though growth has moderated.')],
+ run(v){const hawk=['inflation remains elevated','elevated','tighten','restrictive','strong','robust','solid','further increases','upside risks','persistent','overheating','firming'],dove=['accommodative','soften','moderated','easing','lower','cut','decline','slowing','weak','downside risks','patient','subdued','below target'],tx=String(v.tx).toLowerCase();
+  const cnt=w=>tx.split(w).length-1,hh=hawk.map(w=>[w,cnt(w)]).filter(q=>q[1]>0),dd=dove.map(w=>[w,cnt(w)]).filter(q=>q[1]>0),H=hh.reduce((s,q)=>s+q[1],0),D=dd.reduce((s,q)=>s+q[1],0),sc=H+D>0?100*(H-D)/(H+D):0;
+  const refs=[['Reference A, tightening',' inflation is elevated and the labor market is strong so the committee will tighten policy further with restrictive settings and upside risks'],['Reference B, neutral',' the committee expects to be patient as growth has moderated and inflation is moving toward target with balanced risks'],['Reference C, easing',' growth is slowing and the labor market is weak so the committee will cut rates and keep policy accommodative with downside risks']];
+  const tok=s=>{const o={};(s.toLowerCase().match(/[a-z]+/g)||[]).filter(w=>w.length>3).forEach(w=>o[w]=(o[w]||0)+1);return o},cos=(a,b)=>{let d=0,na=0,nb=0;Object.keys(a).forEach(k=>{na+=a[k]*a[k];if(b[k])d+=a[k]*b[k]});Object.keys(b).forEach(k=>nb+=b[k]*b[k]);return na&&nb?d/Math.sqrt(na*nb):0},tv=tok(tx);
+  const items=hh.map(q=>({l:q[0],v:q[1],cls:'f-acc2'})).concat(dd.map(q=>({l:q[0],v:q[1],cls:'f-acc'})));
+  return{charts:[{t:'bars',h:170,title:'Matched phrases (amber hawkish, blue dovish)',items:items.length?items:[{l:'no match',v:0}],rot:true,vf:v=>String(v),ymin:0},
+   {t:'bars',h:140,title:'Word-count cosine similarity to reference texts',items:refs.map((q,i)=>({l:q[0].replace('Reference ',''),v:cos(tv,tok(q[1])),cls:['f-acc2','f-dim','f-acc'][i]})),vf:v=>v.toFixed(2),ymin:0}],
+   stats:[['hawkish phrases',String(H)],['dovish phrases',String(D)],['score',(sc>=0?'+':'')+F(sc,0)]],
+   alert:{bad:sc>25,text:sc>25?'Reads hawkish on this lexicon.':sc<-25?'Reads dovish on this lexicon.':'Reads close to neutral on this lexicon.'}}}};
+
+KINDS.credit={rand:true,
+ note:'One-factor Gaussian copula on a 200-loan pool. Raise asset correlation and the loss distribution grows a fat right tail, which hits the mezzanine tranche far harder than the average loss suggests. This is how a significant risk transfer tranche gets sized.',
+ controls:[R('pd','Default probability',0.005,0.08,0.005,0.025,pctf(1)),R('rho','Asset correlation',0,0.6,0.02,0.2,NF(2)),R('a','Tranche attaches at',0.0,0.1,0.005,0.03,pctf(1)),R('d','Tranche detaches at',0.05,0.3,0.005,0.12,pctf(1))],
+ run(v,ctx){const L=200,Ns=2000,zc=ctx.z(Ns,91),ze=ctx.z(L*Ns,92),thr=normInv(v.pd),sr=Math.sqrt(v.rho),si=Math.sqrt(1-v.rho),lgd=0.45,loss=[];
+  for(let s=0;s<Ns;s++){let d=0;for(let i=0;i<L;i++)if(sr*zc[s]+si*ze[s*L+i]<thr)d++;loss.push(lgd*d/L)}
+  const a=Math.min(v.a,v.d-0.01),d=v.d,tl=loss.map(q=>Math.min(1,Math.max(0,(q-a)/(d-a)))),srt=sortN(loss);
+  return{charts:[{t:'hist',h:180,title:'Pool loss distribution (2,000 scenarios)',sets:[{data:loss,cls:'f-acc'}],bins:30,xf:v=>(v*100).toFixed(1)+'%',vl:[{x:a,l:'attach',cls:'s-acc2'},{x:d,l:'detach',cls:'s-fail'}]}],
+   stats:[['expected pool loss',P(mean(loss),2)],['99% pool loss',P(qnt(srt,0.99),2)],['tranche expected loss',P(mean(tl),1)],['P(tranche takes any loss)',P(tl.filter(q=>q>0).length/Ns,1)],['P(tranche wiped out)',P(tl.filter(q=>q>=0.999).length/Ns,1)]]}}};
+
+KINDS.bl={
+ note:'Black-Litterman blends market-implied returns with a view. Here the view is that international equity beats US equity by an amount you set, held with the confidence you set. Weights move from market weights toward the view, and only as far as confidence allows.',
+ controls:[R('q','View: Intl beats US by',-0.04,0.04,0.005,0.02,pctf(1)),R('c','Confidence in the view',0.05,0.95,0.05,0.5,NF(2))],
+ run(v){const nm=['US equity','Intl equity','Bonds','Gold'],sd=[0.16,0.18,0.06,0.15],co=[[1,0.8,0.1,0.1],[0.8,1,0.1,0.1],[0.1,0.1,1,0.2],[0.1,0.1,0.2,1]],wm=[0.45,0.25,0.2,0.1],del=2.5,tau=0.05,n=4;
+  const Sg=co.map((r,i)=>r.map((c,j)=>c*sd[i]*sd[j])),pi=mv(Sg,wm).map(x=>del*x),Pv=[-1,1,0,0],tS=Sg.map(r=>r.map(x=>tau*x)),tSP=mv(tS,Pv),pSp=dot(Pv,tSP),om=(1/v.c-1)*pSp,pip=dot(Pv,pi),k=(v.q-pip)/(pSp+om),mu=pi.map((x,i)=>x+tSP[i]*k),w=mv(inv(Sg.map(r=>r.map(x=>del*x))),mu);
+  return{charts:[{t:'bars',h:200,title:'Portfolio weights',legend:[['--dim','market'],['--accent','Black-Litterman']],series:['f-dim','f-acc'],items:nm.map((l,i)=>({l:l,vs:[wm[i],w[i]]})),vf:v=>(v*100).toFixed(0)+'%',yf:v=>(v*100).toFixed(0)+'%'}],
+   stats:[['market-implied Intl minus US',P(pi[1]-pi[0],2)],['posterior Intl minus US',P(mu[1]-mu[0],2)],['weights sum',P(w.reduce((a,b)=>a+b,0),0)]]}}};
+
+KINDS.ic={rand:true,
+ note:'A cross-sectional signal is scored by its information coefficient each period. The question is how often a small true IC shows up as significant. Shrink the universe or the signal and the t-statistic collapses.',
+ controls:[R('ic','True signal strength (IC)',0,0.1,0.005,0.04,NF(3)),R('n','Stocks in the universe',100,1000,100,300,NF(0))],
+ run(v,ctx){const T=60,n=Math.round(v.n),zs=ctx.z(T*n,80),ze=ctx.z(T*n,81),ics=[],q=[0,0,0,0,0],k=Math.sqrt(1-v.ic*v.ic);
+  for(let t=0;t<T;t++){const z=zs.slice(t*n,(t+1)*n),r=z.map((s,i)=>5*(v.ic*s+k*ze[t*n+i])),mz=mean(z),mr=mean(r);let c=0,a=0,b=0;for(let i=0;i<n;i++){c+=(z[i]-mz)*(r[i]-mr);a+=(z[i]-mz)*(z[i]-mz);b+=(r[i]-mr)*(r[i]-mr)}ics.push(c/Math.sqrt(a*b));
+   const o=idx(n).sort((i,j)=>z[i]-z[j]),m=Math.floor(n/5);for(let g=0;g<5;g++){let s=0;for(let i=g*m;i<(g+1)*m;i++)s+=r[o[i]];q[g]+=s/m/T}}
+  const mi=mean(ics),sd=sdev(ics),icir=mi/sd,tst=icir*Math.sqrt(T);
+  return{charts:[{t:'line',h:150,title:'Information coefficient by month',series:[S(idx(T),ics,'s-dim',{spike:true})],hl:[{y:mi,l:'mean IC',cls:'s-acc'}],xt:[0,15,30,45,60],yf:v=>v.toFixed(2)},
+   {t:'bars',h:150,title:'Average monthly return by signal quintile, %',items:q.map((x,i)=>({l:'Q'+(i+1),v:x,cls:i===4?'f-acc':i===0?'f-fail':'f-dim'})),vf:v=>v.toFixed(2)}],
+   stats:[['mean IC',F(mi,3)],['ICIR',F(icir,2)],['t-stat (60 months)',F(tst,2)],['Q5 minus Q1',F(q[4]-q[0],2)+'% / month']],
+   alert:{bad:Math.abs(tst)<2,text:Math.abs(tst)>=2?'Statistically significant at roughly the 5% level on this draw.':'Not distinguishable from zero on this draw. Try New draw to see how much it varies.'}}}};
+
+KINDS.dirpred={rand:true,
+ note:'A model with a true 52% hit rate is tested on a finite sample. The histogram shows how often the observed accuracy lands above 52%, above 50%, or below 50%. Most reported edges in return prediction are inside this noise.',
+ controls:[R('p','True direction accuracy',0.5,0.58,0.005,0.52,pctf(1)),R('N','Test days',100,2000,50,500,NF(0))],
+ run(v,ctx){const rg=ctx.rng(95),E=400,N=Math.round(v.N),acc=[];for(let e=0;e<E;e++){let k=0;for(let i=0;i<N;i++)if(rg()<v.p)k++;acc.push(k/N)}
+  const a52=acc.filter(x=>x>=0.52).length/E,b50=acc.filter(x=>x<0.5).length/E,se=Math.sqrt(v.p*(1-v.p)/N);
+  return{charts:[{t:'hist',h:190,title:'Observed accuracy across 400 repeated tests',sets:[{data:acc,cls:'f-acc'}],bins:26,xf:v=>(v*100).toFixed(0)+'%',vl:[{x:0.5,l:'coin flip',cls:'s-fail'},{x:0.52,l:'52%',cls:'s-g3'}]}],
+   stats:[['95% band on accuracy','+/- '+F(1.96*se*100,1)+' pts'],['P(observed at least 52%)',P(a52,0)],['P(observed below 50%)',P(b50,0)]],
+   alert:{bad:b50>0.05,text:b50>0.05?'A genuinely useful model still looks worse than a coin flip in '+P(b50,0)+' of samples this size.':'The test is long enough that a real edge rarely looks like noise.'}}}};
+
+KINDS.ou={rand:true,
+ note:'A synthetic cointegrated spread follows an Ornstein-Uhlenbeck process. Trade when its rolling z-score is stretched and exit near the mean. Slow reversion or high costs erode the edge quickly. Fast reversion makes the same rule look easy.',
+ controls:[R('hl','Half-life of the spread (days)',3,60,1,15,NF(0)),R('en','Entry z',1,3,0.1,2,NF(1)),R('ex','Exit z',0,1,0.1,0.3,NF(1)),R('co','Cost (% of 1 sd per trade)',0,20,1,4,PF(0))],
+ run(v,ctx){const n=750,L=60,phi=Math.exp(-Math.log(2)/v.hl),e=ctx.z(n,96),s=[0];for(let t=1;t<n;t++)s.push(phi*s[t-1]+e[t]);const sdv=1/Math.sqrt(1-phi*phi);
+  const zs=s.map((_,t)=>{if(t<L)return NaN;const w=s.slice(t-L,t),m=mean(w),sd=sdev(w);return (s[t]-m)/sd});let pos=0;const pp=[0],pnl=[0],ent=[];let wins=0,trades=0,open=0,cum=[0];
+  for(let t=1;t<n;t++){const z=zs[t-1];let np=pos;if(!isNaN(z)){if(pos===0){if(z>v.en)np=-1;else if(z<-v.en)np=1}else if(Math.abs(z)<v.ex)np=0}
+   const g=pos*(s[t]-s[t-1]),c=v.co/100*sdv*Math.abs(np-pos);pnl.push(g-c);if(np!==pos){if(np!==0){ent.push({x:t,y:zs[t-1],cls:np>0?'f-acc':'f-acc2',r:3});open=0;trades++}else{}}open+=g;if(np===0&&pos!==0&&open>0)wins++;pos=np;cum.push(cum[t-1]+pnl[t])}
+  const shr=sdev(pnl)>0?mean(pnl)/sdev(pnl)*Math.sqrt(252):0,ds=s.slice(1).map((q,i)=>q-s[i]),b=olsSlope(s.slice(0,-1),ds),hlE=b<0?-Math.log(2)/Math.log(1+b):Infinity;
+  return{charts:[{t:'line',h:160,title:'Rolling z-score of the spread (dots mark entries)',series:[S(idx(n).slice(L),zs.slice(L),'s-dim',{thin:true})],hl:[{y:v.en,cls:'s-fail'},{y:-v.en,cls:'s-fail'},{y:0,cls:'s-muted'}],dots:ent.filter(d=>d.x>=L),yf:v=>v.toFixed(0),xt:[0,150,300,450,600,750]},
+   {t:'line',h:150,title:'Cumulative P&L in units of one spread sd',series:[S(idx(n),cum,'s-acc',{area:true})],xt:[0,150,300,450,600,750],yf:v=>v.toFixed(0)}],
+   stats:[['trades',String(trades)],['win rate',trades?P(wins/trades,0):'n/a'],['Sharpe, annualised',F(shr,2)],['estimated half-life',isFinite(hlE)?F(hlE,1)+' days':'no reversion']]}}};
+
+KINDS.xsmom={rand:true,
+ note:'Nine coins share a market factor, and each has its own return autocorrelation. The strategy goes long the top three and short the bottom three by trailing return, dollar neutral, with turnover costs. Flip the autocorrelation sign and momentum turns into reversal.',
+ controls:[SEL('md','Strategy',[['m','Momentum'],['r','Reversal']],'m'),R('ph','Idiosyncratic autocorrelation',-0.2,0.2,0.02,0.08,NF(2)),R('L','Lookback (days)',1,30,1,5,NF(0)),R('c','Cost (bps per unit turnover)',0,50,1,5,NF(0))],
+ run(v,ctx){const n=500,K=9,L=Math.round(v.L),zf=ctx.z(n,97),ze=ctx.z(n*K,98),b=idx(K).map(i=>0.8+0.05*i),r=[];const e=new Array(K).fill(0);
+  for(let t=0;t<n;t++){const row=[];for(let i=0;i<K;i++){e[i]=v.ph*e[i]+0.03*ze[t*K+i];row.push(b[i]*0.025*zf[t]+e[i])}r.push(row)}
+  const run1=sgn=>{let w=new Array(K).fill(0);const cum=[0];let to=0;for(let t=1;t<n;t++){let g=0;for(let i=0;i<K;i++)g+=w[i]*r[t][i];let nw=w;if(t>=L){const sc=idx(K).map(i=>{let s=0;for(let q=t-L+1;q<=t;q++)s+=r[q][i];return s*sgn}),o=idx(K).sort((p,q)=>sc[p]-sc[q]);nw=new Array(K).fill(0);for(let j=0;j<3;j++){nw[o[j]]=-1/3;nw[o[K-1-j]]=1/3}}
+    let tv=0;for(let i=0;i<K;i++)tv+=Math.abs(nw[i]-w[i]);to+=tv;cum.push(cum[t-1]+g-v.c/1e4*tv);w=nw}return{cum:cum,to:to/n}},
+  A=run1(1),B=run1(-1),sel=v.md==='m'?A:B,dr=sel.cum.slice(1).map((q,i)=>q-sel.cum[i]),sh=sdev(dr)>0?mean(dr)/sdev(dr)*Math.sqrt(365):0;
+  return{charts:[{t:'line',h:200,title:'Cumulative return, dollar neutral, after costs',legend:[['--accent','momentum'],['--accent-2','reversal']],series:[S(idx(n),A.cum,'s-acc'+(v.md==='m'?'':' thin')),S(idx(n),B.cum,'s-acc2'+(v.md==='r'?'':' thin'))],yf:v=>(v*100).toFixed(0)+'%',xt:[0,100,200,300,400,500]}],
+   stats:[['selected Sharpe',F(sh,2)],['total return',P(sel.cum[n-1],0)],['turnover per day',F(sel.to,2)]]}}};
+
+KINDS.pm={rand:true,
+ note:'Binary event contracts. The market price and the model probability are both noisy views of the truth. The model buys YES when it sees edge over the price and buys NO when it sees the opposite, scored by Brier score and by P&L after fees.',
+ controls:[R('mn','Model noise',0.02,0.15,0.01,0.05,NF(2)),R('kn','Market noise',0.02,0.15,0.01,0.08,NF(2)),R('ed','Edge threshold',0,0.15,0.01,0.05,NF(2)),R('fe','Fee (cents per contract)',0,3,0.25,1,NF(2))],
+ run(v,ctx){const N=2000,zm=ctx.z(N,100),zk=ctx.z(N,101),rg=ctx.rng(102),cl=q=>Math.min(0.97,Math.max(0.03,q)),pt=[],mo=[],mk=[],y=[];
+  for(let i=0;i<N;i++){const p=cl(0.1+0.8*rg());pt.push(p);mo.push(cl(p+v.mn*zm[i]));mk.push(cl(p+v.kn*zk[i]));y.push(rg()<p?1:0)}
+  const bsc=a=>mean(a.map((q,i)=>(q-y[i])*(q-y[i])));let cum=[0],tr=0,wins=0;
+  for(let i=0;i<N;i++){let pl=0;if(mo[i]-mk[i]>v.ed){pl=y[i]-mk[i]-v.fe/100;tr++}else if(mk[i]-mo[i]>v.ed){pl=(1-y[i])-(1-mk[i])-v.fe/100;tr++}if(pl>0)wins++;cum.push(cum[cum.length-1]+pl)}
+  const cal=[];for(let b=0;b<10;b++){const ix=idx(N).filter(i=>mo[i]>=b/10&&mo[i]<(b+1)/10);if(ix.length>=5)cal.push({x:mean(ix.map(i=>mo[i])),y:mean(ix.map(i=>y[i])),cls:'f-acc',r:3})}
+  return{charts:[{t:'scatter',h:170,title:'Calibration of the model probability',points:cal,diag:true,xmin:0,xmax:1,ymin:0,ymax:1,xlab:'predicted'},
+   {t:'line',h:150,title:'Cumulative P&L, $ per 1 contract trades',series:[S(idx(N+1),cum,'s-acc',{area:true})],xt:[0,500,1000,1500,2000],yf:v=>v.toFixed(0)}],
+   stats:[['Brier, model',F(bsc(mo),4)],['Brier, market',F(bsc(mk),4)],['trades',String(tr)],['total P&L','$'+F(cum[N],1)],['hit rate',tr?P(wins/tr,0):'n/a']],
+   alert:{bad:bsc(mo)>=bsc(mk),text:bsc(mo)<bsc(mk)?'The model is better calibrated than the market here, so edge is real.':'The model is no better than the market, so apparent edge is noise and fees will eat it.'}}}};
+
+KINDS.mm={rand:true,
+ note:'A single-asset simplification of the repo options market maker. Quotes sit around mid with a half-spread and an inventory skew. Uninformed flow fills more when quotes are tight. Informed flow only trades when the next move beats the spread, which is the adverse selection that spread has to pay for.',
+ controls:[R('h','Half-spread (cents)',0.5,8,0.25,2,NF(2)),R('sk','Inventory skew',0,1.5,0.05,0.4,NF(2)),R('in','Informed share of flow',0,0.6,0.05,0.2,NF(2)),R('vo','Mid volatility (cents per tick)',0.5,5,0.25,2,NF(2))],
+ run(v,ctx){const n=390,z=ctx.z(n+1,110),rg=ctx.rng(111),mid=[100*100];for(let t=1;t<=n;t++)mid.push(mid[t-1]+v.vo*z[t]);
+  let inv=0,cash=0,cap=0,fills=0,maxI=0;const tot=[0],spr=[0],iv=[0];
+  for(let t=0;t<n;t++){if(rg()<0.6){const informed=rg()<v.in,mv1=mid[t+1]-mid[t],buy=informed?mv1>0:rg()<0.5,hh=v.h-v.sk*inv*(buy?-1:1)*0;
+    const ask=mid[t]+v.h-v.sk*inv,bid=mid[t]-v.h-v.sk*inv;
+    if(buy){const d=ask-mid[t];const fill=informed?Math.abs(mv1)>d:rg()<Math.exp(-Math.max(d,0)/3);if(fill){cash+=ask;inv-=1;cap+=d;fills++}}
+    else{const d=mid[t]-bid;const fill=informed?Math.abs(mv1)>d:rg()<Math.exp(-Math.max(d,0)/3);if(fill){cash-=bid;inv+=1;cap+=d;fills++}}}
+   maxI=Math.max(maxI,Math.abs(inv));const total=(cash+inv*mid[t+1])/100;tot.push(total);spr.push(cap/100);iv.push(inv)}
+  return{charts:[{t:'line',h:170,title:'Cumulative P&L, dollars (1 unit = 1 contract, prices in cents)',legend:[['--accent','total'],['--g3','spread captured'],['--fail','inventory and adverse selection']],series:[S(idx(n+1),spr,'s-g3',{thin:true}),S(idx(n+1),tot.map((q,i)=>q-spr[i]),'s-fail',{thin:true}),S(idx(n+1),tot,'s-acc')],xt:[0,100,200,300,390],yf:v=>v.toFixed(0)},
+   {t:'line',h:120,title:'Inventory in contracts',series:[S(idx(n+1),iv,'s-acc2')],xt:[0,100,200,300,390],hl:[{y:0,cls:'s-muted'}],yf:v=>v.toFixed(0)}],
+   stats:[['fills',String(fills)],['final P&L','$'+F(tot[n],2)],['spread captured','$'+F(spr[n],2)],['max |inventory|',String(maxI)]]}}};
+
+KINDS.etfz={rand:true,
+ note:'The ETF premium to NAV follows a mean-reverting process with occasional jumps. A 63-day rolling z-score flags stretched premiums. The event study averages how the premium moved after each flag, signed so a positive number means reversion.',
+ controls:[R('hl','Half-life of the premium (days)',2,40,1,8,NF(0)),R('th','Entry threshold (z)',1,3,0.1,2,NF(1)),R('co','Round-trip cost (bps)',0,10,0.5,2,NF(1)),R('jp','Jump frequency',0,0.03,0.002,0.01,pctf(1))],
+ run(v,ctx){const n=1250,L=63,phi=Math.exp(-Math.log(2)/v.hl),e=ctx.z(n,120),rg=ctx.rng(121),p=[0];for(let t=1;t<n;t++){let j=0;if(rg()<v.jp)j=(rg()<0.5?-1:1)*30;p.push(phi*p[t-1]+8*e[t]+j)}
+  const zs=p.map((_,t)=>{if(t<L)return NaN;const w=p.slice(t-L,t);return (p[t]-mean(w))/sdev(w)}),H=15,ev=new Array(H+1).fill(0);let ne=0,prev=false;
+  for(let t=L;t<n-H;t++){const f=Math.abs(zs[t])>v.th;if(f&&!prev){const sg=zs[t]>0?-1:1;for(let h=0;h<=H;h++)ev[h]+=sg*(p[t+h]-p[t]);ne++}prev=f}
+  const evm=ev.map(q=>ne?q/ne:0);let pos=0;const cum=[0];let tr=0;
+  for(let t=1;t<n;t++){const z=zs[t-1];let np=pos;if(!isNaN(z)){if(pos===0){if(z>v.th)np=-1;else if(z<-v.th)np=1}else if(Math.abs(z)<0.5)np=0}
+   const g=pos*(p[t]-p[t-1]),c=np!==pos?v.co/2:0;if(np!==pos&&np!==0)tr++;cum.push(cum[t-1]+g-c);pos=np}
+  return{charts:[{t:'line',h:160,title:'Event study: premium reversion after a flag, bps',series:[S(idx(H+1),evm,'s-acc',{area:true})],xf:v=>'t+'+v,yf:v=>v.toFixed(0),xt:[0,5,10,15]},
+   {t:'line',h:150,title:'Cumulative strategy P&L, bps',series:[S(idx(n),cum,'s-g3',{area:true})],xt:[0,250,500,750,1000,1250],yf:v=>v.toFixed(0)}],
+   stats:[['flagged events',String(ne)],['reversion after 5 days',F(evm[5],1)+' bps'],['trades',String(tr)],['total P&L',F(cum[n-1],0)+' bps']]}}};
+
+KINDS.lagdecay={rand:true,
+ note:'Disclosures arrive late, and information decays while they wait. Each filing carries an alpha that decays exponentially with the lag. Filings are bucketed by lag and the alpha still available at the filing date is averaged. This shows the cost side of trading on delayed disclosures.',
+ controls:[R('tau','Information half-life scale (days)',5,120,5,40,NF(0)),R('dl','Filing deadline (days)',30,90,5,45,NF(0)),R('mf','Average lag as share of deadline',0.2,0.9,0.05,0.6,pctf(0))],
+ run(v,ctx){const N=2000,rg=ctx.rng(130),k=(1-v.mf)/v.mf,lag=[],rem=[];for(let i=0;i<N;i++){const l=v.dl*Math.pow(rg(),k);lag.push(l);rem.push(Math.exp(-l/v.tau))}
+  const o=idx(N).sort((a,b)=>lag[a]-lag[b]),m=N/5,bars=[];for(let g=0;g<5;g++){let s=0,ll=0;for(let i=g*m;i<(g+1)*m;i++){s+=rem[o[i]];ll+=lag[o[i]]}bars.push({l:'~'+Math.round(ll/m)+'d',v:s/m,cls:'f-acc'})}
+  const xs=range(0,v.dl,40);
+  return{charts:[{t:'line',h:150,title:'Share of the alpha still available, by lag',series:[S(xs,xs.map(x=>Math.exp(-x/v.tau)),'s-acc',{area:true})],vl:[{x:v.dl,l:'deadline',cls:'s-fail'}],yf:v=>(v*100).toFixed(0)+'%',xf:v=>v.toFixed(0)+'d',ymin:0,ymax:1},
+   {t:'bars',h:150,title:'Average alpha left at filing, by lag quintile',items:bars,vf:v=>(v*100).toFixed(0)+'%',yf:v=>(v*100).toFixed(0)+'%',ymax:1}],
+   stats:[['mean filing lag',F(mean(lag),1)+' days'],['alpha left at the deadline',P(Math.exp(-v.dl/v.tau),0)],['average alpha left',P(mean(rem),0)]]}}};
+
+KINDS.wall={
+ note:'A debt maturity schedule with a concentration in one year, and the cost of rolling it. Move the peak, its size and the refinancing yield. The red bar is a year where maturities exceed cash plus free cash flow, so the company must refinance on the market day.',
+ controls:[R('pk','Share of debt due in peak year',0.1,0.6,0.02,0.36,pctf(0)),R('py','Peak year',1,6,1,3,NF(0)),R('ny','New issue yield',0.05,0.14,0.005,0.09,pctf(1)),R('eb','EBITDA ($M)',400,1500,50,900,NF(0))],
+ run(v){const D=5000,Y=7,py=Math.round(v.py),cash=600,fcf=250,old=0.05,items=[];let hh=0,gap=0;const m=[];
+  for(let y=1;y<=Y;y++){const share=y===py?v.pk:(1-v.pk)/(Y-1);m.push(D*share);hh+=share*share}
+  m.forEach((q,i)=>{const cap=cash+fcf*(i+1);if(q>cap)gap=Math.max(gap,q-cap);items.push({l:'Y'+(i+1),v:q,cls:q>cap?'f-fail':'f-acc'})});
+  const base=D*old,extra=m[py-1]*(v.ny-old),cov0=v.eb/base,cov1=v.eb/(base+extra);
+  return{charts:[{t:'bars',h:180,title:'Maturities by year, $M (red exceeds cash plus free cash flow)',items:items,vf:v=>v.toFixed(0),yf:v=>v.toFixed(0)}],
+   stats:[['concentration (HHI)',F(hh,3)],['refinancing gap in peak year','$'+F(gap,0)+'M'],['interest cover now',F(cov0,1)+'x'],['cover after refinancing the peak',F(cov1,1)+'x']],
+   alert:{bad:cov1<2.5||gap>0,text:gap>0?'Maturities exceed available liquidity in a year. Equity has to price that before credit spreads do.':'Liquidity covers every maturity in this schedule.'}}}};
+
+KINDS.drift={rand:true,
+ note:'Index weights drift as prices move, and the index provider only trims them at scheduled or threshold events. This simulates one stock against its index and counts how often the weight breaches the band, and how large the forced trade would be against average daily volume.',
+ controls:[R('bd','Band before a rebalance (% of target weight)',2,30,1,10,PF(0)),R('rv','Relative volatility vs index',0.01,0.04,0.002,0.015,pctf(1)),R('aum','Passive money tracking ($B)',100,2000,100,800,NF(0))],
+ run(v,ctx){const n=500,w0=0.005,e=ctx.z(n,140);let rel=0,w=w0;const ws=[w0],tr=[];let nre=0;const trade=[];
+  for(let t=1;t<n;t++){rel+=v.rv*e[t];const raw=w0*Math.exp(rel)/(1+w0*(Math.exp(rel)-1));ws.push(raw);if(Math.abs(raw-w)/w0*100>v.bd){nre++;trade.push(Math.abs(raw-w)*v.aum*1000);tr.push({x:t,y:raw*100,cls:'f-fail',r:3});w=raw}}
+  const adv=500,mt=trade.length?mean(trade):0;
+  return{charts:[{t:'line',h:190,title:'Index weight of the stock, %',series:[S(idx(n),ws.map(q=>q*100),'s-acc')],dots:tr,yf:v=>v.toFixed(3)+'%',xt:[0,100,200,300,400,500]}],
+   stats:[['rebalance events',String(nre)],['avg forced trade','$'+F(mt,0)+'M'],['as multiple of $'+adv+'M daily volume',F(mt/adv,2)+'x']],
+   alert:{bad:mt/adv>1,text:mt/adv>1?'A single forced trade exceeds a full day of volume. Those are the patient-capital entries.':'Forced trades are small next to daily volume at this setting.'}}}};
+
+KINDS.crowd={rand:true,
+ note:'A crowding index (a z-score) rises before factor drawdowns in this synthetic world. A managed version cuts exposure when the index passes the warning level. Raise crash sensitivity to see the managed line pay for itself, and set it to zero to see the cost of the hedge.',
+ controls:[R('cs','Crash sensitivity',0,3,0.1,1.5,NF(1)),R('th','Warning level (z)',1,2.5,0.1,1.5,NF(1)),R('ex','Exposure when warned',0,1,0.1,0.5,pctf(0))],
+ run(v,ctx){const n=750,e=ctx.z(n,150),f=ctx.z(n,151);const zi=[0],ra=[0],rm=[0],ca=[0],cm=[0],warn=[];let ex=0;
+  for(let t=1;t<n;t++){zi.push(0.97*zi[t-1]+0.25*e[t]*1.2+(Math.abs(e[t])>2.2?0.4:0));const z=zi[t-1];const r=0.0004+0.009*f[t]-v.cs*0.001*Math.max(z-1,0);ra.push(r);const exp=z>v.th?v.ex:1;if(z>v.th)warn.push({x:t,y:zi[t],cls:'f-fail',r:1.8});rm.push(r*exp);ca.push(ca[t-1]+r);cm.push(cm[t-1]+r*exp)}
+  const mdd=c=>{let pk=0,d=0;c.forEach(q=>{pk=Math.max(pk,q);d=Math.min(d,q-pk)});return d};
+  return{charts:[{t:'line',h:140,title:'Crowding index (z-score), red = warning',series:[S(idx(n),zi,'s-acc2',{thin:true})],dots:warn,hl:[{y:v.th,cls:'s-fail'}],xt:[0,150,300,450,600,750],yf:v=>v.toFixed(1)},
+   {t:'line',h:170,title:'Cumulative log return',legend:[['--dim','factor, unmanaged'],['--accent','managed']],series:[S(idx(n),ca,'s-dim'),S(idx(n),cm,'s-acc')],xt:[0,150,300,450,600,750],yf:v=>(v*100).toFixed(0)+'%'}],
+   stats:[['max drawdown, unmanaged',P(mdd(ca),0)],['max drawdown, managed',P(mdd(cm),0)],['days in warning',String(warn.length)]]}}};
+
+KINDS.silence={
+ note:'Edit the four lines, oldest call first with the new call last. A standard vocabulary is the two-word phrases that show up in most earlier calls. The grid shows which of them appear in each call, and a red cell is a phrase that was always there and has now gone quiet.',
+ controls:[TXT('tx','Calls, one per line (last line is the new call)','we continue to see strength in supply chain optimization and cloud migration across our customer base. share repurchases continue.\nsupply chain optimization remains a priority and cloud migration is on track. customer base growth was strong and share repurchases continue.\nour customer base keeps expanding and supply chain optimization delivered savings. cloud migration is on track and share repurchases continue.\nour customer base keeps expanding and demand was strong. cloud migration is on track.')],
+ run(v){const stop=new Set('the and for are was were with that this have has our their from into over also which when will more than been being about while after before across because'.split(' ')),lines=String(v.tx).split('\n').map(s=>s.trim()).filter(s=>s.length>0).slice(0,6);
+  if(lines.length<3)return{charts:[{t:'bars',h:60,items:[{l:'add more lines',v:0}]}],stats:[['need','at least 3 lines']]};
+  const bg=lines.map(s=>{const tk=(s.toLowerCase().match(/[a-z]+/g)||[]).filter(w=>w.length>2&&!stop.has(w)),o=new Set();for(let i=0;i+1<tk.length;i++)o.add(tk[i]+' '+tk[i+1]);return o}),pr=bg.slice(0,-1),last=bg[bg.length-1],cnt={};
+  pr.forEach(s=>s.forEach(b=>cnt[b]=(cnt[b]||0)+1));const need=Math.ceil(pr.length*0.67),vocab=Object.keys(cnt).filter(b=>cnt[b]>=need).sort((a,b)=>cnt[b]-cnt[a]).slice(0,12);
+  if(!vocab.length)return{charts:[{t:'bars',h:60,items:[{l:'no shared phrases',v:0}]}],stats:[['standard vocabulary','empty']]};
+  const rows=vocab.map(b=>bg.map((s,j)=>j===bg.length-1?(s.has(b)?1:2):(s.has(b)?1:0))),om=vocab.filter(b=>!last.has(b)).length,score=om/vocab.length;
+  return{charts:[{t:'grid',h:40+vocab.length*22,ml:150,rows:rows,rl:vocab,cl:bg.map((_,j)=>j===bg.length-1?'new':'c'+(j+1)),title:'Phrase present (blue), absent (dark), omitted from the new call (red)'}],
+   stats:[['standard vocabulary',vocab.length+' phrases'],['omitted in the new call',String(om)],['omission score',P(score,0)]],
+   alert:{bad:score>=0.4,text:score>=0.4?'Heavy omission relative to the company track record.':'Language is mostly consistent with the track record.'}}}};
+
+/* ---------- demo kinds: stochastic methods, private markets, corporate finance ---------- */
+KINDS.mfg={rand:true,
+ note:'A particle approximation of the Fokker-Planck side of a mean-field game. Each trader controls inventory toward the crowd mean with strength kappa, while the crowd mean itself decays through a coupling term lambda. Watch the distribution tighten and the mean drift to zero.',
+ controls:[R('ka','Control strength kappa',0.5,8,0.5,3,NF(1)),R('la','Mean coupling lambda',0,3,0.1,1,NF(1)),R('sg','Noise sigma',0.2,1,0.05,0.5,NF(2))],
+ run(v,ctx){const Np=2000,steps=100,dt=0.02,z=ctx.z(Np*steps,160),z0=ctx.z(Np,161),x=z0.map(q=>0.6+0.3*q),ms=[mean(x)],ss=[sdev(x)],x0=x.slice();
+  for(let k=0;k<steps;k++){const m=mean(x);for(let i=0;i<Np;i++)x[i]+=(-v.ka*(x[i]-m)-v.la*m)*dt+v.sg*Math.sqrt(dt)*z[i*steps+k];ms.push(mean(x));ss.push(sdev(x))}
+  const T=steps*dt,ts=range(0,T,steps+1),stat=v.sg/Math.sqrt(2*v.ka);
+  return{charts:[{t:'hist',h:170,title:'Distribution of inventories at t = 0 and t = 2',legend:[['--dim','t = 0'],['--accent','t = 2']],sets:[{data:x0,cls:'f-dim',op:0.7},{data:x,cls:'f-acc',op:0.7}],bins:36,clip:[-1.5,1.5],xf:v=>v.toFixed(1)},
+   {t:'line',h:140,title:'Crowd mean and spread over time',legend:[['--accent-2','mean'],['--accent','standard deviation']],series:[S(ts,ms,'s-acc2'),S(ts,ss,'s-acc')],xf:v=>v.toFixed(1),yf:v=>v.toFixed(2)}],
+   stats:[['final mean',F(ms[steps],3)],['final spread',F(ss[steps],3)],['stationary spread, theory',F(stat,3)]]}}};
+
+KINDS.ergodic={rand:true,
+ note:'The ergodic constant is the long-run growth rate of a risk-sensitive criterion. For an Ornstein-Uhlenbeck state it has a closed form, lambda = theta squared times sigma squared over two kappa squared. The Monte Carlo estimate converges to it as the horizon grows.',
+ controls:[R('ka','Mean reversion kappa',0.5,3,0.1,1,NF(1)),R('sg','Volatility sigma',0.2,1,0.05,0.5,NF(2)),R('th','Risk sensitivity theta',0.1,1.2,0.1,0.6,NF(1))],
+ run(v,ctx){const Np=3000,dt=0.1,M=200,z=ctx.z(Np*M,170),z0=ctx.z(Np,171),x=z0.map(q=>q*v.sg/Math.sqrt(2*v.ka)),I=new Array(Np).fill(0),Ts=[],est=[],ex=[];
+  for(let k=1;k<=M;k++){for(let i=0;i<Np;i++){I[i]+=x[i]*dt;x[i]+=-v.ka*x[i]*dt+v.sg*Math.sqrt(dt)*z[i*M+k-1]}
+   if(k%10===0){const T=k*dt;let mx=-1e9;for(let i=0;i<Np;i++)mx=Math.max(mx,v.th*I[i]);let s=0;for(let i=0;i<Np;i++)s+=Math.exp(v.th*I[i]-mx);Ts.push(T);est.push((mx+Math.log(s/Np))/T);ex.push(v.th*v.th*(v.sg*v.sg/(v.ka*v.ka))*(T-(1-Math.exp(-v.ka*T))/v.ka)/(2*T))}}
+  const lam=v.th*v.th*v.sg*v.sg/(2*v.ka*v.ka);
+  return{charts:[{t:'line',h:200,title:'Growth rate estimate against horizon T',legend:[['--accent','Monte Carlo'],['--accent-2','exact at finite T'],['--g3','ergodic constant']],series:[S(Ts,ex,'s-acc2',{thin:true}),S(Ts,est,'s-acc')],hl:[{y:lam,l:'lambda',cls:'s-g3'}],xf:v=>v.toFixed(0),yf:v=>v.toFixed(3)}],
+   stats:[['ergodic constant (theory)',F(lam,4)],['estimate at T = 20',F(est[est.length-1],4)],['exact at T = 20',F(ex[ex.length-1],4)]]}}};
+
+KINDS.ot={rand:true,
+ note:'Each date has a cross-section of stock returns, treated as a probability distribution. The one-dimensional Wasserstein distance between consecutive dates is the average gap between sorted returns. It spikes when volatility jumps or the shape skews, which a plain volatility series can miss.',
+ controls:[R('vm','Volatility jump at day 40',1,4,0.1,2,XF(1)),R('sk','Skew injected at day 40',-1,1,0.1,-0.5,NF(1)),R('tm','Days until the jump reverts',1,30,1,10,NF(0))],
+ run(v,ctx){const T=80,N=400,z=ctx.z(T*N,180),dates=[];
+  for(let t=0;t<T;t++){const on=t>=40&&t<40+Math.round(v.tm),sg=0.01*(on?v.vm:1),s=on?v.sk:0;dates.push(sortN(z.slice(t*N,(t+1)*N).map(q=>sg*(q+s*0.3*(q*q-1)))))}
+  const w=[];for(let t=1;t<T;t++){let a=0;for(let i=0;i<N;i++)a+=Math.abs(dates[t][i]-dates[t-1][i]);w.push(a/N*100)}
+  const qx=idx(N).map(i=>dates[39][i]*100),qy=idx(N).map(i=>dates[40][i]*100),pts=idx(N).filter(i=>i%4===0).map(i=>({x:qx[i],y:qy[i],cls:'f-acc',r:2.2,o:0.7}));
+  const base=mean(w.slice(0,38)),jump=w[39];
+  return{charts:[{t:'line',h:150,title:'Wasserstein-1 distance to the previous day, in % points',series:[S(idx(w.length).map(i=>i+1),w,'s-acc',{area:true})],xt:[0,20,40,60,80],yf:v=>v.toFixed(2)},
+   {t:'scatter',h:190,title:'Quantile plot: day 40 against day 39, % return',points:pts,diag:true,xf:v=>v.toFixed(0),yf:v=>v.toFixed(0)}],
+   stats:[['typical day-to-day distance',F(base,3)],['distance at the jump',F(jump,3)],['ratio',F(jump/base,1)+'x']]}}};
+
+KINDS.sig={rand:true,
+ note:'The signature of a path collects its iterated integrals. Level two includes the Levy area, which measures the signed area the path sweeps out between two series, here price and volatility. Higher correlation squeezes the area toward zero because the two series move together.',
+ controls:[R('rho','Correlation between series',-0.9,0.9,0.1,-0.5,NF(1)),R('n','Steps per path',20,120,10,60,NF(0))],
+ run(v,ctx){const n=Math.round(v.n),np=200,z1=ctx.z(np*120,190),z2=ctx.z(np*120,191),sq=Math.sqrt(1-v.rho*v.rho),area=[],area0=[];let P0=null;
+  for(let p=0;p<np;p++){let x=0,y=0,y0=0,s12=0,s21=0,t12=0,t21=0;const px=[0],py=[0];
+   for(let k=0;k<n;k++){const a=z1[p*120+k]*Math.sqrt(1/n),b=(v.rho*z1[p*120+k]+sq*z2[p*120+k])*Math.sqrt(1/n),c=z2[p*120+k]*Math.sqrt(1/n);s12+=x*b;s21+=y*a;t12+=x*c;t21+=y0*a;x+=a;y+=b;y0+=c;if(p===0){px.push(x);py.push(y)}}
+   area.push(0.5*(s12-s21));area0.push(0.5*(t12-t21));if(p===0)P0={px:px,py:py}}
+  return{charts:[{t:'line',h:170,title:'One sample path: price against volatility',series:[S(P0.px,P0.py,'s-acc')],xf:v=>v.toFixed(1),yf:v=>v.toFixed(1)},
+   {t:'hist',h:150,title:'Levy area over 200 paths',legend:[['--dim','uncorrelated'],['--accent','chosen correlation']],sets:[{data:area0,cls:'f-dim',op:0.6},{data:area,cls:'f-acc',op:0.7}],bins:26,xf:v=>v.toFixed(2)}],
+   stats:[['sd of area, uncorrelated',F(sdev(area0),3)],['sd of area, chosen',F(sdev(area),3)],['ratio',F(sdev(area)/sdev(area0),2)+' (theory '+F(Math.sqrt(1-v.rho*v.rho),2)+')']]}}};
+
+KINDS.malliavin={rand:true,
+ note:'Delta of a digital option. Bumping the spot and differencing a step payoff is very noisy because most paths see no change and a few see a jump. The Malliavin weight needs no bump and no derivative of the payoff. Compare the spread of the two estimators across 40 repeated runs.',
+ controls:[R('N','Paths per run',500,5000,500,2000,NF(0)),R('h','Bump size (spot units)',0.1,5,0.1,1,NF(1)),R('vol','Volatility',0.1,0.6,0.01,0.25,pctf(0))],
+ run(v,ctx){const S0=100,K=100,r=0.03,T=1,N=Math.round(v.N),B=40,g=gaussFn(ctx.rng(200)),df=Math.exp(-r*T),sd=v.vol,fd=[],ml=[];
+  const d2=(Math.log(S0/K)+(r-0.5*sd*sd)*T)/(sd*Math.sqrt(T)),exact=df*Math.exp(-0.5*d2*d2)/Math.sqrt(2*Math.PI)/(S0*sd*Math.sqrt(T));
+  for(let b=0;b<B;b++){let a=0,m=0;for(let i=0;i<N;i++){const z=g(),W=Math.sqrt(T)*z,up=S0+v.h,dn=S0-v.h,fT=(S,s0)=>S*Math.exp((r-0.5*sd*sd)*T+sd*W)>K?1:0;
+    a+=(fT(up)-fT(dn))/(2*v.h);m+=(S0*Math.exp((r-0.5*sd*sd)*T+sd*W)>K?1:0)*W/(S0*sd*T)}fd.push(df*a/N);ml.push(df*m/N)}
+  const pts=[];fd.forEach((q,i)=>pts.push({x:1+((i%7)-3)*0.04,y:q,cls:'f-dim',r:2.6}));ml.forEach((q,i)=>pts.push({x:2+((i%7)-3)*0.04,y:q,cls:'f-acc',r:2.6}));
+  return{charts:[{t:'scatter',h:200,title:'Delta estimates from 40 repeated runs',points:pts,hl:[{y:exact,l:'exact delta',cls:'s-g3'}],xt:[1,2],xf:v=>['','bump and difference','Malliavin weight'][v]||'',xmin:0.5,xmax:2.5,yf:v=>v.toFixed(3)}],
+   stats:[['exact delta',F(exact,4)],['sd, bump and difference',F(sdev(fd),4)],['sd, Malliavin',F(sdev(ml),4)],['variance ratio',F(Math.pow(sdev(fd)/sdev(ml),2),1)+'x']]}}};
+
+function irrOf(cf){let lo=-0.9,hi=3;const f=r=>cf.reduce((s,c,t)=>s+c/Math.pow(1+r,t),0);if(f(lo)*f(hi)>0)return NaN;for(let i=0;i<80;i++){const m=(lo+hi)/2;if(f(lo)*f(m)<=0)hi=m;else lo=m}return (lo+hi)/2}
+KINDS.jcurve={
+ note:'A fund calls capital early and distributes late, so net cash flow dips before it recovers. Set the target multiple and how fast capital is deployed and harvested. The public market equivalent asks what the same cash flows would have earned in an index.',
+ controls:[R('mo','Gross multiple on called capital',1,3,0.1,2,XF(1)),R('cy','Years to call capital',3,7,1,5,NF(0)),R('pk','Peak distribution year',5,10,1,7,NF(0)),R('ix','Public index return',0.04,0.12,0.005,0.08,pctf(1))],
+ run(v){const Y=13,cy=Math.round(v.cy),pk=Math.round(v.pk),calls=new Array(Y).fill(0),dist=new Array(Y).fill(0);let wc=0,wd=0;
+  for(let t=0;t<cy;t++){calls[t]=Math.pow(0.85,t);wc+=calls[t]}
+  for(let t=3;t<Y;t++){dist[t]=Math.exp(-0.5*Math.pow((t-pk)/2.2,2));wd+=dist[t]}
+  const net=idx(Y).map(t=>-calls[t]/wc*100+dist[t]/wd*100*v.mo),cum=cumsum(net),irr=irrOf(net),tr=Math.min.apply(null,cum);
+  let fvD=0,fvC=0;for(let t=0;t<Y;t++){const g=Math.pow(1+v.ix,Y-1-t);fvD+=dist[t]/wd*100*v.mo*g;fvC+=calls[t]/wc*100*g}
+  const dpi=t=>cum.length>t?idx(t+1).reduce((s,i)=>s+dist[i]/wd*100*v.mo,0)/100:0;
+  return{charts:[{t:'bars',h:150,title:'Net cash flow per year, % of commitment',items:net.map((q,t)=>({l:String(t),v:q,cls:q<0?'f-fail':'f-pass'})),vf:null,yf:v=>v.toFixed(0)},
+   {t:'line',h:150,title:'Cumulative net cash, the J-curve',series:[S(idx(Y),cum,'s-acc',{area:true})],hl:[{y:0,cls:'s-muted'}],xf:v=>String(v),yf:v=>v.toFixed(0)}],
+   stats:[['net IRR',isNaN(irr)?'n/a':P(irr,1)],['trough',F(tr,0)+'% of commitment'],['DPI at year 5',F(dpi(5),2)+'x'],['PME ratio',F(fvD/fvC,2)]],
+   alert:{bad:fvD/fvC<1,text:fvD/fvC>=1?'PME above 1: the fund beat the index on these cash flows.':'PME below 1: the index would have done better with the same cash flows.'}}}};
+
+KINDS.lbo={
+ note:'A five-year buyout on a single company. EBITDA grows, free cash flow pays down debt, and the exit multiple decides the rest. The bridge splits equity gain into growth, multiple change and deleveraging. The grid shows where IRR clears a 20% hurdle.',
+ controls:[R('em','Entry multiple',8,14,0.5,10,XF(1)),R('lv','Leverage (x EBITDA)',3,7,0.5,5,XF(1)),R('g','EBITDA growth',0,0.15,0.01,0.08,pctf(0)),R('xm','Exit multiple',7,14,0.5,10,XF(1)),R('ir','Interest rate',0.06,0.12,0.005,0.09,pctf(1))],
+ run(v){const E0=100,yrs=5;
+  const calc=(em,lv,g,xm,ir)=>{const EV=em*E0,D0=lv*E0,Eq=EV-D0;let D=D0,E=E0;for(let y=0;y<yrs;y++){E*=1+g;const fcf=0.5*E-ir*D;D=Math.max(0,D-fcf)}const exitEq=xm*E-D,moic=exitEq/Eq;return{Eq:Eq,exitEq:exitEq,moic:moic,irr:moic>0?Math.pow(moic,1/yrs)-1:-1,E:E,D:D,D0:D0}};
+  const c=calc(v.em,v.lv,v.g,v.xm,v.ir),grow=(c.E-E0)*v.em,mult=(v.xm-v.em)*c.E,delev=c.D0-c.D,tot=c.exitEq-c.Eq;
+  const ms=[8,9,10,11,12,13],ls=[3,4,5,6,7],rows=ls.map(l=>ms.map(m=>{const q=calc(v.em,l,v.g,m,v.ir).irr;return q<0.15?0:q<0.2?1:3}));
+  return{charts:[{t:'bars',h:170,title:'Equity value bridge, $M',items:[{l:'Equity in',v:c.Eq,cls:'f-dim'},{l:'EBITDA growth',v:grow,b:c.Eq,cls:grow>=0?'f-pass':'f-fail'},{l:'Multiple',v:mult,b:c.Eq+grow,cls:mult>=0?'f-pass':'f-fail'},{l:'Debt paydown',v:delev,b:c.Eq+grow+mult,cls:'f-pass'},{l:'Equity out',v:c.exitEq,cls:'f-acc'}],vf:v=>v.toFixed(0),yf:v=>v.toFixed(0)},
+   {t:'grid',h:150,ml:80,rows:rows,rl:ls.map(q=>q+'x lev'),cl:ms.map(q=>q+'x'),title:'IRR by leverage and exit multiple: below 15%, 15 to 20%, above 20%'}],
+   stats:[['IRR',P(c.irr,1)],['MOIC',F(c.moic,2)+'x'],['equity in',F(c.Eq,0)],['equity out',F(c.exitEq,0)]],
+   alert:{bad:c.irr<0.2,text:c.irr>=0.2?'Clears a 20% hurdle.':'Below a 20% hurdle at these inputs.'}}}};
+
+KINDS.powerlaw={rand:true,
+ note:'Early-stage fund outcomes follow a heavy tail. Most companies return nothing and a few return a lot. Lower the tail exponent and a single company decides the whole fund. This is why diligence cares about how many shots a fund takes.',
+ controls:[R('nc','Companies in the fund',10,60,5,25,NF(0)),R('al','Tail exponent alpha',0.8,3,0.1,1.5,NF(1)),R('lo','Share that return nothing',0.3,0.8,0.05,0.55,pctf(0))],
+ run(v,ctx){const F0=500,nc=Math.round(v.nc),rg=ctx.rng(210),moic=[],top=[];let sample=null;
+  for(let f=0;f<F0;f++){const r=[];for(let i=0;i<nc;i++)r.push(rg()<v.lo?0:Math.min(100,Math.pow(Math.max(rg(),1e-6),-1/v.al)));const s=r.reduce((a,b)=>a+b,0);moic.push(s/nc);top.push(s>0?Math.max.apply(null,r)/s:0);if(f===0)sample=r.slice().sort((a,b)=>b-a)}
+  const srt=sortN(moic);
+  return{charts:[{t:'hist',h:170,title:'Fund multiple across 500 simulated funds',sets:[{data:moic,cls:'f-acc'}],bins:30,clip:[0,Math.max(4,qnt(srt,0.95))],xf:v=>v.toFixed(1)+'x',vl:[{x:1,l:'1x',cls:'s-fail'},{x:3,l:'3x',cls:'s-g3'}]},
+   {t:'bars',h:130,title:'One fund: return multiple by company, ranked',items:sample.map((q,i)=>({l:String(i+1),v:q,cls:i===0?'f-acc2':'f-dim'})),yf:v=>v.toFixed(0)+'x'}],
+   stats:[['median fund multiple',F(qnt(srt,0.5),2)+'x'],['P(fund at least 1x)',P(moic.filter(q=>q>=1).length/F0,0)],['P(fund at least 3x)',P(moic.filter(q=>q>=3).length/F0,0)],['top company share of proceeds',P(mean(top),0)]]}}};
+
+KINDS.spend={rand:true,
+ note:'An endowment spends a fixed share of a three-year average of its value. Over 30 years the question is whether real purchasing power survives. Raise spending or volatility and the median stays up while the lower band falls away.',
+ controls:[R('mu','Expected nominal return',0.03,0.09,0.005,0.075,pctf(1)),R('sg','Volatility',0.05,0.2,0.01,0.12,pctf(0)),R('sp','Spending rate',0.03,0.07,0.0025,0.045,pctf(2))],
+ run(v,ctx){const np=300,Y=30,z=ctx.z(np*Y,220),infl=0.025,paths=[];
+  for(let p=0;p<np;p++){let V=100;const h=[100,100,100],real=[100];for(let t=1;t<=Y;t++){const sp=v.sp*mean(h.slice(-3));const rr=Math.exp(v.mu-0.5*v.sg*v.sg+v.sg*z[p*Y+t-1])-1;V=(V-sp)*(1+rr);h.push(V);real.push(Math.max(V,0)/Math.pow(1+infl,t))}paths.push(real)}
+  const at=t=>sortN(paths.map(q=>q[t])),xs=idx(Y+1),q10=xs.map(t=>qnt(at(t),0.1)),q50=xs.map(t=>qnt(at(t),0.5)),q90=xs.map(t=>qnt(at(t),0.9)),pres=paths.filter(q=>q[Y]>=100).length/np;
+  return{charts:[{t:'line',h:200,title:'Real value, starting at 100 (10th, 50th and 90th percentile)',legend:[['--dim','10th and 90th'],['--accent','median']],series:[S(xs,q90,'s-dim',{thin:true}),S(xs,q10,'s-dim',{thin:true}),S(xs,q50,'s-acc')],hl:[{y:100,l:'preserved',cls:'s-g3'}],ymin:0,xf:v=>v+'y',yf:v=>v.toFixed(0)}],
+   stats:[['P(real value preserved at 30y)',P(pres,0)],['median real value at 30y',F(q50[Y],0)],['10th percentile at 30y',F(q10[Y],0)]],
+   alert:{bad:pres<0.5,text:pres>=0.5?'More likely than not to preserve real value at this spending rate.':'Less than even odds of preserving real value at this spending rate.'}}}};
+
+KINDS.cap={
+ note:'Direct capitalisation against a ten-year discounted cash flow for a multifamily portfolio. Value is NOI over the cap rate, and cap rates move value far more than rent growth does. The portfolio size is the 3,060 units described in the repo.',
+ controls:[R('noi','NOI per unit ($ per year)',5000,12000,250,8000,NF(0)),R('gc','Going-in cap rate',0.04,0.08,0.0025,0.0575,pctf(2)),R('xc','Exit cap rate',0.04,0.09,0.0025,0.0625,pctf(2)),R('g','NOI growth',0,0.06,0.005,0.03,pctf(1)),R('dr','Discount rate',0.06,0.12,0.005,0.08,pctf(1))],
+ run(v){const U=3060,N0=v.noi*U/1e6,dcf=(g,xc)=>{let pv=0;for(let t=1;t<=10;t++)pv+=N0*Math.pow(1+g,t)/Math.pow(1+v.dr,t);return pv+N0*Math.pow(1+g,11)/xc/Math.pow(1+v.dr,10)},dir=N0/v.gc,d=dcf(v.g,v.xc),cr=range(0.04,0.09,21),impl=N0/d;
+  return{charts:[{t:'line',h:170,title:'Direct-cap value against cap rate, $M',legend:[['--accent','direct capitalisation'],['--accent-2','DCF at the chosen exit cap']],series:[S(cr,cr.map(c=>N0/c),'s-acc')],hl:[{y:d,l:'DCF',cls:'s-acc2'}],xf:v=>(v*100).toFixed(1)+'%',yf:v=>v.toFixed(0)},
+   {t:'bars',h:130,title:'DCF value by NOI growth, $M',items:[0,0.01,0.02,0.03,0.04,0.05].map(g=>({l:(g*100).toFixed(0)+'%',v:dcf(g,v.xc),cls:Math.abs(g-v.g)<0.0026?'f-acc':'f-dim'})),vf:v=>v.toFixed(0)}],
+   stats:[['year-one NOI','$'+F(N0,1)+'M'],['direct-cap value','$'+F(dir,0)+'M'],['DCF value','$'+F(d,0)+'M'],['value per unit','$'+F(d*1e6/U/1000,0)+'k'],['implied cap on DCF',P(impl,2)]]}}};
+
+KINDS.variance={
+ note:'A budget-to-actual operating income bridge. Volume is valued at budget margin, price at actual volume, and cost at actual volume. Favourable bars are green, unfavourable red. Change the actuals and see which line moved the result.',
+ controls:[R('vv','Volume vs budget',-0.15,0.15,0.01,-0.04,pctf(0)),R('pv','Price vs budget',-0.1,0.1,0.005,0.02,pctf(1)),R('cv','Unit cost vs budget',-0.1,0.1,0.005,0.035,pctf(1)),R('fx','Fixed cost overrun ($M)',-3,6,0.5,1.5,NF(1))],
+ run(v){const U0=1000,P0=200,C0=140,U1=U0*(1+v.vv),P1=P0*(1+v.pv),C1=C0*(1+v.cv),bud=U0*(P0-C0)/1000,vol=(U1-U0)*(P0-C0)/1000,pr=U1*(P1-P0)/1000,co=-U1*(C1-C0)/1000,fx=-v.fx,act=bud+vol+pr+co+fx;
+  const steps=[['Volume',vol],['Price',pr],['Unit cost',co],['Fixed cost',fx]];let b=bud;const items=[{l:'Budget',v:bud,cls:'f-dim'}];steps.forEach(s=>{items.push({l:s[0],v:s[1],b:b,cls:s[1]>=0?'f-pass':'f-fail'});b+=s[1]});items.push({l:'Actual',v:act,cls:'f-acc'});
+  return{charts:[{t:'bars',h:200,title:'Operating income bridge, $M',items:items,vf:v=>v.toFixed(1),yf:v=>v.toFixed(0)}],
+   table:{head:['Driver','$M','Result'],rows:steps.map(s=>[s[0],F(s[1],1),pill(s[1]>=0,'favourable','unfavourable')])},
+   stats:[['budget operating income','$'+F(bud,1)+'M'],['actual','$'+F(act,1)+'M'],['variance',F(act-bud,1)+'M ('+P((act-bud)/bud,1)+')']]}}};
+
+KINDS.saas={
+ note:'A monthly subscription model. Customers are added, some churn, survivors expand, and fixed costs run in the background. The cash line shows runway. The point where it crosses zero is the date you need new funding or a lower burn.',
+ controls:[R('ch','Monthly churn',0.005,0.06,0.0025,0.025,pctf(2)),R('ad','New customers per month',5,40,1,15,NF(0)),R('ar','ARPA ($ per month)',200,1500,50,600,NF(0)),R('cac','CAC ($)',1000,10000,250,4000,NF(0)),R('ex','Monthly expansion',0,0.03,0.0025,0.01,pctf(2))],
+ run(v){const M=36;let cust=100,mrr=100*v.ar,cash=1200,fixed=60,arr=[],cs=[],cashz=-1;const mr=[mrr/1000];cs.push(cash);
+  for(let t=1;t<=M;t++){const churned=cust*v.ch;cust=cust-churned+v.ad;mrr=mrr*(1-v.ch)*(1+v.ex)+v.ad*v.ar;const gp=mrr*0.78/1000,spend=fixed+v.ad*v.cac/1000;cash+=gp-spend;mr.push(mrr/1000);cs.push(cash);if(cash<0&&cashz<0)cashz=t}
+  const ltv=v.ar*0.78/Math.max(v.ch-v.ex*0,0.001),nrr=Math.pow((1-v.ch)*(1+v.ex),12);
+  return{charts:[{t:'line',h:150,title:'MRR, $ thousand',series:[S(idx(M+1),mr,'s-acc',{area:true})],xf:v=>v+'m',yf:v=>v.toFixed(0),xt:[0,12,24,36]},
+   {t:'line',h:150,title:'Cash balance, $ thousand',series:[S(idx(M+1),cs,'s-acc2')],hl:[{y:0,cls:'s-fail'}],xf:v=>v+'m',yf:v=>v.toFixed(0),xt:[0,12,24,36]}],
+   stats:[['ARR at month 36','$'+F(mr[M]*12/1000,2)+'M'],['net revenue retention',P(nrr,0)],['LTV to CAC',F(ltv/v.cac,1)+'x'],['cash runs out',cashz>0?'month '+cashz:'not within 36 months']],
+   alert:{bad:cashz>0,text:cashz>0?'Cash goes negative in month '+cashz+'.':'Cash stays positive for the full 36 months.'}}}};
+
+KINDS.burn={rand:true,
+ note:'Fourteen client engagements, each with a budget and a billing period. The plot compares the share of budget consumed with the share of the period elapsed. Points above the dashed line are burning faster than time. Injected data errors are caught by simple reconciliation checks.',
+ controls:[R('ov','Typical overrun',0,0.4,0.02,0.2,pctf(0)),R('th','Burn flag tolerance',0.05,0.4,0.05,0.15,pctf(0)),R('dq','Data error rate',0,0.15,0.01,0.1,pctf(0))],
+ run(v,ctx){const rg=ctx.rng(230),n=14,pts=[];let flagged=0,risk=0,errs=0,caught=0;
+  for(let i=0;i<n;i++){const bud=80+rg()*320,el=0.2+rg()*0.7,burn=el*(1+v.ov*(rg()*2-0.4));const bad=rg()<v.dq;let rep=burn;if(bad){errs++;rep=burn*(rg()<0.5?1.6:0.5);if(Math.abs(rep-burn)>0.25*burn)caught++}
+   const fl=rep/el>1+v.th;if(fl){flagged++;risk+=(rep-el)*bud}pts.push({x:el*100,y:rep*100,cls:fl?'f-fail':'f-acc',r:3+bud/120,o:0.8,t:bad?'?':''})}
+  return{charts:[{t:'scatter',h:220,title:'Budget consumed against period elapsed, % (? marks a suspicious entry)',points:pts,diag:true,xmin:0,xmax:100,ymin:0,ymax:140,xf:v=>v.toFixed(0)+'%',yf:v=>v.toFixed(0)+'%'}],
+   stats:[['engagements flagged',flagged+' of '+n],['hours-value at risk','$'+F(risk,0)+'k'],['injected data errors',String(errs)],['caught by the reconciliation check',String(caught)]]}}};
+
+KINDS.tnmm={rand:true,
+ note:'A transfer pricing benchmarking study. Comparable companies give a spread of net cost plus margins. The arm length range is the interquartile range. If the tested party sits outside it, the adjustment goes to the median.',
+ controls:[R('n','Comparable companies',8,30,1,14,NF(0)),R('med','Typical comparable margin',0.03,0.12,0.005,0.075,pctf(1)),R('sd','Dispersion of margins',0.01,0.06,0.005,0.025,pctf(1)),R('tp','Tested party margin',0,0.15,0.005,0.045,pctf(1))],
+ run(v,ctx){const n=Math.round(v.n),z=ctx.z(30,240),m=sortN(idx(n).map(i=>v.med+v.sd*z[i])),q1=qnt(m,0.25),md=qnt(m,0.5),q3=qnt(m,0.75),inr=v.tp>=q1&&v.tp<=q3,adj=inr?0:md-v.tp;
+  return{charts:[{t:'scatter',h:210,title:'Comparable margins, ranked',points:m.map((q,i)=>({x:i+1,y:q*100,cls:'f-dim',r:3.4})).concat([{x:n/2+0.5,y:v.tp*100,cls:inr?'f-pass':'f-fail',r:5,t:'tested'}]),hl:[{y:q1*100,l:'Q1',cls:'s-g3'},{y:md*100,l:'median',cls:'s-acc'},{y:q3*100,l:'Q3',cls:'s-g3'}],xf:v=>String(Math.round(v)),yf:v=>v.toFixed(1)+'%'}],
+   stats:[['interquartile range',P(q1,1)+' to '+P(q3,1)],['median',P(md,1)],['adjustment to median',inr?'none':(adj>0?'+':'')+P(adj,2)]],
+   alert:{bad:!inr,text:inr?'Tested party is inside the arm length range. No adjustment.':'Tested party is outside the range, so income is adjusted to the median.'}}}};
+
+/* ---------- demo kinds: strategy and analytics ---------- */
+KINDS.bridge={
+ note:'A growth bridge starts from current revenue and adds each driver: new customers, price, expansion and churn. The lower chart is a price elasticity curve. With elasticity below minus one, a price rise cuts revenue.',
+ controls:[R('nl','New customers',0,0.3,0.01,0.12,pctf(0)),R('pr','Price increase',-0.1,0.2,0.01,0.04,pctf(0)),R('ex','Expansion of existing',0,0.15,0.01,0.05,pctf(0)),R('ch','Churn',0,0.25,0.01,0.09,pctf(0)),R('el','Price elasticity',-3,-0.3,0.1,-1.2,NF(1))],
+ run(v){const R0=100,steps=[['New customers',R0*v.nl],['Price',R0*v.pr],['Expansion',R0*v.ex],['Churn',-R0*v.ch]];let b=R0;const items=[{l:'Revenue now',v:R0,cls:'f-dim'}];steps.forEach(s=>{items.push({l:s[0],v:s[1],b:b,cls:s[1]>=0?'f-pass':'f-fail'});b+=s[1]});items.push({l:'Revenue next year',v:b,cls:'f-acc'});
+  const px=range(-0.1,0.2,31),rev=px.map(x=>100*(1+x)*Math.pow(1+x,v.el)),cur=100*(1+v.pr)*Math.pow(1+v.pr,v.el);
+  return{charts:[{t:'bars',h:190,title:'Growth bridge, revenue index',items:items,vf:v=>v.toFixed(1),yf:v=>v.toFixed(0)},
+   {t:'line',h:150,title:'Revenue index against price change, at the chosen elasticity',series:[S(px,rev,'s-acc2')],dots:[{x:v.pr,y:cur,cls:'f-acc',r:4}],xf:v=>(v*100).toFixed(0)+'%',yf:v=>v.toFixed(0)}],
+   stats:[['next-year revenue',F(b,1)],['net growth',P(b/R0-1,1)],['revenue effect of the price move alone',(cur>=100?'+':'')+F(cur-100,1)]]}}};
+
+KINDS.msize={
+ note:'A top-down market sizing funnel for a market entry case, followed by a five-year ramp against fixed cost. Each narrowing step is a hypothesis you can challenge. The payback line is when cumulative contribution turns positive.',
+ controls:[R('hh','Households in the metro (millions)',1,4,0.1,2.4,NF(1)),R('sa','Share inside the delivery zone',0.2,1,0.05,0.6,pctf(0)),R('ad','Online grocery penetration',0.05,0.4,0.01,0.18,pctf(0)),R('sh','Share you capture',0.01,0.15,0.01,0.06,pctf(0)),R('sp','Annual spend per household ($)',1500,6000,100,3200,NF(0)),R('fc','Fixed cost per year ($M)',2,20,1,5,NF(0))],
+ run(v){const tam=v.hh*1e6,sam=tam*v.sa,adr=sam*v.ad,som=adr*v.sh,rev=som*v.sp/1e6,items=[{l:'Households',v:tam/1e6,cls:'f-dim'},{l:'In zone',v:sam/1e6,cls:'f-g3'},{l:'Order online',v:adr/1e6,cls:'f-acc2'},{l:'Yours',v:som/1e6,cls:'f-acc'}];
+  const ramp=[0.15,0.4,0.7,0.9,1],cm=0.18,net=ramp.map(q=>rev*q*cm-v.fc),cum=cumsum(net);let pay=null;cum.forEach((q,i)=>{if(pay===null&&q>=0)pay=i+1});
+  return{charts:[{t:'bars',h:150,title:'Market funnel, millions of households',items:items,vf:v=>v.toFixed(2),yf:v=>v.toFixed(1)},
+   {t:'line',h:150,title:'Cumulative contribution after fixed cost, $M',series:[S([0,1,2,3,4,5],[0].concat(cum),'s-acc',{area:true})],hl:[{y:0,cls:'s-fail'}],xf:v=>'Y'+v,yf:v=>v.toFixed(0)}],
+   stats:[['households won',F(som/1000,1)+'k'],['steady-state revenue','$'+F(rev,0)+'M'],['year-5 contribution',F(net[4],1)+'M'],['payback',pay?'year '+pay:'beyond year 5']],
+   alert:{bad:!pay,text:pay?'Cumulative contribution turns positive in year '+pay+'.':'The entry does not pay back within five years at these assumptions.'}}}};
+
+KINDS.gantt={
+ note:'A phased roadmap with dependencies and a decision gate. Slip one workstream and the schedule pushes everything that depends on it. The bar colours show the critical path. The dashed line is the gate review.',
+ controls:[R('s1','Partner contracting slip (months)',0,6,1,0,NF(0)),R('s2','Technology integration slip (months)',0,6,1,0,NF(0)),R('s3','Pilot build slip (months)',0,6,1,0,NF(0)),R('gate','Gate review month',8,18,1,14,NF(0))],
+ run(v){const T=[{n:'Governance setup',d:2,dep:[],sl:0},{n:'Partner contracts',d:3,dep:[0],sl:v.s1},{n:'Tech integration',d:5,dep:[0],sl:v.s2},{n:'Pilot build',d:3,dep:[1],sl:v.s3},{n:'Pilot launch',d:2,dep:[2,3],sl:0},{n:'Pilot run',d:3,dep:[4],sl:0}],st=[],en=[];
+  T.forEach((t,i)=>{const s=Math.max.apply(null,[0].concat(t.dep.map(d=>en[d])));st.push(s);en.push(s+t.d+t.sl)});
+  const fin=en[T.length-1],crit=new Set([T.length-1]);for(let i=T.length-1;i>=0;i--)if(crit.has(i))T[i].dep.forEach(d=>{if(Math.abs(en[d]-st[i])<1e-9)crit.add(d)});
+  const late=fin>v.gate;
+  return{charts:[{t:'gantt',ml:70,xmax:Math.max(18,Math.ceil(fin+1)),rows:T.map((t,i)=>({l:t.n,s:st[i],e:en[i],cls:crit.has(i)?'f-acc2':'f-dim'})),vl:[{x:v.gate,l:'gate'}],title:'Amber is the critical path, in months'}],
+   stats:[['pilot complete',F(fin,0)+' months'],['buffer to gate',F(v.gate-fin,0)+' months'],['critical path',T.filter((t,i)=>crit.has(i)).map(t=>t.n).join(' > ')]],
+   alert:{bad:late,text:late?'Pilot data arrives after the gate review. Either move the gate or recover schedule on the critical path.':'Pilot data is in hand before the gate review.'}}}};
+
+KINDS.prio={
+ note:'Ten generic modernisation initiatives scored on value and effort. The ranking score is value divided by effort raised to a weight you set. A high weight punishes big projects and favours quick wins. The repo itself has no content yet, so this demo is illustrative only.',
+ controls:[R('w','Weight on effort',0,2,0.1,1,NF(1)),R('tn','Initiatives to fund',1,6,1,3,NF(0)),R('rk','Risk discount on value',0,0.5,0.05,0.15,pctf(0))],
+ run(v){const I=[['Data platform',8,7],['Model governance',6,3],['Cloud migration',7,9],['Service desk bots',5,2],['Fraud analytics',8,5],['Core system rewrite',9,10],['API layer',6,4],['Data quality tooling',5,3],['Document AI',7,4],['Training programme',4,2]],sc=I.map(q=>q[1]*(1-v.rk)/Math.pow(q[2],v.w)),o=idx(I.length).sort((a,b)=>sc[b]-sc[a]),top=new Set(o.slice(0,Math.round(v.tn)));
+  return{charts:[{t:'scatter',h:230,title:'Value against effort, funded initiatives in amber',points:I.map((q,i)=>({x:q[2],y:q[1],cls:top.has(i)?'f-acc2':'f-dim',r:top.has(i)?5:3.4,t:q[0]})),xmin:0,xmax:12,ymin:2,ymax:10,xf:v=>v.toFixed(0),yf:v=>v.toFixed(0),xlab:'effort'}],
+   stats:[['funded',o.slice(0,Math.round(v.tn)).map(i=>I[i][0]).join(', ')],['value captured',F(o.slice(0,Math.round(v.tn)).reduce((s,i)=>s+I[i][1],0),0)+' of '+I.reduce((s,q)=>s+q[1],0)],['effort used',F(o.slice(0,Math.round(v.tn)).reduce((s,i)=>s+I[i][2],0),0)+' of '+I.reduce((s,q)=>s+q[2],0)]]}}};
+
+KINDS.survey={rand:true,
+ note:'A weekly tracker with a real step change at week 8. Each wave carries sampling error, and a move is flagged when the two-proportion test passes 1.96. Set the step to zero to count false alarms. A design effect widens the bands the way weighting does.',
+ controls:[R('n','Respondents per wave',300,2000,100,800,NF(0)),R('st','True step change at week 8 (pts)',-10,10,1,5,NF(0)),R('de','Design effect',1,2,0.1,1.3,NF(1))],
+ run(v,ctx){const W=16,rg=ctx.rng(250),g=gaussFn(rg),est=[],up=[],lo=[];let sig=[];
+  for(let w=0;w<W;w++){const p=0.42+(w>=8?v.st/100:0),se=Math.sqrt(p*(1-p)/(v.n/v.de)),e=p+se*g();est.push(e*100);up.push((e+1.96*se)*100);lo.push((e-1.96*se)*100);if(w>0){const se2=Math.sqrt(2)*se,zz=(e-est[w-1]/100)/se2;if(Math.abs(zz)>1.96)sig.push({x:w,y:e*100,cls:zz>0?'f-pass':'f-fail',r:3.6})}}
+  const moe=1.96*Math.sqrt(0.42*0.58/(v.n/v.de))*100;
+  return{charts:[{t:'line',h:200,title:'Share positive, % with 95% bands',legend:[['--accent','wave estimate'],['--dim','95% band']],series:[S(idx(W),up,'s-dim',{dash:true,thin:true}),S(idx(W),lo,'s-dim',{dash:true,thin:true}),S(idx(W),est,'s-acc')],dots:sig,vl:[{x:7.5,l:'true step',cls:'s-g3'}],xf:v=>'w'+(v+1),yf:v=>v.toFixed(0)+'%'}],
+   stats:[['margin of error',F(moe,1)+' pts'],['waves flagged as moves',String(sig.length)+' of 15'],['expected false alarms at no change','about 0.75']]}}};
+
+KINDS.retail={rand:true,
+ note:'Two years of synthetic daily sales with a weekday pattern, a holiday season and one system outage. Days are flagged when the residual is below a z threshold. Lower the threshold and the outage is caught, along with ordinary noise.',
+ controls:[R('hu','Holiday uplift (Nov and Dec)',0,0.8,0.05,0.35,pctf(0)),R('ol','Outage length (days)',0,14,1,6,NF(0)),R('zt','Flag threshold (z)',1.5,4,0.1,2.8,NF(1))],
+ run(v,ctx){const n=730,z=ctx.z(n,260),dow=[0.85,0.9,0.92,0.95,1.1,1.25,1.15],y=[],flag=[],out0=420;
+  for(let t=0;t<n;t++){const d=new Date(Date.UTC(2024,0,1+t)),mo=d.getUTCMonth(),h=mo>=10?1+v.hu:1;let s=1000*(1+0.0004*t)*dow[t%7]*h*(1+0.08*z[t]);if(t>=out0&&t<out0+Math.round(v.ol))s*=0.12;y.push(s)}
+  const res=y.map((s,t)=>{const d=new Date(Date.UTC(2024,0,1+t)),h=d.getUTCMonth()>=10?1+v.hu:1;return s/(1000*(1+0.0004*t)*dow[t%7]*h)-1}),sd=sdev(res.filter(q=>q>-0.5)),fl=[];
+  res.forEach((q,t)=>{if(q/sd<-v.zt)fl.push({x:t,y:y[t],cls:'f-fail',r:3})});
+  const wk=[];for(let w=0;w+7<=n;w+=7)wk.push(mean(y.slice(w,w+7))*7/1000);const mon=[];for(let m=0;m<24;m++){let s=0;for(let t=0;t<n;t++){const d=new Date(Date.UTC(2024,0,1+t));if((d.getUTCFullYear()-2024)*12+d.getUTCMonth()===m)s+=y[t]}mon.push(s/1000)}
+  const inOut=fl.filter(q=>q.x>=out0&&q.x<out0+Math.round(v.ol)).length,hol=(mon[10]+mon[11]+mon[22]+mon[23])/mon.reduce((a,b)=>a+b,0);
+  return{charts:[{t:'line',h:160,title:'Daily revenue, $ (red = flagged)',series:[S(idx(n),y,'s-dim',{thin:true})],dots:fl,xt:[0,180,365,545,730],xf:v=>'d'+v,yf:v=>(v/1000).toFixed(1)+'k'},
+   {t:'bars',h:140,title:'Monthly revenue, $ thousand (Nov and Dec in amber)',items:mon.map((q,m)=>({l:'',v:q,cls:m%12>=10?'f-acc2':'f-acc'})),nox:true,yf:v=>v.toFixed(0)}],
+   stats:[['days flagged',String(fl.length)],['outage days caught',v.ol>0?inOut+' of '+Math.round(v.ol):'none injected'],['Nov and Dec share of revenue',P(hol,0)]]}}};
+
+KINDS.program={
+ note:'The same contributions in three plans that differ only in fees. Small annual percentages compound into real money over eighteen years. Use it to see why fee level is the main lever a state treasurer controls in a plan menu.',
+ controls:[R('mc','Monthly contribution ($)',50,1000,25,300,NF(0)),R('yr','Years',5,18,1,18,NF(0)),R('rt','Gross return',0.03,0.09,0.0025,0.065,pctf(2)),R('fb','Middle plan fee (bps)',10,150,5,60,NF(0))],
+ run(v){const fees=[0.0010,v.fb/1e4,0.0110],names=['Low fee plan','Middle plan','High fee plan'],cl=['s-acc','s-g3','s-fail'],res=fees.map(f=>{let b=0;const o=[0];for(let m=1;m<=v.yr*12;m++){b=b*(1+(v.rt-f)/12)+v.mc;if(m%12===0)o.push(b)}return o}),xs=idx(v.yr+1),contrib=v.mc*12*v.yr;
+  return{charts:[{t:'line',h:200,title:'Account balance, $ thousand',legend:names.map((n,i)=>[['--accent','--g3','--fail'][i],n+' ('+(fees[i]*1e4).toFixed(0)+' bps)']),series:res.map((o,i)=>S(xs,o.map(q=>q/1000),cl[i])),xf:v=>v+'y',yf:v=>v.toFixed(0)}],
+   stats:[['contributed','$'+F(contrib/1000,0)+'k'],['low fee ends at','$'+F(res[0][v.yr]/1000,0)+'k'],['high fee ends at','$'+F(res[2][v.yr]/1000,0)+'k'],['fee drag, low vs high','$'+F((res[0][v.yr]-res[2][v.yr])/1000,0)+'k']]}}};
+
+KINDS.probq={rand:true,
+ note:'Interview-style probability questions answered by simulation. Pick a problem and the number of trials. The running estimate settles on the exact answer, and the speed of that settling is itself a useful thing to know.',
+ controls:[SEL('pb','Problem',[['roll','Expected rolls of a die until the first 6'],['coup','Expected draws to collect all 10 coupons'],['max2','Expected max of two uniform random numbers'],['seven','Chance two dice sum to 7']],'roll'),R('N','Trials',200,20000,200,5000,NF(0))],
+ run(v,ctx){const rg=ctx.rng(270),N=Math.round(v.N),vals=[];let exact=0;
+  for(let i=0;i<N;i++){if(v.pb==='roll'){let k=1;while(rg()>=1/6)k++;vals.push(k)}else if(v.pb==='coup'){const seen=new Set();let k=0;while(seen.size<10){seen.add(Math.floor(rg()*10));k++}vals.push(k)}else if(v.pb==='max2'){vals.push(Math.max(rg(),rg()))}else{vals.push(Math.floor(rg()*6)+Math.floor(rg()*6)+2===7?1:0)}}
+  if(v.pb==='roll')exact=6;else if(v.pb==='coup')exact=10*[1,2,3,4,5,6,7,8,9,10].reduce((s,k)=>s+1/k,0);else if(v.pb==='max2')exact=2/3;else exact=1/6;
+  const xs=[],ys=[];let s=0;const step=Math.max(1,Math.floor(N/200));vals.forEach((q,i)=>{s+=q;if((i+1)%step===0){xs.push(i+1);ys.push(s/(i+1))}});const est=s/N;
+  return{charts:[{t:'line',h:200,title:'Running estimate',series:[S(xs,ys,'s-acc')],hl:[{y:exact,l:'exact',cls:'s-g3'}],xf:v=>v>=1000?(v/1000).toFixed(0)+'k':String(v),yf:v=>v.toFixed(2)}],
+   stats:[['exact answer',F(exact,4)],['estimate',F(est,4)],['error',F(est-exact,4)],['standard error',F(sdev(vals)/Math.sqrt(N),4)]]}}};
+
+
+/* ---------- categories and projects ---------- */
+const CATS=[
+ {id:'vol',name:'Volatility and derivatives'},
+ {id:'risk',name:'Risk and credit'},
+ {id:'trade',name:'Trading and ML'},
+ {id:'alt',name:'Alt-data alphas'},
+ {id:'math',name:'Stochastic methods'},
+ {id:'pe',name:'Private markets and finance'},
+ {id:'strat',name:'Strategy and analytics'}
+];
+const PROJECTS=[
+ {id:'Volatility-Forecasting',name:'Volatility forecasting engine',cat:'vol',kind:'garch',blurb:'Asks whether gradient-boosted trees can beat GARCH on next-day realized volatility for SPY. Uses strict temporal validation, a bias-free GARCH baseline, fractional differentiation, monotone-constrained XGBoost and a stacking ensemble.',tags:['GARCH','XGBoost','stacking','SPY']},
+ {id:'Volatility-Forecast-HAR',name:'HAR-RV against machine learning',cat:'vol',kind:'har',blurb:'Tests whether machine learning can statistically beat HAR-RV for next-day SPY realized volatility on a strict 80/20 temporal split, with GARCH, EGARCH and GJR-GARCH-t as the parametric family.',tags:['HAR-RV','GARCH','temporal split']},
+ {id:'dl-volatility',name:'Deep learning volatility benchmark',cat:'vol',kind:'fcmp',blurb:'Benchmarks an LSTM and a Temporal Fusion Transformer against GJR-GARCH and XGBoost on SPY since 2010. Scored with QLIKE, RMSE of log-vol, Diebold-Mariano tests and regime-conditional analysis.',tags:['LSTM','TFT','QLIKE','Diebold-Mariano']},
+ {id:'stochastic-vol-models',name:'Heston stochastic volatility engine',cat:'vol',kind:'heston',blurb:'Heston with characteristic-function machinery, three Fourier pricers (Carr-Madan FFT, COS and Lewis), implied vol surface calibration, smile analytics and semi-analytical Greeks. Ships with a Streamlit dashboard and a research paper.',tags:['Heston','Fourier pricing','calibration','Streamlit']},
+ {id:'rough-vol-engine',name:'Rough volatility engine',cat:'vol',kind:'fbm',blurb:'Library for pricing and calibrating rough stochastic volatility models, with the two main rough-vol families, a Monte Carlo engine, option pricing routines and a two-stage calibration.',tags:['rough vol','fractional Brownian motion','Monte Carlo']},
+ {id:'options-pricing-engine',name:'Options pricing engine',cat:'vol',kind:'crr',blurb:'Black-Scholes, Black-76, binomial CRR and trinomial Boyle models behind one pricing interface. Closed-form and finite-difference Greeks agree to 1e-4, with smile construction, scenario analysis and model validation.',tags:['Black-Scholes','binomial','trinomial','Greeks']},
+ {id:'options-vol-surface',name:'Implied volatility surface and hedging',cat:'vol',kind:'ivs',blurb:'Pricing toolkit calibrated to live SPY options: Black-Scholes-Merton with Greeks, Heston calibration, a 3D implied vol surface with skew by expiry, delta-hedging P&L attribution and GARCH forecasts as vol inputs.',tags:['vol surface','Heston','delta hedging','SPY']},
+ {id:'exotic-options-mc',name:'Exotic options Monte Carlo',cat:'vol',kind:'mcvr',blurb:'Monte Carlo engine for Asian, lookback, barrier and digital options with antithetic and control variates, stratified and Latin hypercube sampling, scrambled Sobol and Halton, and importance sampling.',tags:['Monte Carlo','variance reduction','quasi-MC','exotics']},
+ {id:'Risk-Neutral-Density',name:'Risk-neutral density from options',cat:'vol',kind:'rnd',blurb:'Extracts the market-implied density from live AAPL option chains with Breeden-Litzenberger, SVI and SSVI, and compares it with the historical return distribution.',tags:['Breeden-Litzenberger','SVI','SSVI','AAPL']},
+ {id:'stochastic-rate-models',name:'Stochastic interest rate models',cat:'vol',kind:'vasicek',blurb:'Vasicek, CIR, Hull-White and G2++ with exact and Monte Carlo simulation, analytic bond pricing, yield curve construction, calibration, rate derivatives, and duration, convexity and VaR risk.',tags:['Vasicek','CIR','Hull-White','G2++']},
+ {id:'energy-derivatives-valuation-toolkit',name:'Energy derivatives valuation',cat:'vol',kind:'spark',blurb:'Simulates wholesale power and gas prices to price spread options and value a gas-fired tolling agreement and a battery storage system, ending in a client-style VaR and CVaR report.',tags:['spark spread','tolling','storage','CVaR']},
+
+ {id:'Portfolio-VaR',name:'Portfolio VaR model tournament',cat:'risk',kind:'varm',blurb:'Compares 13 VaR models on a multi-asset ETF portfolio: GARCH family, filtered historical simulation and EVT hybrids. Scored with Christoffersen conditional coverage and the Model Confidence Set.',tags:['VaR','GJR-GARCH','EVT','Model Confidence Set']},
+ {id:'market-risk-engine',name:'Market risk engine',cat:'risk',kind:'basel',blurb:'Historical, parametric and Monte Carlo VaR with Expected Shortfall, Basel backtesting, stress testing, risk decomposition and economic capital allocation.',tags:['VaR','Expected Shortfall','Basel','stress tests']},
+ {id:'var-confidence-audit',name:'Audit of bank VaR disclosures',cat:'risk',kind:'audit',blurb:'Audits the one-day VaR that JPM, GS, MS, BAC and C disclose in SEC filings against realized returns for 2019 to 2024, using Kupiec and Christoffersen backtests across calm and stressed regimes.',tags:['Kupiec','Christoffersen','SEC EDGAR','regimes']},
+ {id:'Regime-Analysis',name:'Regime-dependent risk analysis',cat:'risk',kind:'regime',blurb:'Shows that beta, volatility, VaR and Sharpe change by market regime. Splits SPY at median 30-day volatility and fits a regime-conditional CAPM with robust standard errors.',tags:['regimes','CAPM','HC3','Sharpe']},
+ {id:'fed-sentiment-risk-monitor',name:'Fed sentiment risk monitor',cat:'risk',kind:'fed',blurb:'Streamlit app that scores the latest FOMC statement for hawkishness from -100 to +100 using a curated lexicon, and finds the most similar past statements with TF-IDF and cosine similarity.',tags:['FOMC','NLP','TF-IDF','Streamlit']},
+ {id:'structured-credit-cashflow-model',name:'Structured credit cash flow model',cat:'risk',kind:'credit',blurb:'Synthetic workflow for a significant risk transfer analyst: reference pool, historical loss analysis, cash flow waterfall, Monte Carlo risk simulation, scenario sensitivity, fund economics and a draft IC memo.',tags:['SRT','waterfall','Monte Carlo','synthetic']},
+
+ {id:'Alpha-Engine',name:'Alpha Engine',cat:'trade',kind:'bl',blurb:'Walk-forward systematic portfolio that pipes ML return forecasts through Black-Litterman to allocate across 15 multi-asset ETFs, with explicit guards against look-ahead and retraining bias.',tags:['Black-Litterman','walk-forward','stacking','ETFs']},
+ {id:'factor-research',name:'Cross-sectional factor research',cat:'trade',kind:'ic',blurb:'Framework for factor investing on S&P 500 stocks with six canonical factors, IC, ICIR, Fama-MacBeth, factor decay and quintile analysis, plus a multi-factor long-short portfolio.',tags:['IC','Fama-MacBeth','quintiles','factors'],cfg:{ic:{val:0.03},n:{val:500}}},
+ {id:'nlp-earnings-signal',name:'NLP earnings call signal',cat:'trade',kind:'ic',blurb:'Extracts tone change from S&P 500 earnings call transcripts with FinBERT and builds a long-short strategy with information coefficients across several return horizons.',tags:['FinBERT','NLP','long-short','IC'],cfg:{ic:{val:0.05},n:{val:200}}},
+ {id:'Stock-Return-Prediction',name:'Next-day return prediction',cat:'trade',kind:'dirpred',blurb:'ML pipeline for next-day AAPL direction from 2018 to 2023 with 80+ engineered features and permutation feature selection. Treats direction accuracy above 52% as the exploitability bar.',tags:['classification','feature selection','AAPL']},
+ {id:'stat-arb-pairs',name:'Cointegration pairs trading',cat:'trade',kind:'ou',blurb:'Screens S&P 500 stocks for cointegrated pairs, fits Ornstein-Uhlenbeck dynamics, uses a Kalman filter hedge ratio and runs out-of-sample backtests with regime detection.',tags:['cointegration','Kalman filter','OU process']},
+ {id:'crypto-stat-arb',name:'Crypto statistical arbitrage',cat:'trade',kind:'xsmom',blurb:'Statistical arbitrage platform for crypto with momentum, reversal, pairs and seasonality signals, dollar-neutral backtests with realistic execution costs, and a synthetic fallback for offline use.',tags:['momentum','reversal','ccxt','backtesting']},
+ {id:'Prediction-Market-Trading-Infrastructure-Signal-Research-Toolkit',name:'Prediction market trading engine',cat:'trade',kind:'pm',blurb:'Trading desk pipeline for binary event contracts on synthetic markets: a price-time priority order book, signal research against market-implied probability, an event-driven backtester and risk monitoring.',tags:['order book','Brier score','backtester','synthetic']},
+ {id:'options-market-making-simulator',name:'Options market making simulator',cat:'trade',kind:'mm',blurb:'Simulates a market maker quoting an options chain over a 390-tick day, with Black-Scholes theo, a layered half-spread, informed order flow, delta hedging, hard risk limits and P&L attribution.',tags:['market making','adverse selection','delta hedging']},
+ {id:'etf-nav-arbitrage-study',name:'ETF NAV arbitrage study',cat:'trade',kind:'etfz',blurb:'Studies mean reversion in the premium to NAV of HYG, LQD, JNK, TLT and AGG with rolling z-scores, a bootstrap event study, VIX and credit regimes, a walk-forward backtest, a dashboard and alerts.',tags:['ETF','event study','walk-forward','Streamlit']},
+ {id:'etf-premium-discount',name:'ETF premium and discount reversion',cat:'trade',kind:'etfz',blurb:'Research project on premium and discount mean reversion in fixed income ETFs, using a 63-day rolling z-score and an event study of plus and minus 2 sigma episodes.',tags:['ETF','z-score','event study'],cfg:{th:{val:2},hl:{val:6}}},
+
+ {id:'13f-timestamp-alpha',name:'13F filing timestamp signal',cat:'alt',kind:'lagdecay',blurb:'Treats when a manager files its 13F as a signal. Managers who file near the 45-day deadline are more likely still to hold the position, and a conviction score combines timing with position change.',tags:['13F','metadata','conviction score'],note:'Waiting for a filing costs information. This demo shows that cost: the share of an alpha still available at the filing date as the lag grows. The repo signal is built on the opposite side of the trade, who files late.'},
+ {id:'congressional-trading-alpha',name:'Congressional trading lag signal',cat:'alt',kind:'lagdecay',blurb:'Exploits the 45-day STOCK Act disclosure window, building a signal from disclosure lag and other trade features in House and Senate filings.',tags:['STOCK Act','disclosure lag','alt data'],note:'Disclosures arrive up to 45 days after a trade. This demo shows how much of an alpha is still on the table by the filing date as the lag grows.'},
+ {id:'maturity-wall-alpha',name:'Debt maturity wall signal',cat:'alt',kind:'wall',blurb:'Reads the corporate refinancing calendar from XBRL debt maturity schedules for a 50-company high-yield universe, and tests whether maturity concentration predicts forward equity returns after controlling for leverage and sector.',tags:['XBRL','refinancing','high yield']},
+ {id:'index-drift-alpha',name:'Index rebalancing drift',cat:'alt',kind:'drift',blurb:'Harvests slippage around index rebalancing, where float-adjusted weights drift and the mechanical trade is certain but its timing is not.',tags:['index funds','float adjustment','rebalancing']},
+ {id:'skew-crowding-alpha',name:'Skew as a crowding regime',cat:'alt',kind:'crowd',blurb:'Uses cross-sectional put-skew z-scores from options as a leading indicator of factor crowding, and cuts factor exposure to 50% when the crowding index passes 1.5.',tags:['options skew','factor crowding','regimes']},
+ {id:'earnings-silence-alpha',name:'Earnings call silence mapping',cat:'alt',kind:'silence',blurb:'Measures what management stops saying. A company-specific TF-IDF vocabulary of bigrams and trigrams from SEC 8-K filings defines normal topics, and omission from the latest call is the signal.',tags:['TF-IDF','8-K','NLP','omission score']},
+ {id:'job-posting-alpha',name:'Job posting velocity signal',cat:'alt',kind:'ic',blurb:'Uses the velocity and functional mix of job postings archived by the Wayback Machine as a lead indicator of earnings surprise direction one to two quarters ahead.',tags:['Wayback Machine','hiring','earnings surprise'],cfg:{ic:{val:0.035},n:{val:300}}},
+
+ {id:'mfg-lob',name:'Mean-field games for limit order books',cat:'math',kind:'mfg',blurb:'Solver for mean-field game models of limit order books: a backward Hamilton-Jacobi-Bellman equation coupled to a forward Fokker-Planck equation that describes the crowd.',tags:['mean-field games','HJB','Fokker-Planck']},
+ {id:'ergodic-bsde',name:'Ergodic BSDE solvers',cat:'math',kind:'ergodic',blurb:'Numerical solvers for ergodic backward stochastic differential equations, with applications to long-run risk pricing, robust portfolio optimization and risk-sensitive control.',tags:['BSDE','ergodic control','risk-sensitive']},
+ {id:'ot-returns',name:'Optimal transport on return distributions',cat:'math',kind:'ot',blurb:'Treats the cross-section of stock returns on each date as a probability measure and uses optimal transport to measure how it shifts, stretches and changes shape.',tags:['optimal transport','Wasserstein','cross-section']},
+ {id:'pathsig-finance',name:'Path signatures for finance',cat:'math',kind:'sig',blurb:'Truncated path signatures of price, volume and volatility as mathematically principled, interpretable features for cross-sectional equity return prediction.',tags:['rough paths','signatures','features']},
+ {id:'malliavin-greeks',name:'Malliavin calculus Greeks',cat:'math',kind:'malliavin',blurb:'Computes option Greeks with Malliavin integration by parts, which never differentiates the payoff and so also works for digital and barrier options.',tags:['Malliavin','Greeks','digital options']},
+
+ {id:'pe-fund-performance-analytics',name:'PE fund-of-funds analytics',cat:'pe',kind:'jcurve',blurb:'Analyzes private equity funds as a fund-of-funds analyst would, on synthetic cash flows: dated IRR, MOIC, DPI, RVPI, TVPI, public market equivalent, J-curve modeling and commitment pacing.',tags:['IRR','TVPI','PME','J-curve']},
+ {id:'buyout-underwriting-toolkit',name:'Buyout underwriting toolkit',cat:'pe',kind:'lbo',blurb:'Underwriting workflow for a buy-and-build platform in essential services: target sourcing, valuation, LBO structuring, bolt-on modeling, diligence tracking and an IC write-up.',tags:['LBO','roll-up','IC memo']},
+ {id:'Climate-Tech-Venture-Screening-Diligence-Toolkit',name:'Climate tech venture screening',cat:'pe',kind:'powerlaw',blurb:'Models an early-stage climate VC analyst workflow on synthetic data: pipeline screening, unit economics under technology cost uncertainty, ownership and fund-return dynamics, and IC diligence.',tags:['venture','unit economics','fund returns','synthetic']},
+ {id:'endowment-ocio-toolkit',name:'Endowment OCIO toolkit',cat:'pe',kind:'spend',blurb:'Analytical workflow of an outsourced CIO for nonprofit endowments on synthetic data: long-term capital market assumptions, manager return streams, fund cash flows and simulation.',tags:['OCIO','endowment','simulation','synthetic']},
+ {id:'real-estate-ma-valuation-toolkit',name:'Real estate M&A valuation',cat:'pe',kind:'cap',blurb:'Sell-side valuation of a 12-property, roughly 3,060-unit Atlanta multifamily operating company, using the methods of a real estate investment banking analyst.',tags:['cap rate','DCF','multifamily','M&A']},
+ {id:'corporate-fpa-toolkit',name:'Corporate FP&A toolkit',cat:'pe',kind:'variance',blurb:'Driver-based budgeting, forecasting and variance analysis for a multi-business-unit retail company: variance bridges, rolling forecasts, indirect cash flow, scenarios and capital allocation scoring.',tags:['budgeting','variance bridge','scenarios']},
+ {id:'saas-fpa-financial-model',name:'SaaS FP&A model',cat:'pe',kind:'saas',blurb:'FP&A toolkit for an early-stage SaaS company: synthetic operating data, a linked three-statement model, SaaS KPIs, a budget, variance analysis and a rolling 12-month cash forecast.',tags:['SaaS KPIs','three statements','cash forecast']},
+ {id:'engagement-finance-toolkit',name:'Engagement finance toolkit',cat:'pe',kind:'burn',blurb:'Simulates the financial operations of a professional services practice: time and expense tracking, budget-to-actual monitoring, draft invoicing and data-quality checks in a formula-driven Excel workbook.',tags:['budget to actual','data quality','Excel']},
+ {id:'transfer-pricing-benchmarking-tool',name:'Transfer pricing benchmarking',cat:'pe',kind:'tnmm',blurb:'Comparable-company benchmarking that replicates the mechanics of a transactional net margin method study under the OECD guidelines and Treas. Reg. 1.482-5, using free public data.',tags:['TNMM','OECD','interquartile range']},
+
+ {id:'growth-strategy-diagnostic-toolkit',name:'Growth strategy diagnostic',cat:'strat',kind:'bridge',blurb:'Customer-insight-driven growth work for a subscription business on synthetic data: segmentation, growth bridge, market sizing, pricing elasticity, hypothesis tree and an executive memo.',tags:['growth bridge','elasticity','segmentation']},
+ {id:'market-entry-case-toolkit',name:'Market entry case',cat:'strat',kind:'msize',blurb:'A hypothesis-led case on whether FreshRoute, a fictional online grocer, should enter the Greater Toronto Area. The answer is a conditional go with a milestone-gated pilot.',tags:['market sizing','case','consulting']},
+ {id:'strategy-implementation-roadmap',name:'Strategy implementation roadmap',cat:'strat',kind:'gantt',blurb:'Sequel to the market entry case. Plans the operational rollout of the approved partnership-based pilot, with reassessment at the 18 to 24 month mark.',tags:['roadmap','milestones','implementation']},
+ {id:'ai-tech-modernization-roadmap',name:'AI and tech modernization roadmap',cat:'strat',kind:'prio',blurb:'Placeholder repository with only a title and a license so far.',tags:['roadmap','prioritization'],note:'The repo has no content yet, so this demo is a generic illustration of how initiatives get prioritised and does not describe the repo.'},
+ {id:'consumer-survey-tracking-toolkit',name:'Consumer survey tracker',cat:'strat',kind:'survey',blurb:'Weekly consumer sentiment tracker from questionnaire design through synthetic fieldwork, cleaning, banner tables, wave-over-wave trend detection, a BI export and a written narrative report.',tags:['survey','trend detection','BI export']},
+ {id:'retail-analytics-dashboard',name:'Retail analytics dashboard',cat:'strat',kind:'retail',blurb:'End-to-end analyst project: a messy retail sales export is cleaned in Python, loaded into SQLite, analyzed with hand-written SQL and shown in a Streamlit dashboard, including a February 2025 outage.',tags:['SQL','SQLite','Streamlit','data cleaning']},
+ {id:'public-program-analytics-toolkit',name:'State program analytics',cat:'strat',kind:'program',blurb:'Research workflow of a municipal advisory analyst covering state-run programs: 529 college savings plans, ABLE plans and state-facilitated retirement savings programs.',tags:['529 plans','ABLE','municipal advisory']},
+ {id:'quantquest',name:'QuantQuest',cat:'strat',kind:'probq',blurb:'Game-style learning app for quant interview prep, with milestones and verification scripts.',tags:['interview prep','probability','app']}
+];
+const BRANCH={'13f-timestamp-alpha':'claude/dazzling-planck-UQM50','congressional-trading-alpha':'claude/stoic-ptolemy-qXiWq','dl-volatility':'claude/youthful-thompson-Uc9ej','earnings-silence-alpha':'claude/gracious-darwin-nWAQf','etf-nav-arbitrage-study':'claude/inspiring-faraday-nxyocf','etf-premium-discount':'claude/eloquent-johnson-3f1bpk','exotic-options-mc':'claude/compassionate-planck-csls8r','factor-research':'claude/blissful-mendel-BLbat','fed-sentiment-risk-monitor':'claude/hopeful-tesla-09khkh','index-drift-alpha':'claude/affectionate-thompson-9SoC3','job-posting-alpha':'claude/fervent-clarke-QTo6G','market-risk-engine':'claude/brave-allen-tpmw9o','maturity-wall-alpha':'claude/amazing-pasteur-EoBtw','nlp-earnings-signal':'claude/clever-pasteur-SVECm','options-pricing-engine':'claude/hopeful-brown-ngx7w6','options-vol-surface':'claude/vibrant-bohr-nfjZC','skew-crowding-alpha':'claude/cool-einstein-8LWYI','stat-arb-pairs':'claude/wizardly-davinci-VkM6S','stochastic-rate-models':'claude/modest-bohr-krahnx','stochastic-vol-models':'claude/wizardly-wright-sss3uf','var-confidence-audit':'claude/sweet-lamport-b1lwac'};
+
+function drawHero(){
+  var svg=$('#hero-svg'),sim=garch(0.09,0.89,0.16,true,normals(11,500)),W=wid(svg),H=130,ml=40,mr=6,N=500;
+  var x=sc(0,N-1,ml,W-mr),vmax=Math.max.apply(null,sim.sg),vm=Math.max(10,Math.ceil(vmax/10)*10),y=sc(0,vm,108,8),h='';
+  [0,vm/2,vm].forEach(function(v){h+=ln(ml,y(v),W-mr,y(v),'grid')+tx(ml-6,y(v)+3.5,v.toFixed(0)+'%','end')});
+  var pts=sim.sg.map(function(v,i){return[x(i),y(v)]});
+  h+=pth(pts.concat([[x(N-1),y(0)],[x(0),y(0)]]),'area-acc',true)+pth(pts,'ln s-acc');
+  mount(svg,W,H,h);
+}
+
+
+/* ---------- BRAIN: submitted pipelines ---------- */
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function renderSubmitted(){
+  $('#submitted').innerHTML=SUBMITTED.map(function(a){
+    return '<div class="alpha"><code class="expr">'+esc(a.expr)+'</code><ol class="pipe">'+a.steps.map(function(s){return '<li><span class="k">'+esc(s[0])+'</span><code>'+esc(s[1])+'</code></li>'}).join('')+'</ol><p>'+esc(a.text)+'</p></div>';
+  }).join('');
+}
+
+/* ---------- BRAIN: scorecard ---------- */
+function verdict(ok){return '<span class="pill '+(ok?'ok':'bad')+'">'+(ok?'pass':'fail')+'</span>'}
+function renderScoreTable(){
+  var t='<tr><th>alpha</th><th>Sharpe</th><th>sub-universe</th><th>Fitness</th><th>turnover</th><th>fitness gap</th></tr>';
+  ALPHAS.forEach(function(a){
+    var tov=a.turnover==null?'n/a':(typeof a.turnover==='number'?a.turnover+'%'+verdict(a.turnover>=TH.tmin&&a.turnover<=TH.tmax):'in range'+verdict(true));
+    t+='<tr><td><b style="font-weight:500">'+esc(a.name)+'</b><div style="color:var(--dim);margin-top:4px;max-width:46ch;white-space:normal">'+esc(a.read)+'</div></td>'
+      +'<td class="n">'+fmt(a.sharpe,2)+verdict(a.sharpe>=TH.sharpe)+'</td>'
+      +'<td class="n">'+(a.sub==null?'n/a':fmt(a.sub,2))+'</td>'
+      +'<td class="n">'+(a.fitness==null?'n/a':fmt(a.fitness,2)+verdict(a.fitness>=TH.fitness))+'</td>'
+      +'<td class="n">'+tov+'</td>'
+      +'<td class="n">'+(a.fitness==null?'n/a':fmt(1/(a.fitness*a.fitness),1)+'x')+'</td></tr>';
+  });
+  $('#s-tbl').innerHTML=t;
+}
+function drawScores(){
+  var svg=$('#s-svg'),W=wid(svg),ml=92,mr=44,g='',y=6;
+  function panel(title,key,thr,max,ticks){
+    g+=tx(ml,y+10,title,'start','tk dim');y+=20;
+    var x=sc(0,max,ml,W-mr),top=y,rows=ALPHAS.length,rh=30,bot=y+rows*rh;
+    ticks.forEach(function(v){g+=ln(x(v),top-2,x(v),bot,'grid')+tx(x(v),bot+14,v,'middle','tk dim')});
+    ALPHAS.forEach(function(a,i){
+      var v=a[key],yy=top+i*rh;
+      g+=tx(ml-8,yy+17,esc(a.short),'end','tk fg');
+      if(v==null){g+=tx(ml+4,yy+17,'not logged','start','tk dim');return}
+      g+=rect(ml,yy+6,x(Math.min(v,max))-ml,14,v>=thr?'f-pass':'f-fail')+tx(x(Math.min(v,max))+6,yy+17,fmt(v,2),'start','tk fg');
+    });
+    g+=ln(x(thr),top-4,x(thr),bot,'ln thin dash s-acc2')+tx(x(thr),top-8,'threshold '+fmt(thr,2),'middle','tk');
+    y=bot+34;
+  }
+  panel('Sharpe','sharpe',TH.sharpe,2,[0,0.5,1,1.5,2]);
+  panel('Fitness','fitness',TH.fitness,1.5,[0,0.5,1,1.5]);
+  mount(svg,W,y,g);
+}
+
+/* ---------- BRAIN: fitness explorer ---------- */
+function drawF(){
+  var S=+$('#f-s').value,Rr=+$('#f-r').value/100,Tt=+$('#f-t').value/100;
+  $('#f-s-o').textContent=fmt(S,2);$('#f-r-o').textContent=fmt(Rr*100,1)+'%';$('#f-t-o').textContent=fmt(Tt*100,0)+'%';
+  var fit=S*Math.sqrt(Math.abs(Rr)/Math.max(Tt,0.125)),okS=S>=TH.sharpe,okF=fit>=TH.fitness,okT=Tt*100>=TH.tmin&&Tt*100<=TH.tmax;
+  $('#f-big').textContent=fmt(fit,2);$('#f-big').style.color=okF?'var(--pass)':'var(--fail)';
+  $('#f-checks').innerHTML='<span>Sharpe 1.25'+verdict(okS)+'</span><span>Fitness 1.0'+verdict(okF)+'</span><span>turnover 1 to 70%'+verdict(okT)+'</span>';
+  var svg=$('#f-svg'),W=wid(svg),H=250,ml=46,mr=10,XM=100,YM=30,x=sc(0,XM,ml,W-mr),y=sc(0,YM,H-26,10),g='';
+  niceTicks(0,YM,3).forEach(function(v){g+=ln(ml,y(v),W-mr,y(v),'grid')+tx(ml-6,y(v)+3.5,v+'%','end')});
+  [0,25,50,75,100].forEach(function(v){g+=tx(x(v),H-8,v+'%','middle','tk dim')});
+  var top=[],bot=[];
+  for(var tv=1;tv<=70;tv++){var req=Math.max(tv/100,0.125)/(S*S)*100;bot.push([x(tv),y(Math.min(req,YM))]);top.push([x(tv),y(YM)])}
+  g+=pth(bot.concat(top.reverse()),'area-pass',true)+pth(bot,'ln thin s-pass');
+  g+=ln(x(70),10,x(70),H-26,'ln thin dash s-dim')+tx(x(70)+4,22,'70% cap','start','tk dim');
+  g+=ln(x(12.5),H-26,x(12.5),H-32,'axis')+tx(x(12.5),H-36,'12.5% floor','start','tk dim');
+  var px=x(clamp(Tt*100,0,XM)),py=y(clamp(Rr*100,0,YM));
+  g+=ln(px,10,px,H-26,'ln thin s-muted')+ln(ml,py,W-mr,py,'ln thin s-muted')+'<circle class="'+(okF&&okT&&okS?'f-pass':'f-fail')+'" cx="'+n1(px)+'" cy="'+n1(py)+'" r="5"/>';
+  g+=tx(ml+4,22,'annual returns vs turnover','start','tk dim');
+  mount(svg,W,H,g);
+}
+
+/* ---------- BRAIN: operator playground ---------- */
+var PG_Z=normals(21,48),PG_OFF=[1.1,0.35,-0.45,-1.0],PG_RAW=PG_Z.map(function(z,i){return PG_OFF[Math.floor(i/12)]+0.7*z}),pgMode='raw';
+function rankArr(a){var idx=a.map(function(v,i){return[v,i]}).sort(function(p,q){return p[0]-q[0]}),o=new Array(a.length);idx.forEach(function(p,r){o[p[1]]=r/(a.length-1)});return o}
+function zArr(a){var m=mean(a),s=sdev(a);return a.map(function(v){return(v-m)/s})}
+function pgWeights(mode){
+  var v;
+  if(mode==='raw')v=PG_RAW.slice();
+  else if(mode==='rank')v=rankArr(PG_RAW);
+  else if(mode==='zscore')v=zArr(PG_RAW);
+  else{v=[];for(var gi=0;gi<4;gi++){var seg=PG_RAW.slice(gi*12,gi*12+12);v=v.concat(mode==='group_rank'?rankArr(seg):zArr(seg))}}
+  var m=mean(v);v=v.map(function(a){return a-m});var gross=v.reduce(function(s,a){return s+Math.abs(a)},0);return v.map(function(a){return a/gross});
+}
+function drawP(){
+  var w=pgWeights(pgMode),svg=$('#p-svg'),W=wid(svg),H=220,ml=40,mr=6,n=w.length,mx=Math.max(0.05,Math.ceil(Math.max.apply(null,w.map(Math.abs))*100/2.5)*2.5/100);
+  var x=sc(0,n,ml,W-mr),y=sc(-mx,mx,H-10,10),g='',bw=(W-mr-ml)/n;
+  [-mx,0,mx].forEach(function(v){g+=ln(ml,y(v),W-mr,y(v),v===0?'axis':'grid')+tx(ml-6,y(v)+3.5,(v*100).toFixed(1)+'%','end')});
+  var cls=['f-g1','f-g2','f-g3','f-g4'];
+  w.forEach(function(v,i){var yy=v>=0?y(v):y(0);g+=rect(x(i)+bw*0.12,yy,bw*0.76,Math.abs(y(v)-y(0)),cls[Math.floor(i/12)])});
+  mount(svg,W,H,g);
+  var chips='',names=['A','B','C','D'];
+  for(var gi=0;gi<4;gi++){var net=0;for(var i=gi*12;i<gi*12+12;i++)net+=w[i];chips+='<div class="chip">Subindustry '+names[gi]+'<b style="color:'+(Math.abs(net)<0.005?'var(--pass)':'var(--fg)')+'">'+(net>=0?'+':'')+fmt(net*100,1)+'%</b></div>'}
+  $('#p-chips').innerHTML=chips;
+}
+$('#p-seg').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;pgMode=b.getAttribute('data-v');Array.prototype.forEach.call(this.children,function(c){c.setAttribute('aria-pressed',c===b?'true':'false')});drawP()});
+
+const ALIB=[{"expr": "volume_spike =\nvolume / adv20;\n\ntrend =\nts_delta(close, 5);\n\nalpha =\ngroup_rank(\n    rank(volume_spike)\n    * rank(-trend),\n    subindustry\n);", "sharpe": 1.53, "turnover": 23.01, "fitness": 1.01, "returns": 10.03, "dd": 6.31, "margin": 8.72, "fam": "Price-volume", "id": "A01"}, {"expr": "alpha =\ngroup_rank(\n    rank(inventory / assets)\n    * rank(-returns),\n    subindustry\n);", "sharpe": 1.8, "turnover": 31.59, "fitness": 1.06, "returns": 10.89, "dd": 5.94, "margin": 6.9, "fam": "Blend", "id": "A02"}, {"expr": "alpha_slow =\ngroup_rank(\n    ts_rank(cashflow_op / assets, 252),\n    subindustry\n);\n\nalpha_fast =\nrank(-ts_mean(returns, 5))\n/ (ts_std_dev(returns, 20) + 0.3);\n\nalpha =\nrank(alpha_slow)\n+ 0.4 * rank(alpha_fast);", "sharpe": 1.64, "turnover": 12.4, "fitness": 1.12, "returns": 5.87, "dd": 3.34, "margin": 9.47, "fam": "Blend", "id": "A03"}, {"expr": "alpha_slow =\ngroup_rank(\n    ts_rank(operating_income / assets, 252),\n    subindustry\n);\n\nalpha_fast =\nrank(-ts_mean(returns, 5));\n\nalpha =\nrank(alpha_slow)\n+ 0.2 * rank(alpha_fast);", "sharpe": 1.54, "turnover": 13.35, "fitness": 1.01, "returns": 5.79, "dd": 4.13, "margin": 8.68, "fam": "Blend", "id": "A04"}, {"expr": "alpha =\ngroup_rank(\n    rank(-ts_delta(close, 3))\n    * rank(ts_mean(volume, 5) / adv20),\n    subindustry\n);", "sharpe": 2.27, "turnover": 60.03, "fitness": 1.0, "returns": 11.6, "dd": 4.31, "margin": 3.86, "fam": "Price-volume", "id": "A05"}, {"expr": "alpha =\nrank(vwap - close)\n*\nrank(volume / adv20);", "sharpe": 1.76, "turnover": 27.61, "fitness": 1.0, "returns": 8.99, "dd": 4.36, "margin": 6.51, "fam": "Price-volume", "id": "A06"}, {"expr": "alpha =\ngroup_rank(\n    revenue / assets,\n    industry\n)\n*\nrank(-ts_delta(close, 10));", "sharpe": 1.75, "turnover": 18.72, "fitness": 1.26, "returns": 9.64, "dd": 5.46, "margin": 10.3, "fam": "Blend", "id": "A07"}, {"expr": "alpha_slow =\ngroup_rank(\n    ts_rank(cashflow_op / assets, 270),\n    subindustry\n);\n\nalpha_fast =\nrank(-ts_mean(returns, 1))\n* rank(volume / adv20);\n\nalpha =\nrank(alpha_slow)\n* rank(alpha_fast);", "sharpe": 2.29, "turnover": 39.88, "fitness": 1.12, "returns": 9.57, "dd": 5.17, "margin": 4.8, "fam": "Blend", "id": "A08"}, {"expr": "decay_days = 2;\nrel_days_since_max = rank(ts_arg_max(close, 30));\ndecline_pct = (vwap - close) / close;\ndecline_pct / min( ts_decay_linear(rel_days_since_max, decay_days), 0.20)", "sharpe": 1.65, "turnover": 56.61, "fitness": 1.0, "returns": 20.8, "dd": 8.3, "margin": 7.35, "fam": "Price-volume", "id": "A09"}, {"expr": "sales_strength =\nts_zscore(sales_ps, 252);\n\nsales_trend =\nsales_ps > last_diff_value(sales_ps, 5);\n\nfundamental_signal =\nrank(\n    sales_strength\n    * (operating_income / assets)\n);\n\nprice_reversal =\nrank(-ts_delta(close, 5));\n\nalpha =\nsales_trend && sales_strength > 0\n? fundamental_signal\n: price_reversal;", "sharpe": 2.03, "turnover": 37.8, "fitness": 1.1, "returns": 11.13, "dd": 5.02, "margin": 5.89, "fam": "Blend", "id": "A10"}, {"expr": "// --- Strong structural backbone ---\nalpha_structural =\ngroup_rank(\n    ts_rank(est_eps / close, 90),\n    industry\n);\n\n// --- Fast component ---\nalpha_fast =\nrank(ts_delta(volume / adv20, 5))\n+ rank(-ts_mean(returns, 3));\n\n// --- Final ---\nalpha =\nrank(alpha_structural)\n+ 0.5 * rank(alpha_fast);", "sharpe": 2.02, "turnover": 24.91, "fitness": 1.27, "returns": 9.81, "dd": 4.09, "margin": 7.87, "fam": "Blend", "id": "A11"}, {"expr": "-ts_rank(fn_liab_fair_val_l1_a,126)", "sharpe": 1.44, "turnover": 4.66, "fitness": 1.15, "returns": 8.01, "dd": 6.71, "margin": 34.38, "fam": "Fundamental", "id": "A12"}, {"expr": "multiply(rank(-returns), rank(volume/adv20), filter=true)", "sharpe": 2.01, "turnover": 55.65, "fitness": 1.05, "returns": 15.2, "dd": 5.1, "margin": 5.46, "fam": "Price-volume", "id": "A13"}, {"expr": "ts_scale(operating_income/cap,60)", "sharpe": 1.38, "turnover": 9.9, "fitness": 1.05, "returns": 7.25, "dd": 7.06, "margin": 14.65, "fam": "Fundamental", "id": "A14"}, {"expr": "ts_arg_max(-ts_delta(close,5),1260)", "sharpe": 1.25, "turnover": 1.18, "fitness": 1.16, "returns": 10.83, "dd": 7.73, "margin": 184.24, "fam": "Price-volume", "id": "A15"}, {"expr": "change_day = (vwap - close)/close;\nts_rank(rank(change_day),252)", "sharpe": 1.57, "turnover": 39.17, "fitness": 1.01, "returns": 16.21, "dd": 8.71, "margin": 8.27, "fam": "Price-volume", "id": "A16"}, {"expr": "ts_rank(((high+low)/2 - close),800)", "sharpe": 2.49, "turnover": 58.84, "fitness": 1.3, "returns": 16.15, "dd": 3.48, "margin": 5.49, "fam": "Price-volume", "id": "A17"}, {"expr": "(ts_arg_min(sales/est_tot_assets,512))*(rank(ts_rank(operating_income/cap,126)))", "sharpe": 1.45, "turnover": 12.11, "fitness": 1.09, "returns": 7.08, "dd": 4.66, "margin": 11.69, "fam": "Fundamental", "id": "A18"}, {"expr": "avg_news = vec_avg(nws12_afterhsz_10_min);\nrank(ts_sum(avg_news,200))>0.4 ? 1 : rank(-ts_delta(close,7))", "sharpe": 1.87, "turnover": 20.83, "fitness": 1.03, "returns": 6.31, "dd": 2.78, "margin": 6.06, "fam": "News sentiment", "id": "A19"}, {"expr": "ts_arg_max(news_mins_10_pct_dn,57)", "sharpe": 1.27, "turnover": 14.33, "fitness": 1.06, "returns": 9.98, "dd": 8.86, "margin": 13.93, "fam": "News sentiment", "id": "A20"}, {"expr": "ts_decay_linear(ts_delta(implied_volatility_call_60,20)>0,30)", "sharpe": 1.75, "turnover": 7.24, "fitness": 1.75, "returns": 12.57, "dd": 8.68, "margin": 34.72, "fam": "Options IV", "id": "A21"}, {"expr": "(rank(eps/last_diff_value(eps,120)))>0.23 || ts_step(30)*volume/ts_sum(volume,90)/85>2.8 ? rank(-ts_delta(close,3)): -(ts_step(30)*volume/ts_sum(volume,90)/90);", "sharpe": 1.65, "turnover": 5.36, "fitness": 1.14, "returns": 5.97, "dd": 5.39, "margin": 22.27, "fam": "Blend", "id": "A22"}, {"expr": "alpha = (rank(ts_sum(vec_avg(nws12_afterhsz_sl),252))>0.35)? 1 : rank(-ts_delta(close,2))*1;\ntrade_when(volume>1.3*adv20,alpha,-1);", "sharpe": 1.68, "turnover": 11.4, "fitness": 1.02, "returns": 4.65, "dd": 3.55, "margin": 8.15, "fam": "News sentiment", "id": "A23"}, {"expr": "2*ts_rank(-rank(ebit/capex)/operating_income,504) + 8*rank(ts_rank(est_eps/close,252)+ts_rank(est_netprofit/close,252)/2)*liabilities/assets", "sharpe": 2.04, "turnover": 7.31, "fitness": 2.15, "returns": 13.87, "dd": 6.3, "margin": 37.93, "fam": "Fundamental", "id": "A24"}, {"expr": "a = assets/liabilities_curr;\nb = anl4_capex_flag;\nrank(b) - rank(a)", "sharpe": 1.45, "turnover": 1.9, "fitness": 1.38, "returns": 11.36, "dd": 8.96, "margin": 119.68, "fam": "Fundamental", "id": "A25"}, {"expr": "winsorize(ts_backfill(liabilities/assets,60))*(ts_arg_min(debt/equity,250))", "sharpe": 2.06, "turnover": 3.23, "fitness": 1.81, "returns": 9.67, "dd": 4.58, "margin": 59.91, "fam": "Fundamental", "id": "A26"}, {"expr": "return = (close/ts_delay(close, 1)) - 1;\nvolatility = ts_std_dev(return, 60);\n\nmr_component = -rank((high - ts_delay(high, 2)) / ts_delay(high, 2) / ts_std_dev(return, 20));\n\nlagged_volume = ts_delay(volume, 1);\nvol_component = rank(lagged_volume / adv20);\n\ngroup = bucket(rank(cap), range=\"0,1,0.1667\");\nefficiency_ratio = group_neutralize(rank(sales / assets), group);\n\nalpha = trade_when(\n    (ts_rank(volatility, 126)>0.55),\n    (0.4*mr_component +\n    0.4*vol_component + \n    0.2*efficiency_ratio),\n    -1\n);", "sharpe": 1.71, "turnover": 15.35, "fitness": 1.14, "returns": 6.85, "dd": 3.99, "margin": 8.92, "fam": "Blend", "id": "A27"}, {"expr": "# Returns and Volatility\nret = (close / ts_delay(close, 1)) - 1;\nvolatility = ts_std_dev(ret, 60);\nvol_regime = ts_rank(volatility, 126);\nhigh_vol = vol_regime > 0.55;\n\n# Momentum and Reversal\nmom_5d = (close / ts_delay(close, 5)) - 1;\nmom_reversal = mom_5d < 0;\ncondition_when = high_vol && mom_reversal;\n\n# Mean Reversion Component\nprice_change = (close - ts_delay(close, 3)) / ts_delay(close, 3);\nvol_adjusted = price_change / ts_std_dev(ret, 22);\nmr_component = -rank(vol_adjusted);\n\n# Volume Component (Replacing % 5 with logic)\n# ts_rank returns 0-1. Multiplying by 10 gives us a scale.\nr10 = ts_rank(close, 10) * 10;\ndate_factor = r10 > 5 ? (r10 - 5) : r10;\nvol_ratio = volume / adv20;\nvol_component = rank(vol_ratio + (0.01 * date_factor));\n\n# Alpha Calculation\nalpha = (0.6 * mr_component) + (0.4 * vol_component);\n\n# Final logic for signal adjustment\n# Using a 5-day rank to simulate a \"weekly\" cycle\nr5 = ts_rank(close, 5) * 5;\nalpha_mod = r5 < 3 ? alpha : (alpha * 0.95);\n\n# Final Signal\ntrade_when(condition_when, alpha_mod, -1)", "sharpe": 1.53, "turnover": 11.55, "fitness": 1.03, "returns": 5.62, "dd": 6.96, "margin": 9.73, "fam": "Price-volume", "id": "A28"}, {"expr": "return = (close / ts_delay(close, 1)) - 1;\n\nvolatility = ts_std_dev(return, 60);\n\nwhen = (ts_rank(volatility, 126)>0.65)&&(ts_rank(volume/adv20, 5)>0.7);\n\nmr_component = -rank((close - ts_delay(close, 2))/ts_delay(close, 2)/ts_std_dev(return,20));\n\nvol_component = rank(volume/adv20);\n\nalpha = (\n    0.7*mr_component + 0.3*vol_component\n);\n\ntrade_alpha = alpha;\n\ntrade_when(\n    when, \n    trade_alpha,\n    -1\n);", "sharpe": 1.95, "turnover": 14.61, "fitness": 1.38, "returns": 7.31, "dd": 3.24, "margin": 10.01, "fam": "Price-volume", "id": "A29"}, {"expr": "alpha_slow =\ngroup_rank(\n    ts_rank(operating_income / assets, 252),\n    subindustry\n);\n\nalpha_fast =\nrank(ts_mean(volume / adv20, 5))\n* rank(-ts_mean(returns, 5));\n\nalpha_raw =\ngroup_rank(\n    alpha_slow * alpha_fast,\n    subindustry\n);\n\nalpha =\nts_decay_linear(alpha_raw, 3);", "sharpe": 1.72, "turnover": 19.16, "fitness": 1.09, "returns": 7.75, "dd": 5.86, "margin": 8.09, "fam": "Blend", "id": "A30"}, {"expr": "fx =\nts_mean(\n    ts_backfill(fn_oth_income_loss_fx_transaction_and_tax_translation_adj_a, 60),\n    252\n);\n\nfx_alpha =\ngroup_rank(\n    fx * ts_rank(fx, 126),\n    industry\n);\n\nalpha =\n0.7 * fx_alpha\n- 0.3 * rank(close - ts_mean(close, 20));", "sharpe": 1.85, "turnover": 5.38, "fitness": 1.51, "returns": 8.28, "dd": 3.7, "margin": 30.76, "fam": "Blend", "id": "A31"}, {"expr": "slope = ts_regression(\n    ts_backfill(news_pct_1min,60),\n    ts_step(1),\n    5,\n    rettype = 2\n);\n\nwinsorize(\n    -ts_mean(ts_backfill(news_max_up_ret,60), 3) * abs(slope)\n    / max(ts_std_dev(close, 20), 0.02),\n    std = 4\n)", "sharpe": 1.46, "turnover": 55.12, "fitness": 1.02, "returns": 27.04, "dd": 35.53, "margin": 9.81, "fam": "News sentiment", "id": "A32"}, {"expr": "ts_regression(\n    ts_sum(ts_backfill(fnd6_newqv1300_ivltq,60),252),\n    ts_step(1),\n    756,\n    rettype = 2\n)\n+ 0.15 * ts_delta(fnd6_newqv1300_ivltq, 5)", "sharpe": 1.54, "turnover": 3.38, "fitness": 1.35, "returns": 9.64, "dd": 7.02, "margin": 57.02, "fam": "Fundamental", "id": "A33"}, {"expr": "-ts_corr(est_ptp,est_fcf,40)", "sharpe": 1.49, "turnover": 9.43, "fitness": 1.12, "returns": 7.02, "dd": 6.51, "margin": 14.89, "fam": "Fundamental", "id": "A34"}, {"expr": "-ts_std_dev(scl12_buzz, 15)", "sharpe": 1.34, "turnover": 15.61, "fitness": 1.36, "returns": 16.15, "dd": 17.55, "margin": 20.69, "fam": "News sentiment", "id": "A35"}, {"expr": "group_rank(ts_rank(est_eps/close, 60),industry)", "sharpe": 1.61, "turnover": 16.69, "fitness": 1.11, "returns": 8.0, "dd": 4.16, "margin": 9.59, "fam": "Fundamental", "id": "A36"}, {"expr": "trade_when(rank(parkinson_volatility_120) > 0.05, rank(implied_volatility_call_120 / parkinson_volatility_120), -1)", "sharpe": 1.85, "turnover": 14.08, "fitness": 1.5, "returns": 9.23, "dd": 7.97, "margin": 13.11, "fam": "Options IV", "id": "A37"}, {"expr": "trade_when(pcr_oi_270 < 0.85, zscore(implied_volatility_call_270 - implied_volatility_put_270), -1)", "sharpe": 2.26, "turnover": 23.37, "fitness": 1.97, "returns": 17.71, "dd": 7.21, "margin": 15.16, "fam": "Options IV", "id": "A38"}, {"expr": "avg_news = vec_avg(nws12_afterhsz_sl);\nrank(ts_sum(avg_news, 60)) > 0.5 ? 1 : rank(-ts_delta(close, 2))", "sharpe": 1.98, "turnover": 17.79, "fitness": 1.13, "returns": 5.83, "dd": 2.92, "margin": 6.55, "fam": "News sentiment", "id": "A39"}, {"expr": "ts_rank(operating_income/open,200)", "sharpe": 1.28, "turnover": 9.46, "fitness": 1.03, "returns": 8.13, "dd": 7.23, "margin": 17.19, "fam": "Fundamental", "id": "A40"}, {"expr": "anl4_adjusted_netincome_ft", "sharpe": 1.91, "turnover": 3.04, "fitness": 2.42, "returns": 20.14, "dd": 11.37, "margin": 132.74, "fam": "Fundamental", "id": "A41"}, {"expr": "multiply(rank(-returns),rank(volume/adv20),filter=true)", "sharpe": 1.8, "turnover": 38.41, "fitness": 1.18, "returns": 16.45, "dd": 5.2, "margin": 8.57, "fam": "Price-volume", "id": "A42"}, {"expr": "liabilities/assets", "sharpe": 1.54, "turnover": 1.71, "fitness": 1.33, "returns": 9.34, "dd": 5.23, "margin": 109.05, "fam": "Fundamental", "id": "A43"}, {"expr": "rank(-ts_rank(fn_liab_fair_val_l1_a, 68))", "sharpe": 1.3, "turnover": 6.51, "fitness": 1.19, "returns": 10.47, "dd": 7.01, "margin": 32.16, "fam": "Fundamental", "id": "A44"}, {"expr": "-group_rank(ts_rank(close - ts_mean(close, 300), 5), subindustry)", "sharpe": 1.85, "turnover": 47.19, "fitness": 1.0, "returns": 13.69, "dd": 4.68, "margin": 5.8, "fam": "Price-volume", "id": "A45"}, {"expr": "/*\n HYPOTHESIS: If the operating income of a company is currently higher than its past 1 year history, buy the company's stock and vice-versa.\n \n IMPLEMENTATION: Using ts_rank to identify current performance of the company compared to its own history, using the fundamental data field \"operating_income\".\n \n HINT TO IMPROVE THE ALPHA: Rather than comparing the value directly, can calculating a ratio that includes stock market moves, improve the signal?\n */\n \n ts_rank(operating_income / close,252)", "sharpe": 1.51, "turnover": 13.05, "fitness": 1.17, "returns": 7.82, "dd": 6.86, "margin": 11.98, "fam": "Fundamental", "id": "A46"}];
+/* ---------- alpha library ---------- */
+var AFAMS=['Price-volume','Fundamental','Blend','News sentiment','Options IV'];
+var AFCLS={'Price-volume':'f-acc','Fundamental':'f-g3','Blend':'f-g4','News sentiment':'f-acc2','Options IV':'f-pink'};
+var AFVAR={'Price-volume':'--accent','Fundamental':'--g3','Blend':'--g4','News sentiment':'--accent-2','Options IV':'--pink'};
+var AFDESC={'Price-volume':'price, volume and returns only','Fundamental':'fundamental and estimate fields','Blend':'fundamental fields combined with price or volume','News sentiment':'news and buzz fields','Options IV':'implied volatility and put-call fields'};
+var AL={fam:'All',sel:'A17',k:'id',d:1};
+var ASKIP={alpha:1,true:1,false:1,filter:1,rettype:1,std:1,range:1};
+var AGRP={subindustry:1,industry:1,sector:1,market:1,country:1};
+function alTokens(e){
+  var s=e.replace(/\/\*[\s\S]*?\*\//g,' ').replace(/\/\/.*|#.*/g,' ').replace(/"[^"]*"/g,' ');
+  var loc={};s.replace(/(^|[;\n])\s*([A-Za-z_][A-Za-z_0-9]*)\s*=(?!=)/g,function(m,a,b){loc[b]=1;return m});
+  var ops={},fl={},gp={},re=/[A-Za-z_][A-Za-z_0-9]*/g,m;
+  while((m=re.exec(s))){var w=m[0],nx=/^\s*\(/.test(s.slice(re.lastIndex));
+    if(nx){ops[w]=1;continue}
+    if(loc[w]||ASKIP[w])continue;
+    if(AGRP[w])gp[w]=1;else fl[w]=1}
+  return{ops:Object.keys(ops),fields:Object.keys(fl),groups:Object.keys(gp)};
+}
+function alPreview(e){var s=e.replace(/\/\*[\s\S]*?\*\//g,' ').replace(/\/\/.*|#.*/g,' ').replace(/\s+/g,' ').trim();return s.length>58?s.slice(0,57)+'...':s}
+function alRows(){
+  var r=ALIB.filter(function(a){return AL.fam==='All'||a.fam===AL.fam});
+  r.sort(function(a,b){var x=a[AL.k],y=b[AL.k];return (x<y?-1:x>y?1:0)*AL.d});
+  return r;
+}
+function alRender(){
+  var rows=alRows(),all=ALIB;
+  if(!rows.some(function(a){return a.id===AL.sel}))AL.sel=rows[0].id;
+  $('#a-tabs').innerHTML=['All'].concat(AFAMS).map(function(f){var n=f==='All'?all.length:all.filter(function(a){return a.fam===f}).length;return '<button type="button" data-f="'+f+'" aria-selected="'+(f===AL.fam)+'">'+f+' <span>'+n+'</span></button>'}).join('');
+  var sh=rows.map(function(a){return a.sharpe}),tn=sortN(rows.map(function(a){return a.turnover}));
+  $('#a-chips').innerHTML=[['Alphas',rows.length],['Average Sharpe',fmt(mean(sh),2)],['Best Sharpe',fmt(Math.max.apply(null,sh),2)],['Median turnover',fmt(tn[Math.floor((tn.length-1)/2)]/1+0,1)+'%']].map(function(c){return '<div class="chip">'+c[0]+'<b>'+c[1]+'</b></div>'}).join('');
+  var cols=[['id','#'],['fam','Family'],['expr','Expression'],['sharpe','Sharpe'],['fitness','Fitness'],['turnover','Turnover'],['margin','Margin']];
+  $('#a-tbl').innerHTML='<tr>'+cols.map(function(c){return '<th><button type="button" class="thb" data-k="'+c[0]+'">'+c[1]+(AL.k===c[0]?(AL.d>0?' &uarr;':' &darr;'):'')+'</button></th>'}).join('')+'</tr>'
+   +rows.map(function(a){return '<tr'+(a.id===AL.sel?' class="sel"':'')+'><td><button type="button" class="thb" data-id="'+a.id+'">'+a.id+'</button></td><td><span class="dot" style="background:var('+AFVAR[a.fam]+')"></span>'+a.fam+'</td><td class="ex">'+esc(alPreview(a.expr))+'</td><td class="n">'+fmt(a.sharpe,2)+'</td><td class="n">'+fmt(a.fitness,2)+'</td><td class="n">'+fmt(a.turnover,1)+'%</td><td class="n">'+fmt(a.margin,1)+' bps</td></tr>'}).join('');
+  var a=ALIB.filter(function(x){return x.id===AL.sel})[0],t=alTokens(a.expr);
+  var chip=function(w){return '<li>'+esc(w)+'</li>'};
+  var ok=a.sharpe>=TH.sharpe&&a.fitness>=TH.fitness&&a.turnover>=TH.tmin&&a.turnover<=TH.tmax;
+  $('#a-detail').innerHTML='<div class="pd-head"><h3>'+a.id+'</h3><span class="mono" style="font-size:12px;color:var(--muted)"><span class="dot" style="background:var('+AFVAR[a.fam]+')"></span>'+a.fam+', '+AFDESC[a.fam]+'</span></div>'
+   +'<code class="expr">'+esc(a.expr)+'</code>'
+   +'<div class="chips" style="grid-template-columns:repeat(auto-fit,minmax(110px,1fr));margin:0 0 12px">'+[['Sharpe',fmt(a.sharpe,2)],['Fitness',fmt(a.fitness,2)],['Turnover',fmt(a.turnover,2)+'%'],['Returns',fmt(a.returns,2)+'%'],['Drawdown',fmt(a.dd,2)+'%'],['Margin',fmt(a.margin,2)+' bps']].map(function(c){return '<div class="chip">'+c[0]+'<b>'+c[1]+'</b></div>'}).join('')+'</div>'
+   +'<div class="checks" style="margin:0 0 10px"><span>Sharpe at least 1.25 <span class="pill '+(a.sharpe>=1.25?'ok':'bad')+'">'+(a.sharpe>=1.25?'pass':'fail')+'</span></span><span>Fitness at least 1.0 <span class="pill '+(a.fitness>=1?'ok':'bad')+'">'+(a.fitness>=1?'pass':'fail')+'</span></span><span>Turnover 1 to 70% <span class="pill '+(a.turnover>=1&&a.turnover<=70?'ok':'bad')+'">'+(a.turnover>=1&&a.turnover<=70?'pass':'fail')+'</span></span></div>'
+   +'<p class="fine" style="margin:0 0 6px">Operators</p><ul class="tags" style="margin-top:0">'+t.ops.map(chip).join('')+'</ul>'
+   +'<p class="fine" style="margin:0 0 6px">Data fields'+(t.groups.length?' and groups':'')+'</p><ul class="tags" style="margin-top:0">'+t.fields.concat(t.groups).map(chip).join('')+'</ul>';
+  var vis=rows;
+  var pts=function(xf,yf){return vis.map(function(b){var s=b.id===AL.sel;return{x:xf(b),y:yf(b),cls:s?'f-fail':AFCLS[b.fam],r:s?6:3.6,o:s?1:0.8,t:s?b.id:''}})};
+  var leg=AFAMS.map(function(f){return [AFVAR[f],f]});
+  var c1={t:'scatter',h:220,title:'Sharpe against turnover',legend:leg,points:pts(function(b){return b.turnover},function(b){return b.sharpe}),hl:[{y:1.25,l:'Sharpe 1.25',cls:'s-fail'}],vl:[{x:70,l:'70%',cls:'s-fail'}],xmin:0,xmax:75,ymin:1,xf:function(v){return v.toFixed(0)+'%'},yf:function(v){return v.toFixed(1)}};
+  var c2={t:'scatter',h:220,title:'Fitness against turnover',points:pts(function(b){return b.turnover},function(b){return b.fitness}),hl:[{y:1,l:'Fitness 1.0',cls:'s-fail'}],vl:[{x:70,l:'70%',cls:'s-fail'}],xmin:0,xmax:75,ymin:0.8,xf:function(v){return v.toFixed(0)+'%'},yf:function(v){return v.toFixed(1)}};
+  var h='<div class="legend">'+leg.map(function(x){return '<span><i style="background:var('+x[0]+')"></i>'+x[1]+'</span>'}).join('')+'<span><i style="background:var(--fail)"></i>selected</span></div>';
+  $('#a-charts').innerHTML=h+'<div class="two"><svg id="a-s1" class="chart" role="img" aria-label="Sharpe against turnover for each alpha"></svg><svg id="a-s2" class="chart" role="img" aria-label="Fitness against turnover for each alpha"></svg></div>';
+  delete c1.legend;drawChart($('#a-s1'),c1);drawChart($('#a-s2'),c2);
+}
+
+/* ---------- wire up ---------- */
+bind(['#f-s','#f-r','#f-t'],drawF);
+renderSubmitted();renderScoreTable();
+$('#a-tabs').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;AL.fam=b.getAttribute('data-f');alRender()});
+$('#a-tbl').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var id=b.getAttribute('data-id'),k=b.getAttribute('data-k');if(id){AL.sel=id}else if(k){if(AL.k===k)AL.d=-AL.d;else{AL.k=k;AL.d=(k==='id'||k==='fam'||k==='expr')?1:-1}}alRender()});
+alRender();
+$('#cat-tabs').addEventListener('click',function(e){var b=e.target.closest('button');if(b)selectCat(b.getAttribute('data-cat'))});
+$('#plist').addEventListener('click',function(e){var b=e.target.closest('button');if(b)selectProject(b.getAttribute('data-id'))});
+$('#pdetail').addEventListener('input',function(e){if(e.target.closest('#d-ctl'))updateDemo()});
+$('#pdetail').addEventListener('change',function(e){if(e.target.closest('#d-ctl'))updateDemo()});
+$('#pdetail').addEventListener('click',function(e){if(e.target.closest('#d-new')){cur.seed+=1;updateDemo()}});
+selectCat(CATS[0].id);
+redraws.push(drawHero,drawScores,drawF,drawP,alRender,function(){updateDemo()});
+redraws.forEach(function(f){f()});
+var rt;window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){redraws.forEach(function(f){f()})},120)});
+})();
+</script>
+
+</body>
+</html>
