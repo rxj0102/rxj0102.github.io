@@ -233,7 +233,7 @@ footer{padding-block:40px 56px;border-top:1px solid var(--line);font:12px/1.6 va
 <section id="projects" class="sec">
   <p class="eyebrow">/projects</p>
   <h2>Every repo, simulated</h2>
-  <p class="lede">All 56 of my GitHub repos, grouped by category. Pick a tab, pick a project, and move the controls. Each demo re-implements the core idea of the repo on synthetic data generated in your browser. They show how the methods behave and are not results from the repos.</p>
+  <p class="lede">My project repos, grouped by category. Pick a tab, pick a project, and move the controls. Each demo re-implements the core idea of the repo on synthetic data generated in your browser. They show how the methods behave and are not results from the repos. A few engineering and pre-registered research projects have no demo and link straight to the code.</p>
   <div class="tabs" id="cat-tabs" role="tablist" aria-label="Project categories"></div>
   <div class="browser">
     <ul class="plist" id="plist" aria-label="Projects in this category"></ul>
@@ -484,6 +484,10 @@ function kupiec(n,x,p){function ll(q){return (n-x)*Math.log(1-q)+(x?x*Math.log(q
 function tDraw(z,off,df,sc){let c=0;for(let j=1;j<=df;j++){const q=z[off+j];c+=q*q}return sc*z[off]/Math.sqrt(c/df)}
 function mkCtx(seed){const cache={};return{seed:seed,z(n,s){const k=n+'_'+s;return cache[k]||(cache[k]=normals(seed*997+s*131+7,n))},rng(s){return mulberry32(seed*1013+s*17+3)}}}
 const KINDS={};
+KINDS.nodemo={controls:[],
+ note:'No browser demo for this one. The repo itself is the demo: open it for the code, tests and documentation.',
+ fine:'No simulation on this card.',
+ run(){return{charts:[],stats:[]}}};
 const R=(k,label,min,max,step,val,f)=>({k:k,label:label,min:min,max:max,step:step,val:val,f:f||(v=>String(+Number(v).toFixed(3)))});
 const CK=(k,label,val)=>({k:k,label:label,type:'check',val:val});
 const SEL=(k,label,opts,val)=>({k:k,label:label,type:'select',opts:opts,val:val});
@@ -626,6 +630,7 @@ function renderDetail(){
    +'<p class="try">'+esc(p.note||kind.note)+'</p>'
    +'<div class="demo"><div class="ctl" id="d-ctl">'+kind.controls.map(c=>ctlHTML(c,p)).join('')+(kind.rand?'<button class="bs" id="d-new" type="button">New draw</button>':'')+'</div><div id="d-charts"></div><div class="stats" id="d-stats"></div><div id="d-extra"></div><p class="fine">'+esc(kind.fine||'Synthetic data generated in your browser. It illustrates the method and does not report results from the repo.')+'</p></div>';
   updateDemo();
+  if(p.kind==='nodemo'){const d=$('#pdetail .demo');if(d)d.remove()}
 }
 function selectCat(id){cur.cat=id;const first=PROJECTS.find(p=>p.cat===id);cur.id=first.id;cur.seed=1;renderTabs();renderList();renderDetail()}
 function selectProject(id){cur.id=id;cur.seed=1;const st=$('#plist').scrollTop;renderList();$('#plist').scrollTop=st;renderDetail()}
@@ -1314,7 +1319,12 @@ const PROJECTS=[
  {id:'consumer-survey-tracking-toolkit',name:'Consumer survey tracker',cat:'strat',kind:'survey',blurb:'Weekly consumer sentiment tracker from questionnaire design through synthetic fieldwork, cleaning, banner tables, wave-over-wave trend detection, a BI export and a written narrative report.',tags:['survey','trend detection','BI export']},
  {id:'retail-analytics-dashboard',name:'Retail analytics dashboard',cat:'strat',kind:'retail',blurb:'End-to-end analyst project: a messy retail sales export is cleaned in Python, loaded into SQLite, analyzed with hand-written SQL and shown in a Streamlit dashboard, including a February 2025 outage.',tags:['SQL','SQLite','Streamlit','data cleaning']},
  {id:'public-program-analytics-toolkit',name:'State program analytics',cat:'strat',kind:'program',blurb:'Research workflow of a municipal advisory analyst covering state-run programs: 529 college savings plans, ABLE plans and state-facilitated retirement savings programs.',tags:['529 plans','ABLE','municipal advisory']},
- {id:'quantquest',name:'QuantQuest',cat:'strat',kind:'probq',blurb:'Game-style learning app for quant interview prep, with milestones and verification scripts.',tags:['interview prep','probability','app']}
+ {id:'quantquest',name:'QuantQuest',cat:'strat',kind:'probq',blurb:'Game-style learning app for quant interview prep, with milestones and verification scripts.',tags:['interview prep','probability','app']},
+ {id:'hft',name:'Tick-to-trade HFT engine',cat:'trade',kind:'nodemo',blurb:'A C++20 tick-to-trade engine built in phase gates: market data, order book, a market-making strategy, pre-trade risk, order management and an order-entry gateway, with a replay oracle, fuzzers and failure drills. Exchange connectivity has only been run against a local fake exchange.',tags:['C++20','low latency','order book','fuzzing']},
+ {id:'limit-order-book-matching-engine',name:'Limit order book matching engine',cat:'trade',kind:'nodemo',blurb:'lobkit: a C++20 matching engine with price-time priority, LOBSTER and Nasdaq ITCH replay, and an event-driven backtester that runs an Avellaneda-Stoikov market maker with explicit latency and queue-position modeling. Python bindings included.',tags:['C++20','matching engine','ITCH','market making']},
+ {id:'quanter-pipeline',name:'Paper-trading pipeline',cat:'trade',kind:'nodemo',blurb:'A daily job that runs one strategy with stated costs, labels every day as in-sample, out-of-sample or paper trading, keeps an append-only paper log and flags decay against the out-of-sample range.',tags:['paper trading','costs','decay check','GitHub Actions']},
+ {id:'sentinel',name:'Sentinel behavioral alpha platform',cat:'alt',kind:'nodemo',blurb:'Behavioral alpha and risk platform on free data only: signals, portfolio construction, stress tests and monitoring. Hypotheses are pre-registered and no result is published until a real-data gate is passed; engineering so far runs on synthetic data.',tags:['behavioral finance','pre-registration','free data','risk']},
+ {id:'behavioral-pricing-kernel',name:'Behavioral pricing kernel',cat:'vol',kind:'nodemo',blurb:'Asks whether a behavioral stochastic discount factor, probability weighting plus a sentiment shift, explains the shape of the S&P 500 empirical pricing kernel better than CRRA and habit benchmarks, and whether the distortion predicts returns. Pre-registered; no results yet.',tags:['pricing kernel','options','behavioral SDF','pre-registration']}
 ];
 const BRANCH={}; // every repo links to its default branch; the old working branches are merged into main
 
